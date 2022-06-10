@@ -7,10 +7,12 @@ L'infrastruttura, appoggiandosi ad *AWS*, farà uso dei seguenti servizi:
 - [S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide//Welcome.html)
 - [RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html)
 - [API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html)
-
-*TODO*
+- [Rekognition](https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html)
+- [Comprehend](https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html)
 
 # Architettura
+Verrà implementata un'architettura a *microservizi*. Ogni componente agisce all'interno del proprio ambiente di esecuzione e comunica con le altre, quando serve, attraverso la rete.
+
 ![Architecture](./assets/poc_aws.png)
 
 ## Funzioni Lambda
