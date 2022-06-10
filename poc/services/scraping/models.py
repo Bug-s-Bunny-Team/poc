@@ -1,13 +1,15 @@
 from dataclasses import dataclass
-from enum import Enum, auto
+from enum import Enum, unique
 from typing import Set
 
 
+@unique
 class Social(Enum):
     TIKTOK = 0
     INSTAGRAM = 1
 
 
+@unique
 class MediaType(Enum):
     IMAGE = 0
     VIDEO = 1
