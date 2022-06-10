@@ -27,7 +27,7 @@ Esegue lo *scraping* dei dati di uno specifico account social e li memorizza in 
 Analizza i dati predisposti da *ScrapingService* e applica uno *score*, servendosi dei servizi *Rekognition* e *Comprehend*. Salva il risultato delle elaborazioni in *RDS*. Viene notificato di nuovi dati da analizzare in automatico.
 
 # Architettura VPC
-![VPC_Architecture](.assets/VPC_Architecture.png)
+![VPC_Architecture](./assets/VPC_Architecture.png)
 
 Questa architettura ha lo scopo di descrivere un'architettura cloud per l'accesso e la locazione all'interno di internet delle risorse pubbliche e private del progetto.
 Queste direttive verranno poi implementate in modo gestito dal servizio *AWS VPC*.
