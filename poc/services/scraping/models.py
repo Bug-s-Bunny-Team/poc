@@ -8,11 +8,18 @@ class Social(Enum):
     INSTAGRAM = 1
 
 
+class MediaType(Enum):
+    IMAGE = 0
+    VIDEO = 1
+
+
 @dataclass
 class Post:
     id: str
-    social: Social
     caption: str
+    media_url: str
+    social: Social = Social.INSTAGRAM
+    media_type: MediaType = MediaType.IMAGE
 
     @property
     def hashtags(self) -> Set[str]:
