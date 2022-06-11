@@ -27,15 +27,15 @@ Resources:
   #           Path: /hello
   #           Method: get
 
-  RequestsHandlerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: services/requests_handler/
-
-  ScoringServiceFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: services/scoring/
+#  RequestsHandlerFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: services/requests_handler/
+#
+#  ScoringServiceFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: services/scoring/
 
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
@@ -56,13 +56,13 @@ Outputs:
   # HelloWorldFunctionIamRole:
   #   Description: 'Implicit IAM Role created for Hello World function'
   #   Value: !GetAtt HelloWorldFunctionRole.Arn
-  RequestsHandlerFunction:
-    Description: 'RequestsHandler Lambda Function ARN'
-    Value: !GetAtt RequestsHandlerFunction.Arn
-    
-  ScoringServiceFunction:
-    Description: 'ScoringService Lambda Function ARN'
-    Value: !GetAtt ScoringServiceFunction.Arn
+#  RequestsHandlerFunction:
+#    Description: 'RequestsHandler Lambda Function ARN'
+#    Value: !GetAtt RequestsHandlerFunction.Arn
+#
+#  ScoringServiceFunction:
+#    Description: 'ScoringService Lambda Function ARN'
+#    Value: !GetAtt ScoringServiceFunction.Arn
 
   ScrapingServiceFunction:
     Description: 'ScrapingService Lambda Function ARN'
