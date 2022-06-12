@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 30
     Handler: app.lambda_handler
     Runtime: python3.9
     Architectures:
@@ -46,6 +46,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: services/scraping/
+      Environment:
+        Variables:
+          INSTA_USERNAME: ''
+          INSTA_SESSION: ''
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
