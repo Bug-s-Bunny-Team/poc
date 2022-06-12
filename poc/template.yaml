@@ -49,7 +49,7 @@ Resources:
       Environment:
         Variables:
           INSTA_USERNAME: ''
-          INSTA_SESSION: ''
+          INSTA_PASSWORD: ''
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
