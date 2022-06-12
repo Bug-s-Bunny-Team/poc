@@ -37,6 +37,11 @@ Resources:
 #    Properties:
 #      CodeUri: services/scoring/
 
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: swe-bucket-bugsbunny
+
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -45,6 +50,28 @@ Resources:
         Variables:
           INSTA_USERNAME: ''
           INSTA_SESSION: ''
+
+  ScoringServiceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/scoring
+      Policies:
+        - ComprehendBasicAccessPolicy: {}
+        - S3CrudPolicy: 
+            BucketName: swe-bucket-bugsbunny
+      Events:
+        BucketEvent:
+          Type: S3
+          Properties:
+            Bucket: 
+              Ref: Bucket
+            Events:
+              s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value: 'comprehend/input/'
       
 
 Outputs:
@@ -71,4 +98,8 @@ Outputs:
   ScrapingServiceFunction:
     Description: 'ScrapingService Lambda Function ARN'
     Value: !GetAtt ScrapingServiceFunction.Arn
+
+  ScoringServiceFunction:
+    Description: 'ScoringService Lambda Function ARN'
+    Value: !GetAtt ScoringServiceFunction.Arn
 
