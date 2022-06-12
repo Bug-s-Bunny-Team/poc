@@ -368,3 +368,5 @@ sketch
 yarn-error.log
 
 # End of https://www.toptal.com/developers/gitignore/api/Python,PyCharm,VisualStudioCode,Angular,Vuejs,react,Serverless,Amplify
+
+*.bkp
