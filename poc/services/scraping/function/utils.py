@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import requests
+from botocore.exceptions import ClientError
 
 from .custom import CustomInstaloader
 from .scrapers import BaseScraper, InstagramScraper
@@ -34,3 +35,11 @@ def create_scraper() -> BaseScraper:
         session_provider.refresh_session(insta_username, session)
 
     return InstagramScraper(client=insta)
+
+
+def s3_key_exists(s3, bucket_name: str, key: str) -> bool:
+    try:
+        s3.head_object(Bucket=bucket_name, Key=key)
+        return True
+    except ClientError:
+        return False
