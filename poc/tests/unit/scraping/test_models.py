@@ -1,4 +1,4 @@
-from services.scraping.scraping.models import Social, Post, MediaType
+from services.scraping.function.models import Social, Post, MediaType
 
 
 def test_social():
