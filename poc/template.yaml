@@ -63,6 +63,8 @@ Resources:
           INSTA_PASSWORD: ''
           INSTA_SESSIONS_TABLE: 'poc-instagram-sessions'
           BUCKET_NAME: !Ref Bucket  # IMPORTANT: if running locally, set this variable manually!
+      Policies:
+        - AWSLambdaDynamoDBExecutionRole
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
