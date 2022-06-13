@@ -1,9 +1,11 @@
 import json
 from operator import truediv
+from collections import defaultdict
 import boto3
 
 INPUT_PREFIX = "input/"
 OUPUT_PREFIX = "output/"
+BUCKET_NAME = "swe-bucket-bugsbunny"
 
 def key_present(dict, key):
     if key in dict.keys():
@@ -11,50 +13,55 @@ def key_present(dict, key):
     else:
         return False
 
-def lambda_handler(event, context):
-    bucketName = event['Records'][0]['s3']['bucket']['name']
-    object_key = event['Records'][0]['s3']['object']['key']
+def validate_input_json(in_json):
+    return key_present(in_json, "id") & key_present(in_json, "caption") & key_present(in_json, "caption") & key_present(in_json, "hashtags")
 
+def add_text_from_rekognition_image(in_json, response):
+    in_json.pop('image')
+    in_json['texts'] = dict()
+    for line in response['TextDetections']:
+        if(line['Type']=='LINE'):
+            in_json['texts'][f"{line['Id']}"] = line['DetectedText']
+
+def unpack_json_for_comprehend(in_json):
+    return list([in_json['caption'], *in_json['texts'].values(), *in_json['hashtags'].values()])
+
+def add_results_from_comprehend(in_json, response):
+    n_texts = len(in_json['texts'])
+    for item in response['ResultList'] + response['ErrorList']:
+        idx = item.pop('Index')
+        if(idx==0): 
+            in_json['caption'] = [in_json['caption'], item]
+        elif(idx-1 < n_texts):
+            in_json['texts']['{}'.format(idx-1)] = [in_json['texts']['{}'.format(idx-1)], item]
+        else:
+            in_json['hashtags']['{}'.format(idx-1-n_texts)] = [in_json['hashtags']['{}'.format(idx-1-n_texts)], item]
+
+def lambda_handler(event, context):
+    rekognition = boto3.client(service_name='rekognition', region_name='eu-central-1')
     comprehend = boto3.client(service_name='comprehend', region_name='eu-central-1')
     s3 = boto3.resource('s3')
 
     try:
-        print("Analyzing: " + object_key + " from Bucket: " + bucketName)
+        print("Analyzing SQS Event")
 
-        assert(object_key.endswith(".json"))
-        data_json = json.loads(s3.Object(bucketName, object_key).get()['Body'].read())
-        assert(key_present(data_json, "id") & key_present(data_json, "caption") & key_present(data_json, "labels") & key_present(data_json, "hashtags")) 
+        data_json = json.loads(event['Records'][0]['body'])
+        assert(validate_input_json(data_json))
         print("Successfully read data")
 
-        textList = list([data_json["caption"], *data_json["labels"].values(), *data_json["hashtags"].values()])
-        response = comprehend.batch_detect_sentiment(TextList=textList, LanguageCode='en')
-        print("Successfully analized")
+        response = rekognition.detect_text(Image={'S3Object': {'Bucket': BUCKET_NAME, 'Name': data_json['image']}})
+        add_text_from_rekognition_image(data_json, response)
+        print('Successfully analized image')
 
-        n_labels = len(data_json["labels"])
-        for item in response["ResultList"]:
-            idx = item.pop("Index")
-            if(idx==0): 
-                data_json["caption"] = item
-            elif(idx-1 < n_labels):
-                data_json["labels"]['{}'.format(idx-1)] = item
-            else:
-                data_json["hashtags"]['{}'.format(idx-1-n_labels)] = item
+        response = comprehend.batch_detect_sentiment(TextList=unpack_json_for_comprehend(data_json), LanguageCode='en')
+        add_results_from_comprehend(data_json, response)
+        print('Successfully analized textual information')
 
-        for item in response["ErrorList"]:
-            idx = item.pop("Index")
-            if(idx==0): 
-                data_json["caption"] = item
-            elif(idx-1 < n_labels):
-                data_json["labels"]['{}'.format(idx-1)] = item
-            else:
-                data_json["hashtags"]['{}'.format(idx-1-n_labels)] = item
-
-        outputObject = s3.Object(bucketName, object_key.replace(INPUT_PREFIX, OUPUT_PREFIX, 1))
-        assert(object_key != outputObject.key)
+        outputObject = s3.Object(BUCKET_NAME, f"scoring/{data_json['id']}.json")
         outputObject.put(Body=json.dumps(data_json, indent=2))
-        print("Successfully written output to S3 Bucket: " + bucketName)
+        print('Successfully written output to S3 Bucket: ' + BUCKET_NAME)
 
         return 'Success'
     except Exception as e:
-        print("Error processing object {} from bucket {}. Event {}".format(object_key, bucketName, json.dumps(event, indent=2)))
+        print('Error processing Event {}'.format(json.dumps(event, indent=2)))
         raise e
