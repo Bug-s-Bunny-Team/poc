@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, unique
+from functools import cached_property
 from typing import Set
 
 from instaloader import Post as InstaPost
@@ -26,10 +27,15 @@ class Post:
     social: Social = Social.INSTAGRAM
     media_type: MediaType = MediaType.IMAGE
 
-    @property
+    @cached_property
     def hashtags(self) -> Set[str]:
         tags = [tag.strip('#') for tag in self.caption.split() if tag.startswith('#')]
         return set(tags)
+
+    @cached_property
+    def media_filename(self) -> str:
+        extension = 'mp4' if self.media_type == MediaType.VIDEO else 'png'
+        return f'{self.id}.{extension}'
 
     @classmethod
     def from_instaloader_post(cls, post: InstaPost):

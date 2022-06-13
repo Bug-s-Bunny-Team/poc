@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from instaloader import Instaloader, Profile
 
-from models import Post
+from .models import Post
 
 
 class BaseScraper(ABC):

@@ -9,8 +9,8 @@ Description: >
 Globals:
   Function:
     Timeout: 30
-    Handler: app.lambda_handler
     Runtime: python3.9
+    Handler: lambda.app.lambda_handler
     Architectures:
       - x86_64
 
@@ -55,7 +55,7 @@ Resources:
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: services/scoring
+      CodeUri: services/scoring/
       Policies:
         - ComprehendBasicAccessPolicy: {}
         - S3CrudPolicy: 

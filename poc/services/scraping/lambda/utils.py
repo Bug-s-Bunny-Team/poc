@@ -3,16 +3,16 @@ from pathlib import Path
 
 import requests
 
-from custom import CustomInstaloader
-from scrapers import BaseScraper, InstagramScraper
-from sessions import InstagramSessionProvider
+from .custom import CustomInstaloader
+from .scrapers import BaseScraper, InstagramScraper
+from .sessions import InstagramSessionProvider
 
 
 # TODO: add option to download file in memory and don't create a new file
 def download_media(url: str, dest: Path):
     with requests.get(url, stream=True) as r:
         with open(dest, 'wb') as f:
-            for chunk in r.iter_content():
+            for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
 
 

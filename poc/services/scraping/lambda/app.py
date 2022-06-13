@@ -1,9 +1,10 @@
 import json
+from pathlib import Path
 
 from pydantic import ValidationError
 
-from models import LambdaEvent
-from utils import create_scraper
+from .models import LambdaEvent
+from .utils import create_scraper, download_media
 
 
 def lambda_handler(event, context):
@@ -17,8 +18,16 @@ def lambda_handler(event, context):
             }),
         }
 
+    print('getting scraper')
     scraper = create_scraper()
+
+    print(f'getting last post for "{event.username}"')
     post = scraper.get_last_post(event.username)
+
+    print('downloading post media')
+    dest = Path('/tmp') / post.media_filename
+    print(dest)
+    download_media(post.media_url, dest)
 
     return {
         'statusCode': 200,
