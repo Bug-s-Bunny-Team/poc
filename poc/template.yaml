@@ -13,6 +13,8 @@ Globals:
     Handler: function.app.lambda_handler
     Architectures:
       - x86_64
+    Layers:
+      - !Ref CommonDependenciesLayer
 
 Resources:
   # HelloWorldFunction:
@@ -41,6 +43,15 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: swe-bucket-bugsbunny
+
+  CommonDependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: dependencies
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
 
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
