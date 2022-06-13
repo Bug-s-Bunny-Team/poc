@@ -50,6 +50,7 @@ Resources:
         Variables:
           INSTA_USERNAME: ''
           INSTA_PASSWORD: ''
+          INSTA_SESSIONS_TABLE: 'poc-instagram-sessions'
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function

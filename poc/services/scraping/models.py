@@ -1,20 +1,21 @@
 from dataclasses import dataclass
-from enum import IntEnum, unique
+from enum import Enum, unique
 from typing import Set
 
 from instaloader import Post as InstaPost
+from pydantic import BaseModel
 
 
 @unique
-class Social(IntEnum):
-    TIKTOK = 0
-    INSTAGRAM = 1
+class Social(str, Enum):
+    TIKTOK = 'tiktok'
+    INSTAGRAM = 'instagram'
 
 
 @unique
-class MediaType(IntEnum):
-    IMAGE = 0
-    VIDEO = 1
+class MediaType(str, Enum):
+    IMAGE = 'image'
+    VIDEO = 'video'
 
 
 @dataclass
@@ -39,3 +40,8 @@ class Post:
             social=Social.INSTAGRAM,
             media_type=MediaType.VIDEO if post.is_video else MediaType.IMAGE
         )
+
+
+class LambdaEvent(BaseModel):
+    social: Social
+    username: str
