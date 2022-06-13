@@ -13,6 +13,8 @@ Globals:
     Handler: function.app.lambda_handler
     Architectures:
       - x86_64
+    Layers:
+      - !Ref CommonDependenciesLayer
 
 Resources:
   Bucket:
@@ -24,6 +26,15 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: swe-sqs
+      
+  CommonDependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: dependencies
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
 
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
@@ -34,6 +45,7 @@ Resources:
           INSTA_USERNAME: ''
           INSTA_PASSWORD: ''
           INSTA_SESSIONS_TABLE: 'poc-instagram-sessions'
+          BUCKET_NAME: !Ref Bucket  # IMPORTANT: if running locally, set this variable manually!
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function

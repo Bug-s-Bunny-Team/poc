@@ -1,20 +1,12 @@
 import os
 from pathlib import Path
 
-import requests
+import boto3
 from botocore.exceptions import ClientError
 
 from .custom import CustomInstaloader
 from .scrapers import BaseScraper, InstagramScraper
 from .sessions import InstagramSessionProvider
-
-
-# TODO: add option to download file in memory and don't create a new file
-def download_media(url: str, dest: Path):
-    with requests.get(url, stream=True) as r:
-        with open(dest, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
 
 
 def create_scraper() -> BaseScraper:
@@ -37,9 +29,16 @@ def create_scraper() -> BaseScraper:
     return InstagramScraper(client=insta)
 
 
-def s3_key_exists(s3, bucket_name: str, key: str) -> bool:
+def s3_key_exists(bucket_name: str, key: str) -> bool:
     try:
+        s3 = boto3.client('s3')
         s3.head_object(Bucket=bucket_name, Key=key)
         return True
     except ClientError:
         return False
+
+
+def s3_upload_file(bucket_name: str, key: str, src: Path):
+    s3 = boto3.resource('s3')
+    bucket = s3.Bucket(bucket_name)
+    bucket.upload_file(str(src), key)
