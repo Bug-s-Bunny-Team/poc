@@ -62,6 +62,7 @@ Resources:
           INSTA_USERNAME: ''
           INSTA_PASSWORD: ''
           INSTA_SESSIONS_TABLE: 'poc-instagram-sessions'
+          BUCKET_NAME: !Ref Bucket  # IMPORTANT: if running locally, set this variable manually!
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
@@ -102,10 +103,6 @@ Outputs:
 #  RequestsHandlerFunction:
 #    Description: 'RequestsHandler Lambda Function ARN'
 #    Value: !GetAtt RequestsHandlerFunction.Arn
-#
-#  ScoringServiceFunction:
-#    Description: 'ScoringService Lambda Function ARN'
-#    Value: !GetAtt ScoringServiceFunction.Arn
 
   ScrapingServiceFunction:
     Description: 'ScrapingService Lambda Function ARN'

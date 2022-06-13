@@ -1,0 +1,30 @@
+import os
+from pathlib import Path
+
+import requests
+
+from .models import Post
+from .utils import s3_key_exists, s3_upload_file
+
+
+# TODO: add option to download file in memory and don't create a new file
+def download_media(url: str, dest: Path):
+    with requests.get(url, stream=True) as r:
+        with open(dest, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+
+def download_and_save_post(post: Post):
+    post_key = f'{post.social}/{post.media_filename}'
+    bucket_name = os.environ['BUCKET_NAME']
+
+    if s3_key_exists(bucket_name, post_key):
+        print('post already downloaded, skipping')
+    else:
+        print('downloading post media')
+        dest = Path('/tmp') / post.media_filename
+        download_media(post.media_url, dest)
+
+        print(f'uploading to s3 with key "{post_key}"')
+        s3_upload_file(bucket_name, post_key, dest)
