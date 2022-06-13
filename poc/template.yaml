@@ -5,10 +5,9 @@ Description: >
 
   SAM Template for poc
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 300
+    Timeout: 60
     Runtime: python3.9
     Handler: function.app.lambda_handler
     Architectures:
@@ -26,6 +25,7 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: swe-sqs
+      VisibilityTimeout: 60
       
   CommonDependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -44,10 +44,13 @@ Resources:
         Variables:
           INSTA_USERNAME: ''
           INSTA_PASSWORD: ''
-          INSTA_SESSIONS_TABLE: 'poc-instagram-sessions'
+          INSTA_SESSIONS_TABLE: poc-instagram-sessions
           BUCKET_NAME: !Ref Bucket  # IMPORTANT: if running locally, set this variable manually!
       Policies:
-        - AWSLambdaDynamoDBExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: poc-instagram-sessions
+        - S3CrudPolicy:
+            BucketName: !Ref Bucket
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
@@ -56,16 +59,15 @@ Resources:
       Policies:
         - ComprehendBasicAccessPolicy: {}
         - SQSPollerPolicy:
-            QueueName: swe-aws
+            QueueName: !GetAtt SQSQueue.QueueName
         - S3CrudPolicy: 
-            BucketName: swe-bucket-bugsbunny
+            BucketName: !Ref Bucket
       Events:
         SQSEvent:
           Type: SQS
           Properties:
-            Queue: !Ref SQSQueue
+            Queue: !GetAtt SQSQueue.Arn
             BatchSize: 5
-      
 
 Outputs:
   ScrapingServiceFunction:
