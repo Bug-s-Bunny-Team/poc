@@ -31,21 +31,23 @@ class ScoringPost:
     textsScore: Dict[int, Score]
     hashtagsScore = Dict[int, Score]
 
-    def __validate_input_json(in_json):
+    @classmethod
+    def __validate_input_json(cls, in_json):
         return key_present(in_json, "id") & key_present(in_json, "caption") & key_present(in_json, "image") & key_present(in_json, "hashtags")
 
-    def fromString(string):
+    @classmethod
+    def fromString(cls, string):
         in_json = json.loads(string)
         assert(ScoringPost.__validate_input_json(in_json))
-        post = ScoringPost()
-        post.id = in_json["id"]
-        post.caption = in_json["caption"]
-        post.image = in_json["image"]
-        post.texts = dict()
-        post.hashtags = { idx: string for idx,string in enumerate(in_json["hashtags"]) }
-        post.textsScore = dict()
-        post.hashtagsScore = dict()
-        return post
+        return cls(
+            id = in_json["id"],
+            caption = in_json["caption"],
+            image = in_json["image"],
+            texts = dict(),
+            hashtags = { idx: string for idx,string in enumerate(in_json["hashtags"]) },
+            textsScore = dict(),
+            hashtagsScore = dict()
+        )
 
     def toString(self):
         return json.dumps(self.__dict__)
@@ -92,15 +94,18 @@ class SQSEventAdapter(EventAdapter):
         return post
 
 class BasicScoringService(ScoringService):
-    def __add_text_from_rekognition_image(sPost: ScoringPost, rekResult):
+    @classmethod
+    def __add_text_from_rekognition_image(cls, sPost: ScoringPost, rekResult):
         for line in rekResult['TextDetections']:
             if(line['Type']=='LINE'):
                 sPost.texts[line['Id']] = line['DetectedText']
-
-    def __unpack_post_for_comprehend(sPost: ScoringPost):
+    
+    @classmethod
+    def __unpack_post_for_comprehend(cls, sPost: ScoringPost):
         return list([sPost.caption, *sPost.texts.values(), *sPost.hashtags.values()])
 
-    def __add_results_from_comprehend(sPost: ScoringPost, compResult):
+    @classmethod
+    def __add_results_from_comprehend(cls, sPost: ScoringPost, compResult):
         n_texts = len(sPost.texts)
         for item in compResult['ResultList'] + compResult['ErrorList']:
             if not key_present(item, "Sentiment"):
