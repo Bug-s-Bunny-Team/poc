@@ -22,7 +22,7 @@ def create_scraper() -> BaseScraper:
         insta.import_session_from_dict(session, insta_username)
     else:
         print('session not found, logging in')
-        insta_password = os.environ['INSTA_PASSWORD']
+        insta_password = session_provider.get_password(insta_username)
         insta.login(insta_username, insta_password)
         session_provider.refresh_session(insta_username, session)
 

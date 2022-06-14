@@ -42,8 +42,7 @@ Resources:
       CodeUri: services/scraping/
       Environment:
         Variables:
-          INSTA_USERNAME: ''
-          INSTA_PASSWORD: ''
+          INSTA_USERNAME: 'NotABotBB1'
           INSTA_SESSIONS_TABLE: poc-instagram-sessions
           BUCKET_NAME: !Ref Bucket  # IMPORTANT: if running locally, set this variable manually!
       Policies:
