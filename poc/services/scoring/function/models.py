@@ -27,9 +27,10 @@ class ScoringPost:
     image: str
     texts: Dict[int, str]
     hashtags: Dict[int, str]
-    captionScore: Score
-    textsScore: Dict[int, Score]
-    hashtagsScore = Dict[int, Score]
+    captionScore: float
+    textsScore: Dict[int, float]
+    hashtagsScore = Dict[int, float],
+    finalScore: float
 
     @classmethod
     def __validate_input_json(cls, in_json):
@@ -39,15 +40,17 @@ class ScoringPost:
     def fromString(cls, string):
         in_json = json.loads(string)
         assert(ScoringPost.__validate_input_json(in_json))
-        return cls(
-            id = in_json["id"],
-            caption = in_json["caption"],
-            image = in_json["image"],
-            texts = dict(),
-            hashtags = { idx: string for idx,string in enumerate(in_json["hashtags"]) },
-            textsScore = dict(),
-            hashtagsScore = dict()
-        )
+        post = ScoringPost()
+        post.id = in_json["id"]
+        post.caption = in_json["caption"]
+        post.image = in_json["image"]
+        post.texts = dict()
+        post.hashtags = { idx: string for idx,string in enumerate(in_json["hashtags"]) }
+        post.captionScore = 0.0
+        post.textsScore = dict()
+        post.hashtagsScore = dict()
+        post.finalScore = 0.0
+        return post
 
     def toString(self):
         return json.dumps(self.__dict__)
@@ -76,6 +79,7 @@ class ScoringService(ABC):
         sPost = self.__e.processEvent(event)
         self._runRekognition(sPost)
         self._runComprehend(sPost)
+        self._calcFinalScore(sPost)
         self.__o.output(sPost)
 
     @abstractmethod
@@ -84,6 +88,10 @@ class ScoringService(ABC):
 
     @abstractmethod
     def _runComprehend(self, sPost: ScoringPost):
+        pass
+
+    @abstractmethod
+    def _calcFinalScore(self, sPost: ScoringPost):
         pass
 
 class SQSEventAdapter(EventAdapter):
@@ -107,18 +115,18 @@ class BasicScoringService(ScoringService):
     @classmethod
     def __add_results_from_comprehend(cls, sPost: ScoringPost, compResult):
         n_texts = len(sPost.texts)
-        for item in compResult['ResultList'] + compResult['ErrorList']:
-            if not key_present(item, "Sentiment"):
-                raise Exception("Error " + item["ErrorCode"] + ": " + item["ErrorMessage"])
+        if(len(compResult['ErrorList'])>0):
+            raise Exception(compResult['ErrorList'])
+        for item in compResult['ResultList']:
+            idx = item['Index']
+            score = Score(item["Sentiment"])
+            float_score = item["SentimentScore"]["Positive"]-item["SentimentScore"]["Negative"] if(score == Score.POSITIVE or score==Score.NEGATIVE) else 0.0
+            if(idx==0): 
+                sPost.captionScore = float_score
+            elif(idx-1 < n_texts):
+                sPost.textsScore[idx-1] = float_score
             else:
-                idx = item['Index']
-                score = Score(item["Sentiment"])
-                if(idx==0): 
-                    sPost.captionScore = score
-                elif(idx-1 < n_texts):
-                    sPost.textsScore[idx-1] = score
-                else:
-                    sPost.hashtagsScore[idx-1-n_texts] = score
+                sPost.hashtagsScore[idx-1-n_texts] = float_score
 
     def _runRekognition(self, sPost: ScoringPost):
         print('Analyzing image')
@@ -131,6 +139,9 @@ class BasicScoringService(ScoringService):
         response = self._comprehend.batch_detect_sentiment(TextList=BasicScoringService.__unpack_post_for_comprehend(sPost), LanguageCode='en')
         BasicScoringService.__add_results_from_comprehend(sPost, response)
         print('Successfully analized textual information')
+
+    def _calcFinalScore(self, sPost: ScoringPost):
+        sPost.finalScore = (sPost.captionScore + sum(sPost.textsScore.values())/len(sPost.textsScore))/2.0
 
 class S3OutputStrategy:
     outputBucket = BUCKET_NAME
