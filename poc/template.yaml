@@ -45,7 +45,12 @@ Resources:
         Variables:
           INSTA_USERNAME: 'NotABotBB1'
           INSTA_SESSIONS_TABLE: poc-instagram-sessions
-          BUCKET_NAME: !Ref Bucket  # IMPORTANT: if running locally, set this variable manually!
+          # IMPORTANT: if running locally, set the following variables manually!
+          BUCKET_NAME: !Ref Bucket
+          DB_USER: ''
+          DB_PASSWORD: ''
+          DB_HOST: ''
+          DB_NAME: ''
       Policies:
         - DynamoDBCrudPolicy:
             TableName: poc-instagram-sessions
