@@ -26,6 +26,7 @@ Resources:
     Properties:
       QueueName: swe-sqs
       VisibilityTimeout: 60
+      MessageRetentionPeriod: 120
       
   CommonDependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -50,6 +51,14 @@ Resources:
             TableName: poc-instagram-sessions
         - S3CrudPolicy:
             BucketName: !Ref Bucket
+#        - SQSPollerPolicy:
+#            QueueName: !GetAtt SQSQueue.QueueName
+#      Events:
+#        SQSEvent:
+#          Type: SQS
+#          Properties:
+#            Queue: !GetAtt SQSQueue.Arn
+#            BatchSize: 5
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
