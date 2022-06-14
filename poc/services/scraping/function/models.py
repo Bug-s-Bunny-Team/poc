@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from enum import Enum, unique
 from functools import cached_property
-from typing import Set
+from typing import Set, Optional
 
 from instaloader import Post as InstaPost
-from pydantic import BaseModel
+from pydantic import BaseModel, validator, root_validator
 
 
 @unique
@@ -48,6 +48,22 @@ class Post:
         )
 
 
+########################################################################################################################
+
+
 class LambdaEvent(BaseModel):
     social: Social
-    username: str
+    username: Optional[str] = None
+    url: Optional[str] = None
+
+    @validator('url', always=True)
+    def mutually_exclusive(cls, v, values):
+        if values['username'] is not None and v:
+            raise ValueError('"username" and "url" are mutually exclusive')
+        return v
+
+    @root_validator()
+    def check_required(cls, values):
+        if (values.get('username') is None) and (values.get('url') is None):
+            raise ValueError('either "username" or "url" is required')
+        return values

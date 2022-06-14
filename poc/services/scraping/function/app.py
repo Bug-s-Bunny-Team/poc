@@ -29,8 +29,12 @@ def lambda_handler(event, context):
             }),
         }
 
-    print(f'getting last post for "{event.username}"')
-    post = scraper.get_last_post(event.username)
+    if event.username:
+        print(f'getting last post for "{event.username}"')
+        post = scraper.get_last_post(event.username)
+    else:
+        print(f'getting post from url')
+        post = scraper.get_post_from_url(event.url)
 
     print(f'downloading post "{post.id}"')
     download_and_save_post(post)
