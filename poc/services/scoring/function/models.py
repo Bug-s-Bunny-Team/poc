@@ -3,10 +3,11 @@ from enum import Enum, unique
 from typing import Dict
 import json
 import boto3
+import os
 
 s3 = boto3.resource('s3')
-REGION_NAME = 'eu-central-1'
-BUCKET_NAME = 'swe-bucket-bugsbunny'
+REGION_NAME = os.environ['ENV_REGION_NAME']
+BUCKET_NAME = os.environ['ENV_BUCKET_NAME']
 
 @unique
 class Score(str, Enum):

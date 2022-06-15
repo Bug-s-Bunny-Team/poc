@@ -5,6 +5,41 @@ Description: >
 
   SAM Template for poc
 
+Parameters:
+  BucketName:
+    Type: String
+    Default: 'swe-bucket-bugsbunny'
+    Description: Enter desired S3 bucket name
+  QueueName:
+    Type: String
+    Default: 'swe-sqs'
+    Description: Enter desired SQS Queue name
+  RegionName:
+    Type: String
+    Default: 'eu-central-1'
+    Description: Enter region name
+  DatabaseUser:
+    Type: String
+    Default: ''
+    Description: Enter database user
+  DatabasePassword:
+    Type: String
+    NoEcho: true
+    Default: ''
+    Description: Enter database password
+  DatabaseHost:
+    Type: String
+    Default: ''
+    Description: Enter database host
+  DatabaseName:
+    Type: String
+    Default: ''
+    Description: Enter database name
+  InstaSessionTableName:
+    Type: String
+    Default: 'poc-instagram-sessions'
+    Description: Enter instagram session table name
+
 Globals:
   Function:
     Timeout: 60
@@ -14,17 +49,26 @@ Globals:
       - x86_64
     Layers:
       - !Ref CommonDependenciesLayer
+    Environment:
+      Variables:
+        ENV_REGION_NAME:  !Ref RegionName
+        # IMPORTANT: if running locally, set the following variables manually!
+        ENV_BUCKET_NAME:  !Ref BucketName
+        DB_USER:          !Ref DatabaseUser
+        DB_PASSWORD:      !Ref DatabasePassword
+        DB_HOST:          !Ref DatabaseHost
+        DB_NAME:          !Ref DatabaseName
 
 Resources:
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: swe-bucket-bugsbunny
+      BucketName: !Ref BucketName
 
   SQSQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: swe-sqs
+      QueueName: !Ref QueueName
       VisibilityTimeout: 60
       MessageRetentionPeriod: 120
       
@@ -44,18 +88,12 @@ Resources:
       Environment:
         Variables:
           INSTA_USERNAME: 'NotABotBB1'
-          INSTA_SESSIONS_TABLE: poc-instagram-sessions
-          # IMPORTANT: if running locally, set the following variables manually!
-          BUCKET_NAME: !Ref Bucket
-          DB_USER: ''
-          DB_PASSWORD: ''
-          DB_HOST: ''
-          DB_NAME: ''
+          INSTA_SESSIONS_TABLE: !Ref InstaSessionTableName
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: poc-instagram-sessions
+            TableName: !Ref InstaSessionTableName
         - S3CrudPolicy:
-            BucketName: !Ref Bucket
+            BucketName: !Ref BucketName
 #        - SQSPollerPolicy:
 #            QueueName: !GetAtt SQSQueue.QueueName
 #      Events:
@@ -72,14 +110,14 @@ Resources:
       Policies:
         - ComprehendBasicAccessPolicy: {}
         - SQSPollerPolicy:
-            QueueName: !GetAtt SQSQueue.QueueName
+            QueueName: !Ref QueueName
         - S3CrudPolicy: 
-            BucketName: !Ref Bucket
+            BucketName: !Ref BucketName
       Events:
         SQSEvent:
           Type: SQS
           Properties:
-            Queue: !GetAtt SQSQueue.Arn
+            Queue: !Ref SQSQueue
             BatchSize: 5
 
 Outputs:
