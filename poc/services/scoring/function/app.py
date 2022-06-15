@@ -1,4 +1,6 @@
-from .models import BasicScoringService, SQSEventAdapter, S3OutputStrategy
+from .scoring_service import BasicScoringService
+from .event_adapter import SQSEventAdapter
+from .output_strategy import S3OutputStrategy
 import json
 
 def lambda_handler(event, context):
