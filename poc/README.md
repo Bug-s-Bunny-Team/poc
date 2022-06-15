@@ -53,7 +53,7 @@ Ricordarsi di impostare il parametro `docker-network` per rendere visibile il
 database dentro l'ambiente di esecuzione della *Lambda*. 
 
 ```shell
-sam local invoke ... --docker-nextwork sam_local
+sam local invoke ... --docker-network sam_local
 ```
 
 ## Testing
