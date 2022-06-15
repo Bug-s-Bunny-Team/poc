@@ -3,7 +3,7 @@
     {
       "messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78",
       "receiptHandle": "MessageReceiptHandle",
-      "body": "{\"id\":\"923165429\",\"caption\":\"unfortunately today it is raining in Seattle\",\"image\":\"scoring/test.png\",\"hashtags\":[\"sad\",\"city\"]}",
+      "body": "{\"id\":\"923165429\",\"caption\":\"unfortunately today it is raining in Seattle\",\"image\":\"scoring/test.png\",\"hashtags\":{\"0\":\"sad\",\"1\":\"city\"}}",
       "attributes": {
         "ApproximateReceiveCount": "1",
         "SentTimestamp": "1523232000000",
