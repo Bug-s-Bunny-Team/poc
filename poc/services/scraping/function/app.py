@@ -1,7 +1,11 @@
 import json
+
+from pony.orm import commit
 from pydantic import ValidationError
 
 from db import init_db
+from db.models import SocialProfile
+
 
 from .download import download_and_save_post
 from .exceptions import ItemNotFoundException

@@ -1,10 +1,3 @@
-
-
-Editing diagram bugsbunnyteam/poc_db
-Explore
-bugsbunnyteam
-Log out
-
 CREATE TABLE "location" (
   "id" SERIAL PRIMARY KEY,
   "score" DOUBLE PRECISION
@@ -12,7 +5,7 @@ CREATE TABLE "location" (
 
 CREATE TABLE "socialprofile" (
   "id" SERIAL PRIMARY KEY,
-  "username" TEXT NOT NULL
+  "username" TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE "post" (
@@ -53,4 +46,3 @@ CREATE INDEX "idx_socialprofile_suggested_profiles" ON "socialprofile_suggested_
 ALTER TABLE "socialprofile_suggested_profiles" ADD CONSTRAINT "fk_socialprofile_suggested_profiles__socialprofile" FOREIGN KEY ("socialprofile") REFERENCES "socialprofile" ("id");
 
 ALTER TABLE "socialprofile_suggested_profiles" ADD CONSTRAINT "fk_socialprofile_suggested_profiles__socialprofile_2" FOREIGN KEY ("socialprofile_2") REFERENCES "socialprofile" ("id")
-

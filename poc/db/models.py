@@ -7,7 +7,7 @@ class SocialProfile(db.Entity):
     id = PrimaryKey(int, auto=True)
     posts = Set('Post')
     suggested_profiles = Set('SocialProfile', reverse='suggested_profiles')
-    username = Required(str)
+    username = Required(str, unique=True)
 
 
 class Post(db.Entity):
