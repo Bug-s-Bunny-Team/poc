@@ -1,5 +1,3 @@
 boto3
 requests
 pydantic
-pony
-psycopg2-binary

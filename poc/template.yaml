@@ -49,6 +49,7 @@ Globals:
       - x86_64
     Layers:
       - !Ref CommonDependenciesLayer
+      - !Ref DbLayer
     Environment:
       Variables:
         ENV_REGION_NAME:  !Ref RegionName
@@ -80,6 +81,15 @@ Resources:
         - python3.9
     Metadata:
       BuildMethod: python3.9
+
+  DbLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: db
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: makefile
 
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function

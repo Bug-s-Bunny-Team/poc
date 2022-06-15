@@ -4,7 +4,8 @@ CREATE TABLE "location" (
 );
 
 CREATE TABLE "socialprofile" (
-  "id" SERIAL PRIMARY KEY
+  "id" SERIAL PRIMARY KEY,
+  "username" TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE "post" (
