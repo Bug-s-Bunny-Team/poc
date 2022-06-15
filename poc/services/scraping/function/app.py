@@ -1,6 +1,8 @@
 import json
 from pydantic import ValidationError
 
+from db import init_db
+
 from .download import download_and_save_post
 from .exceptions import ItemNotFoundException
 from .models import LambdaEvent
@@ -17,6 +19,8 @@ def lambda_handler(event, context):
                 'error': str(e)
             }),
         }
+
+    init_db()
 
     print('getting scraper')
     try:
