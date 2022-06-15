@@ -38,13 +38,23 @@ pgadmin fornisce una interfaccia web per gestire il database localmente.
 
 Se viene richiesta, la password del database server è `password`.
 
-### Environment variables
+### Variabili d'ambiente
+
 | Nome        | Valore        |
 |-------------|---------------|
 | DB_USER     | `user`        |
 | DB_PASSWORD | `password`    |
 | DB_HOST     | `172.18.0.10` |
 | DB_NAME     | `poc`         |
+
+### Invocazione locale
+
+Ricordarsi di impostare il parametro `docker-network` per rendere visibile il
+database dentro l'ambiente di esecuzione della *Lambda*. 
+
+```shell
+sam local invoke ... --docker-nextwork sam_local
+```
 
 ## Testing
 
