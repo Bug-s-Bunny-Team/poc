@@ -1,7 +1,6 @@
 from enum import Enum, unique
 from typing import Dict
 import json
-import services.scraping.function.models.Post
 
 @unique
 class Score(str, Enum):
@@ -27,7 +26,7 @@ class ScoringPost:
     hashtagsScore = Dict[int, float],
     finalScore: float
 
-    def __init__(id: str, caption: str, image: str, hashtags: Dict[int, str]):
+    def __init__(self, id: str, caption: str, image: str, hashtags: Dict[int, str]):
         self.id = id
         self.caption = caption
         self.image = image
@@ -43,7 +42,7 @@ class ScoringPost:
         return key_present(in_json, "id") & key_present(in_json, "caption") & key_present(in_json, "image") & key_present(in_json, "hashtags")
 
     @classmethod
-    def fromPost(p: Post):
+    def fromPost(cls, p):
         return cls(
             id = p.id,
             caption = p.caption,
