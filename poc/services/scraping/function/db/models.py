@@ -1,25 +1,13 @@
-import os
+from . import db
 
 from pony.orm import *
-
-db = Database()
-
-
-def init_db():
-    db.bind(
-        provider='postgres',
-        user=os.environ['DB_USER'],
-        password=os.environ['DB_PASSWORD'],
-        host=os.environ['DB_HOST'],
-        database=os.environ['DB_NAME'],
-    )
-    db.generate_mapping(create_tables=True)
 
 
 class SocialProfile(db.Entity):
     id = PrimaryKey(int, auto=True)
     posts = Set('Post')
     suggested_profiles = Set('SocialProfile', reverse='suggested_profiles')
+    username = Required(str)
 
 
 class Post(db.Entity):
