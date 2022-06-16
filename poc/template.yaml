@@ -10,10 +10,10 @@ Parameters:
     Type: String
     Default: 'swe-bucket-bugsbunny'
     Description: Enter desired S3 bucket name
-  QueueName:
+  SNSTopicName:
     Type: String
-    Default: 'swe-sqs'
-    Description: Enter desired SQS Queue name
+    Default: 'swe-sns-post'
+    Description: Enter desired SNS topic name
   RegionName:
     Type: String
     Default: 'eu-central-1'
@@ -66,12 +66,11 @@ Resources:
     Properties:
       BucketName: !Ref BucketName
 
-  SQSQueue:
-    Type: AWS::SQS::Queue
+  SNSTopic:
+    Type: AWS::SNS::Topic
     Properties:
-      QueueName: !Ref QueueName
-      VisibilityTimeout: 60
-      MessageRetentionPeriod: 120
+      TopicName: !Ref SNSTopicName
+      FifoTopic: False
       
   CommonDependenciesLayer:
     Type: AWS::Serverless::LayerVersion
@@ -104,14 +103,6 @@ Resources:
             TableName: !Ref InstaSessionTableName
         - S3CrudPolicy:
             BucketName: !Ref BucketName
-#        - SQSPollerPolicy:
-#            QueueName: !GetAtt SQSQueue.QueueName
-#      Events:
-#        SQSEvent:
-#          Type: SQS
-#          Properties:
-#            Queue: !GetAtt SQSQueue.Arn
-#            BatchSize: 5
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
@@ -119,16 +110,17 @@ Resources:
       CodeUri: services/scoring/
       Policies:
         - ComprehendBasicAccessPolicy: {}
-        - SQSPollerPolicy:
-            QueueName: !Ref QueueName
         - S3CrudPolicy: 
             BucketName: !Ref BucketName
+        - Statement:
+            Effect: Allow
+            Action: sns:Subscribe
+            Resource: !Ref SNSTopic
       Events:
-        SQSEvent:
-          Type: SQS
+        SNSEvent:
+          Type: SNS
           Properties:
-            Queue: !Ref SQSQueue
-            BatchSize: 5
+            Topic: !Ref SNSTopic
 
 Outputs:
   ScrapingServiceFunction:
