@@ -10,9 +10,9 @@ Parameters:
     Type: String
     Default: 'swe-bucket-bugsbunny'
     Description: Enter desired S3 bucket name
-  SNSTopicName:
+  SNSScrapingToScoringName:
     Type: String
-    Default: 'swe-sns-post'
+    Default: 'swe-sns-score'
     Description: Enter desired SNS topic name
   RegionName:
     Type: String
@@ -66,10 +66,10 @@ Resources:
     Properties:
       BucketName: !Ref BucketName
 
-  SNSTopic:
+  SNSTopicS2S:
     Type: AWS::SNS::Topic
     Properties:
-      TopicName: !Ref SNSTopicName
+      TopicName: !Ref SNSScrapingToScoringName
       FifoTopic: False
       
   CommonDependenciesLayer:
@@ -115,12 +115,12 @@ Resources:
         - Statement:
             Effect: Allow
             Action: sns:Subscribe
-            Resource: !Ref SNSTopic
+            Resource: !Ref SNSTopicS2S
       Events:
         SNSEvent:
           Type: SNS
           Properties:
-            Topic: !Ref SNSTopic
+            Topic: !Ref SNSTopicS2S
 
 Outputs:
   ScrapingServiceFunction:
