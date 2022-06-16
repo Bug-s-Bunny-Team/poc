@@ -2,8 +2,8 @@ import json
 
 from pydantic import ValidationError
 
-from db import init_db
-
+from db.utils import init_db
+from db.models import SocialProfile
 
 from .download import download_and_save_post
 from .exceptions import ItemNotFoundException
@@ -36,6 +36,9 @@ def lambda_handler(event, context):
         }
 
     if event.username:
+        # profile = SocialProfile(username=event.username)
+        # profile.get_or_create()
+
         print(f'getting last post for "{event.username}"')
         post = scraper.get_last_post(event.username)
     else:

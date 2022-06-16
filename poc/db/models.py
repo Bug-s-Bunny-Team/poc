@@ -3,6 +3,14 @@ from peewee import *
 from . import db
 
 
+__all__ = [
+    'SocialProfile',
+    'Location',
+    'Post',
+    'PostScore'
+]
+
+
 class BaseModel(Model):
     class Meta:
         database = db
@@ -14,6 +22,9 @@ class SocialProfile(BaseModel):
 
 
 class Location(BaseModel):
+    name = CharField(unique=True)
+    lat = FloatField(default=0)
+    long = FloatField(default=0)
     score = FloatField()
 
 
