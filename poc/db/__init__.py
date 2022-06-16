@@ -1,9 +1,9 @@
 import os
 from typing import Optional
 
-from pony.orm import Database
+from peewee import PostgresqlDatabase, DatabaseProxy
 
-db = Database()
+db = DatabaseProxy()
 
 
 def init_db(
@@ -12,11 +12,10 @@ def init_db(
     host: Optional[str] = None,
     database: Optional[str] = None,
 ):
-    db.bind(
-        provider='postgres',
+    postgres = PostgresqlDatabase(
         user=user if user else os.environ['DB_USER'],
         password=password if password else os.environ['DB_PASSWORD'],
         host=host if host else os.environ['DB_HOST'],
         database=database if database else os.environ['DB_NAME'],
     )
-    db.generate_mapping()
+    db.initialize(postgres)

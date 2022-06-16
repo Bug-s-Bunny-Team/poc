@@ -1,32 +1,30 @@
+from peewee import *
+
 from . import db
 
-from pony.orm import *
+
+class BaseModel(Model):
+    class Meta:
+        database = db
 
 
-class SocialProfile(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    posts = Set('Post')
-    suggested_profiles = Set('SocialProfile', reverse='suggested_profiles')
-    username = Required(str, unique=True)
+class SocialProfile(BaseModel):
+    username = CharField(unique=True)
+    suggested_profiles = ForeignKeyField('self', null=True)
 
 
-class Post(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    social_profile = Required(SocialProfile)
-    media_type = Required(str, default='image')
-    media_s3_key = Required(str)
-    post_score = Optional('PostScore')
-    location = Optional('Location')
+class Location(BaseModel):
+    score = FloatField()
 
 
-class Location(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    posts = Set(Post)
-    score = Optional(float)
+class Post(BaseModel):
+    social_profile = ForeignKeyField(SocialProfile, backref='posts', lazy_load=False)
+    media_type = CharField(choices=['image', 'video'])
+    media_s3_key = CharField()
+    location = ForeignKeyField(Location, backref='posts', lazy_load=False)
 
 
-class PostScore(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    post = Required(Post)
-    media_score = Required(float, default=0)
-    caption_score = Optional(float, default=0)
+class PostScore(BaseModel):
+    media_score = FloatField(default=0)
+    caption_score = FloatField(default=0)
+    post = ForeignKeyField(Post, backref='post_score', lazy_load=False, unique=True)
