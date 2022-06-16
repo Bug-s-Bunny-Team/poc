@@ -8,8 +8,9 @@ services:
       POSTGRES_DB: poc
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-    volumes:
-      - ./local_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+#    volumes:
+#      - ./local_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - ./local_db/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -24,6 +25,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: password
     volumes:
+      # - ./local_db/pgadmin:/var/lib/pgadmin
       - ./local_db/servers.json:/pgadmin4/servers.json
     ports:
       - "8080:80"

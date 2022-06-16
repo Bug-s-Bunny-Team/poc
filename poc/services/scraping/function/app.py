@@ -2,7 +2,7 @@ import json
 
 from pydantic import ValidationError
 
-from db.utils import init_db
+from db.utils import init_db, create_all_tables
 from db.models import SocialProfile
 
 from .download import download_and_save_post
@@ -23,6 +23,7 @@ def lambda_handler(event, context):
         }
 
     init_db()
+    create_all_tables()
 
     print('getting scraper')
     try:
@@ -36,14 +37,15 @@ def lambda_handler(event, context):
         }
 
     if event.username:
-        # profile = SocialProfile(username=event.username)
-        # profile.get_or_create()
-
         print(f'getting last post for "{event.username}"')
         post = scraper.get_last_post(event.username)
+        username = event.username
     else:
         print(f'getting post from url')
         post = scraper.get_post_from_url(event.url)
+        username = post.owner_username
+
+    profile = SocialProfile.get_or_create(username=username)
 
     print(f'downloading post "{post.id}"')
     download_and_save_post(post)

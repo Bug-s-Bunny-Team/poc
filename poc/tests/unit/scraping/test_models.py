@@ -20,7 +20,8 @@ def test_post():
         id='sdfjbsdf',
         social=Social.INSTAGRAM,
         caption='a great experience at the restaurant #yum #friends',
-        media_url='https://example.com/image.png'
+        media_url='https://example.com/image.png',
+        owner_username='useless_person'
     )
     
     hashtags = post.hashtags

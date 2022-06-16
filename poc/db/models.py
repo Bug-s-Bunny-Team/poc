@@ -17,8 +17,7 @@ class BaseModel(Model):
 
 
 class SocialProfile(BaseModel):
-    username = CharField(unique=True)
-    suggested_profiles = ForeignKeyField('self', null=True)
+    username = CharField(unique=True, null=False)
 
 
 class Location(BaseModel):
@@ -32,7 +31,7 @@ class Post(BaseModel):
     social_profile = ForeignKeyField(SocialProfile, backref='posts', lazy_load=False)
     media_type = CharField(choices=['image', 'video'])
     media_s3_key = CharField()
-    location = ForeignKeyField(Location, backref='posts', lazy_load=False)
+    location = ForeignKeyField(Location, backref='posts', lazy_load=False, null=True)
 
 
 class PostScore(BaseModel):

@@ -24,6 +24,7 @@ class Post:
     id: str
     caption: str
     media_url: str
+    owner_username: str
     social: Social = Social.INSTAGRAM
     media_type: MediaType = MediaType.IMAGE
 
@@ -44,7 +45,8 @@ class Post:
             caption=post.caption,
             media_url=post.video_url if post.is_video else post.url,
             social=Social.INSTAGRAM,
-            media_type=MediaType.VIDEO if post.is_video else MediaType.IMAGE
+            media_type=MediaType.VIDEO if post.is_video else MediaType.IMAGE,
+            owner_username=post.owner_username
         )
 
 
