@@ -5,11 +5,11 @@ import boto3
 from botocore.exceptions import ClientError
 
 from .custom import CustomInstaloader
-from .scrapers import BaseScraper, InstagramScraper
+from .scrapers import InstagramScraper
 from .sessions import InstagramSessionProvider
 
 
-def create_scraper() -> BaseScraper:
+def create_scraper() -> InstagramScraper:
     insta_username = os.environ['INSTA_USERNAME']
     sessions_table = os.environ['INSTA_SESSIONS_TABLE']
 

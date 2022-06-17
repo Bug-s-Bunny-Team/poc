@@ -16,11 +16,11 @@ def download_media(url: str, dest: Path):
                 f.write(chunk)
 
 
-def download_and_save_post(post: Post) -> Optional[str]:
+def download_and_save_post(post: Post, overwrite: bool = True) -> Optional[str]:
     post_key = f'instagram/{post.media_filename}'
     bucket_name = os.environ['ENV_BUCKET_NAME']
 
-    if s3_key_exists(bucket_name, post_key):
+    if not overwrite and s3_key_exists(bucket_name, post_key):
         print('post already downloaded, skipping')
     else:
         print('downloading post media')

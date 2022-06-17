@@ -28,7 +28,7 @@ class InstagramScraper(BaseScraper):
         self._client = client
         self._shortcode_regex = re.compile(INSTA_SHORTCODE_REGEX)
 
-    def _extract_shortcode(self, url: str) -> Optional[str]:
+    def extract_shortcode(self, url: str) -> Optional[str]:
         groups = self._shortcode_regex.match(url)
         if groups:
             shortcode = groups.group(6)
@@ -45,7 +45,7 @@ class InstagramScraper(BaseScraper):
         return post
 
     def get_post_from_url(self, url: str) -> InstaPost:
-        shortcode = self._extract_shortcode(url)
+        shortcode = self.extract_shortcode(url)
         if not shortcode:
             raise InvalidUrlException('Cannot extract shortcode from provided URL')
         p = InstaPost.from_shortcode(self._client.context, shortcode)
