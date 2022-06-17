@@ -1,9 +1,11 @@
 from typing import Optional
 
-from pydantic import BaseModel, validator, root_validator
+from pydantic import validator, root_validator
+
+from common.models import LambdaEvent
 
 
-class LambdaEvent(BaseModel):
+class ScrapingEvent(LambdaEvent):
     username: Optional[str] = None
     url: Optional[str] = None
 

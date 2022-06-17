@@ -5,7 +5,7 @@ from typing import Optional
 import requests
 
 from db.models import Post
-from .utils import s3_key_exists, s3_upload_file
+from common.utils import s3_key_exists, s3_upload_file
 
 
 # TODO: add option to download file in memory and don't create a new file
