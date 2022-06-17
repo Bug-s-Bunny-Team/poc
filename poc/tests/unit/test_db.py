@@ -7,7 +7,7 @@ from db.utils import init_db, create_all_tables
 
 @pytest.fixture
 def transaction():
-    init_db('user', 'password', '172.18.0.10', 'poc')
+    init_db('user', 'password', '172.18.0.10', 'poc_test')
     with db.transaction() as txn:
         create_all_tables()
         yield txn
@@ -25,6 +25,7 @@ def post(profile) -> Post:
         shortcode='Cef7VMLloOP',
         social_profile=profile,
         media_type='image',
+        media_url='https://instagram.fvce2-1.fna.fbcdn.net/v/dkfjgbndfjgbdfgsdfnsdf',
         caption='Great stuff #yum #friends'
     )
 

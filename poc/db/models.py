@@ -1,6 +1,6 @@
 from functools import cached_property
 from enum import Enum, unique
-from typing import Set
+from typing import Set, Optional
 
 from peewee import *
 
@@ -34,6 +34,7 @@ class Post(BaseModel):
     caption = TextField()
     social_profile = ForeignKeyField(SocialProfile, backref='posts', lazy_load=False)
     media_type = CharField(choices=[MediaType.IMAGE, MediaType.VIDEO])
+    media_url = CharField(max_length=512)
     media_s3_key = CharField(null=True, unique=True)
     location = ForeignKeyField(Location, backref='posts', lazy_load=False, null=True)
 
@@ -48,13 +49,15 @@ class Post(BaseModel):
         return set(tags)
 
     @classmethod
-    def from_instaloader_post(cls, insta_post):
+    def from_instaloader_post(cls, insta_post, profile: Optional[SocialProfile] = None):
+        if not profile:
+            profile = SocialProfile.get_or_create(username=insta_post.owner_username)
         return cls(
-            id=insta_post.shortcode,
+            shortcode=insta_post.shortcode,
             caption=insta_post.caption,
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
             media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
-            owner_username=insta_post.owner_username
+            social_profile=profile
         )
 
 

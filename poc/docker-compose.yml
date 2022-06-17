@@ -8,8 +8,8 @@ services:
       POSTGRES_DB: poc
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-#    volumes:
-#      - ./local_db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    volumes:
+      - ./local_db/init.sql:/docker-entrypoint-initdb.d/init.sql
 #      - ./local_db/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
