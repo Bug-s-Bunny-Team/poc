@@ -50,11 +50,21 @@ Se viene richiesta, la password del database server è `password`.
 ### Invocazione locale
 
 Ricordarsi di impostare il parametro `docker-network` per rendere visibile il
-database dentro l'ambiente di esecuzione della *Lambda*. 
+database dentro l'ambiente di esecuzione della *Lambda*.
 
 ```shell
 sam local invoke ... --docker-network sam_local
 ```
+
+## Layers
+
+Codice e dipendenze esterne comuni ai vari servizi, sono divisi in *package* e trattati da *SAM*
+come [layers](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-layers.html).
+
+| Nome        | Package  | Contenuto                                                           |
+|-------------|----------|---------------------------------------------------------------------|
+| CommonLayer | `common` | Dipendenze e codice comune                                          |
+| DbLayer     | `db`     | Dipendenze relative alla gestione del *database* e relativi modelli |
 
 ## Testing
 

@@ -48,7 +48,7 @@ Globals:
     Architectures:
       - x86_64
     Layers:
-      - !Ref CommonDependenciesLayer
+      - !Ref CommonLayer
       - !Ref DbLayer
     Environment:
       Variables:
@@ -72,14 +72,14 @@ Resources:
       TopicName: !Ref SNSScrapingToScoringName
       FifoTopic: False
       
-  CommonDependenciesLayer:
+  CommonLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      ContentUri: dependencies
+      ContentUri: common
       CompatibleRuntimes:
         - python3.9
     Metadata:
-      BuildMethod: python3.9
+      BuildMethod: makefile
 
   DbLayer:
     Type: AWS::Serverless::LayerVersion
