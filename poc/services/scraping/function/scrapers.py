@@ -1,6 +1,6 @@
 import re
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import Optional
 
 from instaloader import Instaloader, Profile
 from instaloader import Post as InstaPost
@@ -19,7 +19,7 @@ class BaseScraper(ABC):
         pass
 
     # @abstractmethod
-    # def get_posts(self, username: str) -> List[Post]:
+    # def get_posts(self, username: str):
     #     pass
 
 
