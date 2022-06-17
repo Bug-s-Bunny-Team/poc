@@ -1,14 +1,16 @@
+from functools import cached_property
+from enum import Enum, unique
+from typing import Set
+
 from peewee import *
 
 from . import db
 
 
-__all__ = [
-    'SocialProfile',
-    'Location',
-    'Post',
-    'PostScore'
-]
+@unique
+class MediaType(str, Enum):
+    IMAGE = 'image'
+    VIDEO = 'video'
 
 
 class BaseModel(Model):
@@ -28,10 +30,32 @@ class Location(BaseModel):
 
 
 class Post(BaseModel):
+    shortcode = CharField(unique=True)
+    caption = TextField()
     social_profile = ForeignKeyField(SocialProfile, backref='posts', lazy_load=False)
-    media_type = CharField(choices=['image', 'video'])
-    media_s3_key = CharField()
+    media_type = CharField(choices=[MediaType.IMAGE, MediaType.VIDEO])
+    media_s3_key = CharField(null=True, unique=True)
     location = ForeignKeyField(Location, backref='posts', lazy_load=False, null=True)
+
+    @cached_property
+    def media_filename(self) -> str:
+        extension = 'mp4' if self.media_type == MediaType.VIDEO else 'jpg'
+        return f'{self.shortcode}.{extension}'
+
+    @cached_property
+    def hashtags(self) -> Set[str]:
+        tags = [tag.strip('#') for tag in self.caption.split() if tag.startswith('#')]
+        return set(tags)
+
+    @classmethod
+    def from_instaloader_post(cls, insta_post):
+        return cls(
+            id=insta_post.shortcode,
+            caption=insta_post.caption,
+            media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
+            media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
+            owner_username=insta_post.owner_username
+        )
 
 
 class PostScore(BaseModel):

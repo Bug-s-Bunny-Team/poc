@@ -6,8 +6,8 @@ from instaloader import Instaloader, Profile
 from instaloader import Post as InstaPost
 
 from .exceptions import InvalidUrlException
-from .models import Post
 from .constants import INSTA_SHORTCODE_REGEX
+from db.models import Post
 
 
 class BaseScraper(ABC):
@@ -22,10 +22,6 @@ class BaseScraper(ABC):
     # @abstractmethod
     # def get_posts(self, username: str) -> List[Post]:
     #     pass
-
-
-class TikTokScraper(BaseScraper):
-    pass
 
 
 class InstagramScraper(BaseScraper):

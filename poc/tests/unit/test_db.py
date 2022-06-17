@@ -1,7 +1,7 @@
 import pytest
 
 from db import db
-from db.models import SocialProfile, Post
+from db.models import SocialProfile, Post, MediaType
 from db.utils import init_db, create_all_tables
 
 
@@ -14,12 +14,42 @@ def transaction():
         txn.rollback()
 
 
-def test_create_profile(transaction):
-    profile = SocialProfile.create(username='testuser123')
-    assert profile
+@pytest.fixture
+def profile() -> SocialProfile:
+    return SocialProfile(username='testuser123')
 
 
-def test_create_post(transaction):
-    profile = SocialProfile.create(username='testuser123')
-    post = Post.create(social_profile=profile, media_type='image', media_s3_key='test/sdfjkhn.jpg')
-    assert post
+@pytest.fixture
+def post(profile) -> Post:
+    return Post(
+        shortcode='Cef7VMLloOP',
+        social_profile=profile,
+        media_type='image',
+        caption='Great stuff #yum #friends'
+    )
+
+
+def test_create_profile(transaction, profile):
+    profile.save()
+
+
+def test_create_post(transaction, profile, post):
+    profile.save()
+    post.save()
+
+
+def test_post_hashtags(post):
+    hashtags = post.hashtags
+    for expected in ['yum', 'friends']:
+        assert expected in hashtags
+
+
+def test_post_media_filename(post):
+    assert post.media_filename == 'Cef7VMLloOP.jpg'
+
+
+def test_media_type():
+    assert MediaType('image') == MediaType.IMAGE
+    assert MediaType('video') == MediaType.VIDEO
+    assert MediaType['IMAGE'] == MediaType.IMAGE
+    assert MediaType['VIDEO'] == MediaType.VIDEO
