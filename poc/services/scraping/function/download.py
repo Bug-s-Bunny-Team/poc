@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
+from typing import Optional
 
 import requests
 
-from .models import Post
+from db.models import Post
 from .utils import s3_key_exists, s3_upload_file
 
 
@@ -15,8 +16,8 @@ def download_media(url: str, dest: Path):
                 f.write(chunk)
 
 
-def download_and_save_post(post: Post):
-    post_key = f'{post.social}/{post.media_filename}'
+def download_and_save_post(post: Post) -> Optional[str]:
+    post_key = f'instagram/{post.media_filename}'
     bucket_name = os.environ['ENV_BUCKET_NAME']
 
     if s3_key_exists(bucket_name, post_key):
@@ -28,3 +29,7 @@ def download_and_save_post(post: Post):
 
         print(f'uploading to s3 with key "{post_key}"')
         s3_upload_file(bucket_name, post_key, dest)
+
+        return post_key
+
+    return None

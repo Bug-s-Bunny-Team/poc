@@ -7,16 +7,15 @@ from instaloader import Post as InstaPost
 
 from .exceptions import InvalidUrlException
 from .constants import INSTA_SHORTCODE_REGEX
-from db.models import Post
 
 
 class BaseScraper(ABC):
     @abstractmethod
-    def get_last_post(self, username: str) -> Post:
+    def get_last_post(self, username: str):
         pass
 
     @abstractmethod
-    def get_post_from_url(self, url: str) -> Post:
+    def get_post_from_url(self, url: str):
         pass
 
     # @abstractmethod
@@ -40,14 +39,14 @@ class InstagramScraper(BaseScraper):
     def get_profile(self, username: str) -> Profile:
         return Profile.from_username(self._client.context, username)
 
-    def get_last_post(self, username: str) -> Post:
+    def get_last_post(self, username: str) -> InstaPost:
         profile = self.get_profile(username)
         post = next(profile.get_posts())
-        return Post.from_instaloader_post(post)
+        return post
 
-    def get_post_from_url(self, url: str) -> Post:
+    def get_post_from_url(self, url: str) -> InstaPost:
         shortcode = self._extract_shortcode(url)
         if not shortcode:
             raise InvalidUrlException('Cannot extract shortcode from provided URL')
         p = InstaPost.from_shortcode(self._client.context, shortcode)
-        return Post.from_instaloader_post(p)
+        return p
