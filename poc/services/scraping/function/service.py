@@ -4,8 +4,9 @@ from instaloader import Post as InstaPost
 
 from db.models import SocialProfile, Post
 from db.utils import init_db, create_all_tables
+
 from .download import download_and_save_post
-from .models import LambdaEvent
+from .models import ScrapingEvent
 from .scrapers import InstagramScraper
 
 
@@ -45,7 +46,7 @@ class ScrapingService:
         insta_post = self._scraper.get_post_from_url(url)
         return insta_post
 
-    def process_event(self, event: LambdaEvent) -> dict:
+    def process_event(self, event: ScrapingEvent) -> dict:
         if event.username:
             insta_post = self._scrape_last_post(event.username)
         else:
