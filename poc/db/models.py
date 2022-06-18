@@ -1,8 +1,8 @@
-from functools import cached_property
 from enum import Enum, unique
-from typing import Set, Optional
+from functools import cached_property
+from typing import Set, Tuple
 
-from peewee import *
+from peewee import Model, CharField, TextField, ForeignKeyField, FloatField
 
 from . import db
 
@@ -49,10 +49,8 @@ class Post(BaseModel):
         return set(tags)
 
     @classmethod
-    def from_instaloader_post(cls, insta_post, profile: Optional[SocialProfile] = None):
-        if not profile:
-            profile = SocialProfile.get_or_create(username=insta_post.owner_username)
-        return cls(
+    def from_instaloader_post(cls, insta_post, profile: SocialProfile) -> Tuple[Model, bool]:
+        return Post.get_or_create(
             shortcode=insta_post.shortcode,
             caption=insta_post.caption,
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,

@@ -1,8 +1,24 @@
+from dataclasses import dataclass
+from typing import Optional
+
 import pytest
 
 from db import db
 from db.models import SocialProfile, Post, MediaType
 from db.utils import init_db, create_all_tables
+
+
+@dataclass
+class DummyInstaPost:
+    shortcode: str
+    caption: str
+    url: Optional[str] = None
+    video_url: Optional[str] = None
+
+    @property
+    def is_video(self) -> bool:
+        return self.video_url is not None
+
 
 
 @pytest.fixture
@@ -54,3 +70,15 @@ def test_media_type():
     assert MediaType('video') == MediaType.VIDEO
     assert MediaType['IMAGE'] == MediaType.IMAGE
     assert MediaType['VIDEO'] == MediaType.VIDEO
+
+
+def test_create_from_instaloader_post(transaction, profile):
+    profile.save()
+    insta_post = DummyInstaPost(
+        shortcode='Cef7VMLloOP',
+        caption='A caption',
+        url='https://instagram.fvce2-1.fna.fbcdn.net/v/dkfjgbndfjgbdfgsdfnsdf'
+    )
+    post, created = Post.from_instaloader_post(insta_post, profile)
+    assert created
+    assert post.media_type == MediaType.IMAGE

@@ -59,8 +59,7 @@ class ScrapingService:
                 return self._get_success_response(post)
 
         profile, _ = SocialProfile.get_or_create(username=insta_post.owner_username)
-        post = Post.from_instaloader_post(insta_post, profile)
-        post, created = post.get_or_create()
+        post, created = Post.from_instaloader_post(insta_post, profile)
 
         if created:
             self._download_post(post)
