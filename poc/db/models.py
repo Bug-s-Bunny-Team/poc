@@ -1,8 +1,15 @@
 from enum import Enum, unique
 from functools import cached_property
-from typing import Set, Tuple
+from typing import Set, Tuple, Optional
 
-from peewee import Model, CharField, TextField, ForeignKeyField, FloatField
+from peewee import (
+    Model,
+    CharField,
+    TextField,
+    ForeignKeyField,
+    FloatField,
+    IntegerField,
+)
 
 from . import db
 
@@ -23,10 +30,20 @@ class SocialProfile(BaseModel):
 
 
 class Location(BaseModel):
+    insta_id = IntegerField()
     name = CharField(unique=True)
     lat = FloatField(default=0)
     long = FloatField(default=0)
-    score = FloatField()
+    score = FloatField(null=True)
+
+    @classmethod
+    def from_instaloader_location(cls, location) -> Tuple['Location', bool]:
+        return Location.get_or_create(
+            insta_id=location.id,
+            name=location.name,
+            lat=location.lat,
+            long=location.lng,
+        )
 
 
 class Post(BaseModel):
@@ -49,13 +66,16 @@ class Post(BaseModel):
         return set(tags)
 
     @classmethod
-    def from_instaloader_post(cls, insta_post, profile: SocialProfile) -> Tuple[Model, bool]:
+    def from_instaloader_post(
+        cls, insta_post, profile: SocialProfile, location: Optional[Location] = None
+    ) -> Tuple['Post', bool]:
         return Post.get_or_create(
             shortcode=insta_post.shortcode,
             caption=insta_post.caption,
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
             media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
-            social_profile=profile
+            social_profile=profile,
+            location=location
         )
 
 

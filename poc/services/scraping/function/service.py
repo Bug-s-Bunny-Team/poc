@@ -2,9 +2,8 @@ import json
 
 from instaloader import Post as InstaPost
 
-from db.models import SocialProfile, Post
+from db.models import SocialProfile, Post, Location
 from db.utils import init_db, create_all_tables
-
 from .download import download_and_save_post
 from .models import ScrapingEvent
 from .scrapers import InstagramScraper
@@ -22,19 +21,16 @@ class ScrapingService:
     def _get_success_response(self, post: Post):
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'post': {
-                    'shortcode': post.shortcode,
-                    'media_url': post.media_url
-                }
-            }),
+            'body': json.dumps(
+                {'post': {'shortcode': post.shortcode, 'media_url': post.media_url}}
+            ),
         }
 
     def _download_post(self, post: Post):
         print(f'downloading post "{post.shortcode}"')
         key = download_and_save_post(post)
         post.media_s3_key = key
-        post.update()
+        post.save()
 
     def _scrape_last_post(self, username: str) -> InstaPost:
         print(f'getting last post for "{username}"')
@@ -59,7 +55,11 @@ class ScrapingService:
                 return self._get_success_response(post)
 
         profile, _ = SocialProfile.get_or_create(username=insta_post.owner_username)
-        post, created = Post.from_instaloader_post(insta_post, profile)
+        location = None
+        if insta_post.location:
+            print('post has location data')
+            location, _ = Location.from_instaloader_location(insta_post.location)
+        post, created = Post.from_instaloader_post(insta_post, profile, location)
 
         if created:
             self._download_post(post)
