@@ -2,9 +2,10 @@ from dataclasses import dataclass
 from typing import Optional
 
 import pytest
+from instaloader import PostLocation
 
 from db import db
-from db.models import SocialProfile, Post, MediaType
+from db.models import SocialProfile, Post, MediaType, Location
 from db.utils import init_db, create_all_tables
 
 
@@ -18,7 +19,6 @@ class DummyInstaPost:
     @property
     def is_video(self) -> bool:
         return self.video_url is not None
-
 
 
 @pytest.fixture
@@ -42,7 +42,7 @@ def post(profile) -> Post:
         social_profile=profile,
         media_type='image',
         media_url='https://instagram.fvce2-1.fna.fbcdn.net/v/dkfjgbndfjgbdfgsdfnsdf',
-        caption='Great stuff #yum #friends'
+        caption='Great stuff #yum #friends',
     )
 
 
@@ -77,8 +77,17 @@ def test_create_from_instaloader_post(transaction, profile):
     insta_post = DummyInstaPost(
         shortcode='Cef7VMLloOP',
         caption='A caption',
-        url='https://instagram.fvce2-1.fna.fbcdn.net/v/dkfjgbndfjgbdfgsdfnsdf'
+        url='https://instagram.fvce2-1.fna.fbcdn.net/v/dkfjgbndfjgbdfgsdfnsdf',
     )
     post, created = Post.from_instaloader_post(insta_post, profile)
     assert created
     assert post.media_type == MediaType.IMAGE
+
+
+def test_create_from_instaloader_location(transaction):
+    insta_location = PostLocation(
+        123456, 'Random place', 'random-place', True, 40.0, 20.0
+    )
+    location, created = Location.from_instaloader_location(insta_location)
+    assert created
+    assert location.insta_id == 123456
