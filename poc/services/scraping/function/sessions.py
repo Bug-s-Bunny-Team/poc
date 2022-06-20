@@ -3,7 +3,7 @@ from typing import Optional
 
 import boto3
 
-from .exceptions import ItemNotFoundException
+from common.exceptions import ItemNotFoundException
 
 
 class SessionProvider(ABC):

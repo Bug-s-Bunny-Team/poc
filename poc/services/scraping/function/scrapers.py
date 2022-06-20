@@ -5,7 +5,7 @@ from typing import Optional
 from instaloader import Instaloader, Profile
 from instaloader import Post as InstaPost
 
-from .exceptions import InvalidUrlException
+from common.exceptions import InvalidUrlException
 from .constants import INSTA_SHORTCODE_REGEX
 
 

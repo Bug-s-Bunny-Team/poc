@@ -1,10 +1,10 @@
 from pydantic import ValidationError
 
+from common.exceptions import ItemNotFoundException
 from common.utils import create_error_response
 
-from .exceptions import ItemNotFoundException
-from .service import ScrapingService
 from .models import ScrapingEvent
+from .service import ScrapingService
 from .utils import create_scraper
 
 
