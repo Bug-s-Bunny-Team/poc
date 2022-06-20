@@ -1,8 +1,9 @@
-from .models import ScoringPost
-from abc import ABC, abstractmethod
-from db import init_db
 import boto3
 import os
+from abc import ABC, abstractmethod
+from db.utils import *
+from db.models import *
+from .models import ScoringPost
 
 class OutputStrategy(ABC):
     @abstractmethod
@@ -20,9 +21,14 @@ class S3OutputStrategy:
         print(f'Successfully written output to {self.outputBucket} S3 Bucket')
 
 class DBOutputStrategy:
-
     def output(self, sPost: ScoringPost):
         print(f'Writing output to Database')
         init_db()
-
+        create_all_tables()
+        SocialProfile.create(username="test")
+        Location.create(insta_id=1, name="test_loc")
+        Post.create(shortcode=sPost.id, caption=sPost.caption, social_profile=1, media_type=MediaType.IMAGE, media_url="www.media.url", location=1)
+        response = PostScore.create(media_score=sum(sPost.textsScore.values())/len(sPost.textsScore), 
+                                    caption_score=sPost.captionScore,
+                                    post=sPost.id)
         print(f'Successfully written output to Database')

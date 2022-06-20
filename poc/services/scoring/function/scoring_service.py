@@ -1,9 +1,9 @@
+import boto3
+import os
+from abc import ABC, abstractmethod
 from .models import ScoringPost, Score
 from .event_adapter import EventAdapter
 from .output_strategy import OutputStrategy
-from abc import ABC, abstractmethod
-import boto3
-import os
 
 class ScoringService(ABC):
     __e: EventAdapter

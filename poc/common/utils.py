@@ -25,3 +25,9 @@ def s3_upload_file(bucket_name: str, key: str, src: Path):
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(bucket_name)
     bucket.upload_file(str(src), key)
+
+def key_present_in_dict(dict, key):
+    if key in dict.keys():
+        return True
+    else:
+        return False

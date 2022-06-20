@@ -1,6 +1,7 @@
+import json
 from enum import Enum, unique
 from typing import Dict
-import json
+from common.utils import key_present_in_dict
 
 @unique
 class Score(str, Enum):
@@ -8,12 +9,6 @@ class Score(str, Enum):
     NEGATIVE = "NEGATIVE"
     NEUTRAL = "NEUTRAL"
     POSITIVE = "POSITIVE"
-
-def key_present(dict, key):
-    if key in dict.keys():
-        return True
-    else:
-        return False
 
 class ScoringPost:
     id: str
@@ -39,7 +34,7 @@ class ScoringPost:
 
     @classmethod
     def __validate_input_json(cls, in_json):
-        return key_present(in_json, "id") & key_present(in_json, "caption") & key_present(in_json, "image") & key_present(in_json, "hashtags")
+        return key_present_in_dict(in_json, "id") & key_present_in_dict(in_json, "caption") & key_present_in_dict(in_json, "image") & key_present_in_dict(in_json, "hashtags")
 
     @classmethod
     def fromPost(cls, p):

@@ -1,11 +1,11 @@
+import json
 from .scoring_service import BasicScoringService
 from .event_adapter import SQSEventAdapter, SNSEventAdapter
-from .output_strategy import S3OutputStrategy
-import json
+from .output_strategy import S3OutputStrategy, DBOutputStrategy
 
 def lambda_handler(event, context):
     try:
-        scoringService = BasicScoringService(SNSEventAdapter(), S3OutputStrategy())
+        scoringService = BasicScoringService(SNSEventAdapter(),  DBOutputStrategy())
         scoringService.score(event)
         return 'Success'
     except Exception as e:
