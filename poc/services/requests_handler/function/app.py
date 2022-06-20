@@ -1,10 +1,15 @@
-import json
+from pydantic import ValidationError
+
+from common.utils import create_error_response
+from handler import RequestsHandler
+from services.requests_handler.function.models import Request
 
 
 def lambda_handler(event, context):
-    return {
-        'statusCode': 200,
-        'body': json.dumps({
-            'message': 'hello from RequestsHandler',
-        }),
-    }
+    try:
+        request = Request(**event)
+    except ValidationError as e:
+        return create_error_response(str(e))
+
+    handler = RequestsHandler()
+    return handler.handle_request(request)
