@@ -1,0 +1,80 @@
+openapi: 3.0.0
+info:
+  title: PoC API
+  version: 0.1.0
+  
+paths:
+  /posts/{postId}:
+    get:
+      summary: Returns a Post by ID
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Post in JSON format
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+                  
+  /posts:
+    get:
+      summary: Returns all Post
+      responses:
+        '200':
+          description: JSON array of Post
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Post'
+                  
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        caption:
+          type: string
+          example: A very nice day at place X
+        profile:
+          $ref: '#/components/schemas/SocialProfile'
+        location:
+          $ref: '#/components/schemas/Location' 
+    SocialProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        username:
+          type: string
+          example: ic3peak
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        name:
+          type: string
+          example: X
+        lat:
+          type: number
+          example: 55.7535579
+        long:
+          type: number
+          example: 37.6187217
+        score:
+          type: number
+          example: 4.6
+  
