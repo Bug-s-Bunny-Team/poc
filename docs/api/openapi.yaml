@@ -91,6 +91,39 @@ paths:
                 items: 
                   $ref: '#/components/schemas/Location'
                   
+  /profiles/{profileId}:
+    get:
+      summary: Returns a SocialProfile by ID
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: SocialProfile in JSON format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialProfile'
+        '404':
+          description: SocialProfile not found
+
+  /profiles:
+    get:
+      summary: Returns all SocialProfile
+      responses:
+        '200':
+          description: JSON array of SocialProfile
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialProfile'
+
 components:
   schemas:
     Post:
@@ -102,10 +135,16 @@ components:
         caption:
           type: string
           example: A very nice day at place X
+        media_score:
+          type: number
+          example: 4.5
+        caption_score:
+          type: number
+          example: 4.5
         profile:
           $ref: '#/components/schemas/SocialProfile'
         location:
-          $ref: '#/components/schemas/Location' 
+          $ref: '#/components/schemas/Location'
     SocialProfile:
       type: object
       properties:
@@ -133,4 +172,3 @@ components:
         score:
           type: number
           example: 4.6
-  

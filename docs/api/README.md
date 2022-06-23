@@ -12,6 +12,8 @@ All URIs are relative to *http://localhost*
 *DefaultApi* | [**postsGet**](Apis/DefaultApi.md#postsget) | **GET** /posts | Returns all Post |
 *DefaultApi* | [**postsPost**](Apis/DefaultApi.md#postspost) | **POST** /posts | Scrape and analyze a new Post |
 *DefaultApi* | [**postsPostIdGet**](Apis/DefaultApi.md#postspostidget) | **GET** /posts/{postId} | Returns a Post by ID |
+*DefaultApi* | [**profilesGet**](Apis/DefaultApi.md#profilesget) | **GET** /profiles | Returns all SocialProfile |
+*DefaultApi* | [**profilesProfileIdGet**](Apis/DefaultApi.md#profilesprofileidget) | **GET** /profiles/{profileId} | Returns a SocialProfile by ID |
 
 
 <a name="documentation-for-models"></a>

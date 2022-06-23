@@ -9,6 +9,8 @@ All URIs are relative to *http://localhost*
 | [**postsGet**](DefaultApi.md#postsGet) | **GET** /posts | Returns all Post |
 | [**postsPost**](DefaultApi.md#postsPost) | **POST** /posts | Scrape and analyze a new Post |
 | [**postsPostIdGet**](DefaultApi.md#postsPostIdGet) | **GET** /posts/{postId} | Returns a Post by ID |
+| [**profilesGet**](DefaultApi.md#profilesGet) | **GET** /profiles | Returns all SocialProfile |
+| [**profilesProfileIdGet**](DefaultApi.md#profilesProfileIdGet) | **GET** /profiles/{profileId} | Returns a SocialProfile by ID |
 
 
 <a name="locationsGet"></a>
@@ -120,6 +122,53 @@ Returns a Post by ID
 ### Return type
 
 [**Post**](../Models/Post.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+<a name="profilesGet"></a>
+# **profilesGet**
+> List profilesGet()
+
+Returns all SocialProfile
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List**](../Models/SocialProfile.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+<a name="profilesProfileIdGet"></a>
+# **profilesProfileIdGet**
+> SocialProfile profilesProfileIdGet(profileId)
+
+Returns a SocialProfile by ID
+
+### Parameters
+
+|Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **profileId** | **Integer**|  | [default to null] |
+
+### Return type
+
+[**SocialProfile**](../Models/SocialProfile.md)
 
 ### Authorization
 

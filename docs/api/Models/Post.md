@@ -5,6 +5,8 @@
 |------------ | ------------- | ------------- | -------------|
 | **id** | **Integer** |  | [optional] [default to null] |
 | **caption** | **String** |  | [optional] [default to null] |
+| **media\_score** | **BigDecimal** |  | [optional] [default to null] |
+| **caption\_score** | **BigDecimal** |  | [optional] [default to null] |
 | **profile** | [**SocialProfile**](SocialProfile.md) |  | [optional] [default to null] |
 | **location** | [**Location**](Location.md) |  | [optional] [default to null] |
 
