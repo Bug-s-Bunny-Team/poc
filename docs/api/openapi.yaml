@@ -135,6 +135,9 @@ components:
         caption:
           type: string
           example: A very nice day at place X
+        media_url:
+          type: string
+          example: https://example.com/posts/4/post.jpg
         media_score:
           type: number
           example: 4.5
