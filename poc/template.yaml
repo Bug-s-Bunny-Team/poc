@@ -90,6 +90,11 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
+  RequestsHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/requests_handler/
+
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -1,8 +1,9 @@
 from pydantic import ValidationError
 
 from common.utils import create_error_response
-from handler import RequestsHandler
-from services.requests_handler.function.models import Request
+
+from .handler import RequestsHandler
+from .models import Request
 
 
 def lambda_handler(event, context):

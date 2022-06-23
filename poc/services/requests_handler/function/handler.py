@@ -1,6 +1,6 @@
 import json
 
-from models import Request
+from .models import Request
 
 
 class RequestsHandler:
