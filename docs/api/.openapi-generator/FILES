@@ -1,6 +1,8 @@
-.openapi-generator-ignore
 Apis/DefaultApi.md
 Models/Location.md
 Models/Post.md
 Models/SocialProfile.md
+Models/_posts_get_request.md
+Models/_posts_get_request_oneOf.md
+Models/_posts_get_request_oneOf_1.md
 README.md
