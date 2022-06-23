@@ -82,4 +82,4 @@ class Post(BaseModel):
 class PostScore(BaseModel):
     media_score = FloatField(default=0)
     caption_score = FloatField(default=0)
-    post = ForeignKeyField(Post, backref='post_score', lazy_load=False, unique=True)
+    post = ForeignKeyField(Post, backref='score', lazy_load=False, unique=True)
