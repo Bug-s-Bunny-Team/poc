@@ -27,11 +27,6 @@ esecuzione e comunica con le altre, quando serve, attraverso la rete.
 I servizi qui brevemente descritti verranno implementati all'interno di funzioni *Lambda*. Una descrizione con maggiore
 dettaglio è disponibile nella documentazione specifica ad ogni servizio.
 
-### [RequestsHandler](./services/requests_handler.md)
-
-Gestisce le richieste *HTTP* provenienti dai *clients* attraverso il *Gateway*. Decide se invocare a sua volta *
-ScrapingService* in base alla presenza o meno dei dati richiesti dal *client*, in *RDS* ed *S3*.
-
 ### [ScrapingService](./services/scraping.md)
 
 Esegue lo *scraping* dei dati di uno specifico account social e li memorizza in *RDS* (metadati come *geotag*, username,
