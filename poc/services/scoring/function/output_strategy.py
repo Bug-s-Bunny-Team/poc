@@ -3,7 +3,7 @@ import os
 from abc import ABC, abstractmethod
 from db.utils import *
 from db.models import *
-from .models import ScoringPost
+from common.models import ScoringPost
 
 class OutputStrategy(ABC):
     @abstractmethod
@@ -27,7 +27,7 @@ class DBOutputStrategy:
         create_all_tables()
         SocialProfile.create(username="test")
         Location.create(insta_id=1, name="test_loc")
-        Post.create(shortcode=sPost.id, caption=sPost.caption, social_profile=1, media_type=MediaType.IMAGE, media_url="www.media.url", location=1)
+        Post.create(id=sPost.id, shortcode=1, caption=sPost.caption, social_profile=1, media_type=MediaType.IMAGE, media_url="www.media.url", location=1)
         response = PostScore.create(media_score=sum(sPost.textsScore.values())/len(sPost.textsScore), 
                                     caption_score=sPost.captionScore,
                                     post=sPost.id)

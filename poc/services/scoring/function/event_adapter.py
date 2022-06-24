@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from .models import ScoringPost
+from common.models import ScoringPost
 
 class EventAdapter(ABC):
     @abstractmethod

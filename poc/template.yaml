@@ -53,7 +53,6 @@ Globals:
     Environment:
       Variables:
         ENV_REGION_NAME:  !Ref RegionName
-        # IMPORTANT: if running locally, set the following variables manually!
         ENV_BUCKET_NAME:  !Ref BucketName
         DB_USER:          !Ref DatabaseUser
         DB_PASSWORD:      !Ref DatabasePassword
