@@ -14,18 +14,14 @@ Parameters:
     Type: String
     Default: 'swe-bucket-bugsbunny-frontend'
     Description: Enter desired S3 bucket name for frontend content
-  CloudFrontCachePolicyName:
-    Type: String
-    Default: 'CloudFrontCachePolicy'
-    Description: Enter desired cloudfront cache policy name
   SNSScrapingToScoringName:
     Type: String
     Default: 'swe-sns-score'
     Description: Enter desired SNS topic name
-  RegionName:
+  SNSRequestToScrapeName:
     Type: String
-    Default: 'eu-central-1'
-    Description: Enter region name
+    Default: 'swe-sns-scrape'
+    Description: Enter desired SNS topic name
   DatabaseUser:
     Type: String
     Default: ''
@@ -60,7 +56,7 @@ Globals:
       - !Ref DbLayer
     Environment:
       Variables:
-        ENV_REGION_NAME:  !Ref RegionName
+        ENV_REGION_NAME:  !Ref AWS::Region
         ENV_BUCKET_NAME:  !Ref BackendBucketName
         DB_USER:          !Ref DatabaseUser
         DB_PASSWORD:      !Ref DatabasePassword
@@ -77,17 +73,31 @@ Resources:
     Properties:
       BucketName: !Ref FrontendBucketName
 
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Statement:
+            - Action: s3:GetObject
+              Effect: Allow
+              Resource: 
+                Fn::Join: ['', [Fn::GetAtt: [FrontendBucket, Arn], '/*']]
+              Principal:
+                AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}
+
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: 'Client OAI'
+        Comment: Client Origin Access Identity
 
-  CloudFrontCachePolicy:
+  S3CachePolicy:
     Type: AWS::CloudFront::CachePolicy
     Properties: 
       CachePolicyConfig: 
-        Name: !Ref CloudFrontCachePolicyName
+        Comment: Cache policy used when accessing static data from Frontend S3 Bucket
+        Name: S3CachePolicy
         DefaultTTL: 86400 
         MaxTTL: 31536000 
         MinTTL: 0 
@@ -110,43 +120,46 @@ Resources:
           - Id: !Ref FrontendBucketName
             DomainName: !GetAtt FrontendBucket.RegionalDomainName
             S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
         DefaultCacheBehavior:
           Compress: true
-          CachePolicyId: !Ref CloudFrontCachePolicy 
+          CachePolicyId: !Ref S3CachePolicy 
           TargetOriginId: !Ref FrontendBucketName
           ViewerProtocolPolicy : redirect-to-https
 
-  FrontendBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref FrontendBucket
-      PolicyDocument:
-        Statement:
-            - Action: 's3:GetObject'
-              Effect: Allow
-              Resource: 
-                !Join
-                  - ''
-                  - - !GetAtt FrontendBucket.Arn
-                    - '/*'
-              Principal:
-                AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
-
   # BACKEND
 
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      OpenApiVersion: 3.0.0
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: ../docs/api/openapi copy.yaml
+      EndpointConfiguration:
+        Type: REGIONAL
+
   BackendBucket:
-    Type: AWS::S3::Bucket
+    Type: AWS::S3::Bucket 
     Properties:
       BucketName: !Ref BackendBucketName
       AccessControl: Private
+
+  SNSTopicR2S:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Ref SNSRequestToScrapeName
+      FifoTopic: False
 
   SNSTopicS2S:
     Type: AWS::SNS::Topic
     Properties:
       TopicName: !Ref SNSScrapingToScoringName
       FifoTopic: False
-      
+
   CommonLayer:
     Type: AWS::Serverless::LayerVersion
     LayerName: CommonLayer
@@ -171,6 +184,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: services/requests_handler/
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref SNSTopicR2S
 
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
@@ -178,13 +194,25 @@ Resources:
       CodeUri: services/scraping/
       Environment:
         Variables:
-          INSTA_USERNAME: 'NotABotBB1'
+          INSTA_USERNAME: NotABotBB1
           INSTA_SESSIONS_TABLE: !Ref InstaSessionTableName
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref InstaSessionTableName
         - S3CrudPolicy:
             BucketName: !Ref BackendBucket
+        - Statement:
+            Effect: Allow
+            Action: sns:Subscribe
+            Resource: !Ref SNSTopicR2S
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref SNSTopicS2S
+      Events:
+        SNSEvent:
+          Type: SNS
+          Properties:
+            Topic: !Ref SNSTopicR2S
+          
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function

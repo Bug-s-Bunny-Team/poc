@@ -1,0 +1,10 @@
+openapi: 3.0.0
+info:
+  title: PoC API
+  version: 0.1.0
+  
+paths:   
+  /posts:
+    post:
+      x-amazon-apigateway-integration:
+        type: mock
