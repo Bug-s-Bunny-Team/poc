@@ -195,6 +195,12 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+      Events:
+        ApiAll:
+          Type: Api
+          Properties:
+            Path: /locations
+            Method: get
 
   ProfilesFunction:
     Type: AWS::Serverless::Function
@@ -203,6 +209,12 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /profiles
+            Method: get
 
 
   ScrapingServiceFunction:

@@ -10,10 +10,11 @@ confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
 
-[default.local_invoke.parameters]
+[default.global.parameters]
 parameter_overrides=[
     "DatabaseUser=user",
     "DatabasePassword=password",
     "DatabaseHost=172.18.0.10",
     "DatabaseName=poc"
 ]
+
