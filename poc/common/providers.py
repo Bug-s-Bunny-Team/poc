@@ -13,7 +13,7 @@ class DataProvider(ABC):
         pass
 
     def handle_request(self, request: Request):
-        parts = request.resource.removeprefix('/').split('/')
+        parts = request.path.removeprefix('/').split('/')
         if len(parts) > 1:
             entity_id = int(parts[1])
             return self.get_by_id(entity_id)

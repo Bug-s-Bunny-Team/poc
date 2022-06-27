@@ -196,10 +196,15 @@ Resources:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
       Events:
-        ApiAll:
+        ById:
           Type: Api
           Properties:
             Path: /locations
+            Method: get
+        All:
+          Type: Api
+          Properties:
+            Path: /locations/{id}
             Method: get
 
   ProfilesFunction:
@@ -210,10 +215,15 @@ Resources:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
       Events:
-        ApiEvent:
+        ById:
           Type: Api
           Properties:
             Path: /profiles
+            Method: get
+        All:
+          Type: Api
+          Properties:
+            Path: /profiles/{id}
             Method: get
 
 
