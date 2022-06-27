@@ -1,9 +1,9 @@
 from pydantic import ValidationError
 
+from common.models import Request
 from common.utils import create_error_response
 
-from .handler import RequestsHandler
-from .models import Request
+from .provider import PostProvider
 
 
 def lambda_handler(event, context):
@@ -12,5 +12,5 @@ def lambda_handler(event, context):
     except ValidationError as e:
         return create_error_response(str(e))
 
-    handler = RequestsHandler()
-    return handler.handle_request(request)
+    provider = PostProvider()
+    return provider.handle_request(request)

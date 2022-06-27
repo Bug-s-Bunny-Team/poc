@@ -180,10 +180,10 @@ Resources:
     Metadata:
       BuildMethod: makefile
 
-  RequestsHandlerFunction:
+  PostsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: services/requests_handler/
+      CodeUri: services/posts/
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
