@@ -188,6 +188,23 @@ Resources:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
 
+  LocationsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/locations/
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref SNSTopicR2S
+
+  ProfilesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/profiles/
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref SNSTopicR2S
+
+
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
     Properties:

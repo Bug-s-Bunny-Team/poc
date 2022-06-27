@@ -5,11 +5,12 @@ import boto3
 from botocore.exceptions import ClientError
 
 
-def create_error_response(message: str, code: int = 400):
-    return {
-        'statusCode': code,
-        'body': json.dumps({'error': message}),
-    }
+def create_response(data, code: int) -> dict:
+    return {'statusCode': code, 'body': json.dumps(data)}
+
+
+def create_error_response(message: str, code: int = 400) -> dict:
+    return create_response({'error': message}, code)
 
 
 def s3_key_exists(bucket_name: str, key: str) -> bool:
@@ -25,6 +26,7 @@ def s3_upload_file(bucket_name: str, key: str, src: Path):
     s3 = boto3.resource('s3')
     bucket = s3.Bucket(bucket_name)
     bucket.upload_file(str(src), key)
+
 
 def key_present_in_dict(dict, key):
     if key in dict.keys():
