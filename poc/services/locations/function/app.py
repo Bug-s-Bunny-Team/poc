@@ -1,10 +1,10 @@
 from pydantic import ValidationError
 
 from common.models import Request
+from common.providers import DataProvider
 from common.utils import create_error_response
-from db.utils import init_db
-
-from .provider import LocationProvider
+from db.models import Location
+from db.utils import init_db, create_all_tables
 
 
 def lambda_handler(event, context):
@@ -15,5 +15,5 @@ def lambda_handler(event, context):
 
     init_db()
 
-    provider = LocationProvider()
+    provider = DataProvider(model=Location)
     return provider.handle_request(request)

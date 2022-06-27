@@ -187,6 +187,22 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+      Events:
+        ById:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: get
+        All:
+          Type: Api
+          Properties:
+            Path: /posts/{id}
+            Method: get
+        New:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: post
 
   LocationsFunction:
     Type: AWS::Serverless::Function
