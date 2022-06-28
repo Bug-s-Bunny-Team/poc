@@ -2,7 +2,6 @@ from pydantic import ValidationError
 
 from common.models import Request
 from common.utils import create_error_response
-from db.models import Post
 from db.utils import init_db
 
 from .provider import PostProvider
