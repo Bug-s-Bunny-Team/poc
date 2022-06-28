@@ -1,8 +1,8 @@
 {
-  "body": "{\"message\": \"hello world\"}",
-  "resource": "/posts/1",
-  "path": "/posts/1",
-  "httpMethod": "GET",
+  "body": "{\"url\": \"https://www.instagram.com/p/Cek7VMLjsOa/?igshid=Ym34HBuPY=\"}",
+  "resource": "/posts",
+  "path": "/posts",
+  "httpMethod": "POST",
   "isBase64Encoded": false,
   "queryStringParameters": {
     "foo": "bar"

@@ -6,7 +6,8 @@ from instaloader import Instaloader, Profile
 from instaloader import Post as InstaPost
 
 from common.exceptions import InvalidUrlException
-from .constants import INSTA_SHORTCODE_REGEX
+from common.constants import INSTA_SHORTCODE_REGEX
+from common.utils import extract_insta_shortcode
 
 
 class BaseScraper(ABC):
@@ -24,13 +25,9 @@ class InstagramScraper(BaseScraper):
         self._client = client
         self._shortcode_regex = re.compile(INSTA_SHORTCODE_REGEX)
 
-    def extract_shortcode(self, url: str) -> Optional[str]:
-        groups = self._shortcode_regex.match(url)
-        if groups:
-            shortcode = groups.group(6)
-            if shortcode:
-                return shortcode
-        return None
+    @staticmethod
+    def extract_shortcode(url: str) -> Optional[str]:
+        return extract_insta_shortcode(url)
 
     def get_profile(self, username: str) -> Profile:
         return Profile.from_username(self._client.context, username)

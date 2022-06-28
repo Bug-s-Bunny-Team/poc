@@ -11,7 +11,7 @@ class PostProvider(DataProvider):
     def __init__(self):
         super().__init__(Post)
 
-    def _query_all(self):
+    def query_all(self):
         results = (
             Post.select(Post, SocialProfile, Location)
             .join(SocialProfile, on=(Post.social_profile == SocialProfile.id))
@@ -20,14 +20,15 @@ class PostProvider(DataProvider):
         )
         return results
 
-    def _query_by_id(self, entity_id: int) -> Optional:
+    def query_by_id(self, entity_id: int) -> Optional:
         try:
-            return self._query_all().where(Post.id == entity_id).get()
+            return self.query_all().where(Post.id == entity_id).get()
         except DoesNotExist:
             return None
 
     # TODO: add scores
-    def _serialize(self, result: Post) -> dict:
+    @staticmethod
+    def serialize(result: Post) -> dict:
         return {
             'id': result.id,
             'caption': result.caption,

@@ -1,8 +1,12 @@
 import json
+import re
 from pathlib import Path
+from typing import Optional
 
 import boto3
 from botocore.exceptions import ClientError
+
+from common.constants import INSTA_SHORTCODE_REGEX
 
 
 def create_response(data, code: int) -> dict:
@@ -33,3 +37,12 @@ def key_present_in_dict(dict, key):
         return True
     else:
         return False
+
+
+def extract_insta_shortcode(url: str) -> Optional[str]:
+    groups = re.compile(INSTA_SHORTCODE_REGEX).match(url)
+    if groups:
+        shortcode = groups.group(6)
+        if shortcode:
+            return shortcode
+    return None
