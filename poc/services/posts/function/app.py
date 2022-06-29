@@ -30,6 +30,8 @@ def lambda_handler(event, context):
             try:
                 # check if a post with this shortcode already exists and return it
                 shortcode = extract_insta_shortcode(url)
+                if not shortcode:
+                    return create_error_response('Specified URL is invalid')
                 post = provider.query_all().where(Post.shortcode == shortcode).get()
                 return create_response(provider.serialize(post), 200)
             except DoesNotExist:
