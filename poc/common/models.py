@@ -1,5 +1,5 @@
 import json
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 from enum import Enum, unique
 from typing import Dict, Literal, Optional
 from .utils import key_present_in_dict
@@ -13,7 +13,7 @@ class Request(LambdaEvent):
     resource: str
     path: str
     httpMethod: Literal['GET', 'POST']
-    body: Optional[str] = None
+    body: Optional[Json] = None
 
     class Config:
         extra = 'allow'

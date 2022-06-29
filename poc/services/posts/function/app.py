@@ -1,5 +1,3 @@
-import json
-
 from peewee import DoesNotExist
 from pydantic import ValidationError
 
@@ -23,20 +21,23 @@ def lambda_handler(event, context):
 
     if request.httpMethod == 'GET':
         return provider.handle_request(request)
-    else:
-        body = json.loads(request.body)
 
-        if url := body.get('url'):
-            try:
-                # check if a post with this shortcode already exists and return it
-                shortcode = extract_insta_shortcode(url)
-                if not shortcode:
-                    return create_error_response('Specified URL is invalid')
-                post = provider.query_all().where(Post.shortcode == shortcode).get()
-                return create_response(provider.serialize(post), 200)
-            except DoesNotExist:
-                pass
+    if not request.body:
+        return create_error_response('Body is required')
 
-        # publish scrape request on scrape topic and return something with code 201
+    if url := request.body.get('url'):
+        try:
+            # check if a post with this shortcode already exists and return it
+            shortcode = extract_insta_shortcode(url)
+            if not shortcode:
+                return create_error_response('Specified URL is invalid')
+            post = provider.query_all().where(Post.shortcode == shortcode).get()
+            return create_response(provider.serialize(post), 200)
+        except DoesNotExist:
+            pass
+    elif not request.body.get('username'):
+        return create_error_response('URL or username not provided')
 
-        return create_error_response('Not implemented')
+    # publish scrape request on scrape topic and return something with code 201
+
+    return create_error_response('Not implemented')
