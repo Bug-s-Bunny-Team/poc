@@ -12,4 +12,4 @@ Il secondo step è l'uso di *AWS Comprehend* per ottenere uno score sul sentimen
 
 # Scoring
 
-L'ultimo step cerca di dare una valutazione unica in floating point ad un post considerando i risultati dell'analisi fatta con *Comprehend*. Questo valore viene poi inserito nel Database scelto.
+L'ultimo step cerca di dare una valutazione alla caption e al testo trovato nell'immagine in floating point considerando i risultati dell'analisi fatta con *Comprehend*. Questo valore viene poi inserito nel Database scelto.

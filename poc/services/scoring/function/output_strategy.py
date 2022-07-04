@@ -3,7 +3,13 @@ import os
 from abc import ABC, abstractmethod
 from db.utils import *
 from db.models import *
-from common.models import ScoringPost
+from .models import ScoringPost
+
+init_db()
+create_all_tables()
+SocialProfile.get_or_create(username="test")
+Location.get_or_create(insta_id=1, name="test_loc")
+Post.get_or_create(id=1, shortcode=1, caption="unfortunately today it is raining in Seattle #sad #city", social_profile=1, media_type=MediaType.IMAGE, media_url="test.png", location=1)
 
 class OutputStrategy(ABC):
     @abstractmethod
@@ -23,12 +29,8 @@ class S3OutputStrategy:
 class DBOutputStrategy:
     def output(self, sPost: ScoringPost):
         print(f'Writing output to Database')
-        init_db()
-        create_all_tables()
-        SocialProfile.create(username="test")
-        Location.create(insta_id=1, name="test_loc")
-        Post.create(id=sPost.id, shortcode=1, caption=sPost.caption, social_profile=1, media_type=MediaType.IMAGE, media_url="www.media.url", location=1)
-        response = PostScore.create(media_score=sum(sPost.textsScore.values())/len(sPost.textsScore), 
-                                    caption_score=sPost.captionScore,
-                                    post=sPost.id)
+        postScore = PostScore.get_or_create(post=sPost.id)[0]
+        postScore.caption_score = sPost.captionScore
+        postScore.media_score = sum(sPost.textsScore.values())/len(sPost.textsScore)
+        postScore.save()
         print(f'Successfully written output to Database')

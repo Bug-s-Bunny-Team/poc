@@ -1,7 +1,7 @@
 import boto3
 import os
 from abc import ABC, abstractmethod
-from common.models import ScoringPost, Score
+from .models import ScoringPost, Score
 from .event_adapter import EventAdapter
 from .output_strategy import OutputStrategy
 
@@ -38,7 +38,7 @@ class ScoringService(ABC):
 
 class BasicScoringService(ScoringService):
     @classmethod
-    def __add_text_from_rekognition_image(cls, sPost: ScoringPost, rekResult):
+    def __parse_rekognition_response(cls, sPost: ScoringPost, rekResult):
         for line in rekResult['TextDetections']:
             if(line['Type']=='LINE'):
                 sPost.texts[line['Id']] = line['DetectedText']
@@ -48,7 +48,7 @@ class BasicScoringService(ScoringService):
         return list([sPost.caption, *sPost.texts.values(), *sPost.hashtags.values()])
 
     @classmethod
-    def __add_results_from_comprehend(cls, sPost: ScoringPost, compResult):
+    def __parse_comprehend_response(cls, sPost: ScoringPost, compResult):
         n_texts = len(sPost.texts)
         if(len(compResult['ErrorList'])>0):
             raise Exception(compResult['ErrorList'])
@@ -66,13 +66,13 @@ class BasicScoringService(ScoringService):
     def _runRekognition(self, sPost: ScoringPost):
         print('Analyzing image')
         response = self._rekognition.detect_text(Image={'S3Object': {'Bucket': os.environ['ENV_BUCKET_NAME'], 'Name': sPost.image}})
-        BasicScoringService.__add_text_from_rekognition_image(sPost, response)
+        BasicScoringService.__parse_rekognition_response(sPost, response)
         print('Successfully analized image')
 
     def _runComprehend(self, sPost: ScoringPost):
         print('Analizying textual information')
         response = self._comprehend.batch_detect_sentiment(TextList=BasicScoringService.__unpack_post_for_comprehend(sPost), LanguageCode='en')
-        BasicScoringService.__add_results_from_comprehend(sPost, response)
+        BasicScoringService.__parse_comprehend_response(sPost, response)
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):

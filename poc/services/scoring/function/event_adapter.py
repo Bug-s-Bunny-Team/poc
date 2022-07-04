@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from common.models import ScoringPost
+from db.utils import *
+from db.models import *
+from .models import ScoringPost
 
 class EventAdapter(ABC):
     @abstractmethod
@@ -16,6 +18,7 @@ class SQSEventAdapter(EventAdapter):
 class SNSEventAdapter(EventAdapter):
     def processEvent(self, event) -> ScoringPost:
         print("Processing SNS Event")
-        post = ScoringPost.fromString(event['Records'][0]['Sns']['Message'])
-        print("Successfully processed data, subject: " + event['Records'][0]['Sns']['Subject'])
-        return post
+        post = Post.get(id=event['Records'][0]['Sns']['MessageAttributes']['id'])
+        sPost = ScoringPost.fromPost(post)
+        print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
+        return sPost

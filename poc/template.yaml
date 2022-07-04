@@ -6,6 +6,10 @@ Description: >
   SAM Template for poc
 
 Parameters:
+  RegionName:
+    Type: String
+    Default: 'eu-central-1'
+    Description: Enter name of aws region since AWS::Region does not work
   BackendBucketName:
     Type: String
     Default: 'swe-bucket-bugsbunny-backend'
@@ -14,6 +18,10 @@ Parameters:
     Type: String
     Default: 'swe-bucket-bugsbunny-frontend'
     Description: Enter desired S3 bucket name for frontend content
+  ApiStageName:
+    Type: String
+    Default: 'dev'
+    Description: Enter desired Api stage name
   SNSScrapingToScoringName:
     Type: String
     Default: 'swe-sns-score'
@@ -56,7 +64,7 @@ Globals:
       - !Ref DbLayer
     Environment:
       Variables:
-        ENV_REGION_NAME:  !Ref AWS::Region
+        ENV_REGION_NAME:  !Ref RegionName #!Ref AWS::Region wtf non funziona
         ENV_BUCKET_NAME:  !Ref BackendBucketName
         DB_USER:          !Ref DatabaseUser
         DB_PASSWORD:      !Ref DatabasePassword
@@ -108,7 +116,37 @@ Resources:
             HeaderBehavior: none
           QueryStringsConfig:
             QueryStringBehavior: none
+          EnableAcceptEncodingGzip: true
+
+  ApiCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties: 
+      CachePolicyConfig: 
+        Comment: Cache policy used when accessing Backend Api
+        Name: ApiCachePolicy
+        DefaultTTL: 0 
+        MaxTTL: 0 
+        MinTTL: 0 
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
           EnableAcceptEncodingGzip: false
+
+  ApiOriginRequestPolicy:
+    Type: AWS::CloudFront::OriginRequestPolicy
+    Properties: 
+      OriginRequestPolicyConfig: 
+        Name: ApiOriginRequestPolicy
+        HeadersConfig: 
+          HeaderBehavior: allViewer
+        CookiesConfig: 
+          CookieBehavior: all
+        QueryStringsConfig: 
+          QueryStringBehavior: all
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -117,22 +155,36 @@ Resources:
         DefaultRootObject: index.html
         Enabled: true
         Origins:
-          - Id: !Ref FrontendBucketName
+          - Id: S3Origin
             DomainName: !GetAtt FrontendBucket.RegionalDomainName
             S3OriginConfig:
               OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
+          - Id: ApiOrigin
+            DomainName: !Sub "${Api}.execute-api.${RegionName}.amazonaws.com"
+            OriginPath: !Sub "/${ApiStageName}"
+            CustomOriginConfig: 
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: 
+                - TLSv1.2
+        CacheBehaviors:
+          - PathPattern: api/*
+            TargetOriginId: ApiOrigin
+            CachePolicyId: !Ref ApiCachePolicy
+            OriginRequestPolicyId: !Ref ApiOriginRequestPolicy 
+            ViewerProtocolPolicy : redirect-to-https
+            Compress: true
         DefaultCacheBehavior:
-          Compress: true
+          TargetOriginId: S3Origin
           CachePolicyId: !Ref S3CachePolicy 
-          TargetOriginId: !Ref FrontendBucketName
           ViewerProtocolPolicy : redirect-to-https
+          Compress: true
 
   # BACKEND
 
   Api:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: dev
+      StageName: !Ref ApiStageName
       EndpointConfiguration:
         Type: REGIONAL
 
@@ -140,7 +192,6 @@ Resources:
     Type: AWS::S3::Bucket 
     Properties:
       BucketName: !Ref BackendBucketName
-      AccessControl: Private
 
   SNSTopicR2S:
     Type: AWS::SNS::Topic
@@ -276,6 +327,7 @@ Resources:
       CodeUri: services/scoring/
       Policies:
         - ComprehendBasicAccessPolicy: {}
+        - RekognitionDetectOnlyPolicy: {}
         - S3CrudPolicy: 
             BucketName: !Ref BackendBucket
         - Statement:
