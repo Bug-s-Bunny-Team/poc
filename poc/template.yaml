@@ -133,12 +133,6 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: dev
-      OpenApiVersion: 3.0.0
-      DefinitionBody:
-        Fn::Transform:
-          Name: AWS::Include
-          Parameters:
-            Location: ../docs/api/openapi copy.yaml
       EndpointConfiguration:
         Type: REGIONAL
 
@@ -193,16 +187,19 @@ Resources:
           Properties:
             Path: /posts
             Method: get
+            RestApiId: !Ref Api
         All:
           Type: Api
           Properties:
             Path: /posts/{id}
             Method: get
+            RestApiId: !Ref Api 
         New:
           Type: Api
           Properties:
             Path: /posts
             Method: post
+            RestApiId: !Ref Api
 
   LocationsFunction:
     Type: AWS::Serverless::Function
@@ -217,11 +214,13 @@ Resources:
           Properties:
             Path: /locations
             Method: get
+            RestApiId: !Ref Api
         All:
           Type: Api
           Properties:
             Path: /locations/{id}
             Method: get
+            RestApiId: !Ref Api
 
   ProfilesFunction:
     Type: AWS::Serverless::Function
@@ -236,11 +235,13 @@ Resources:
           Properties:
             Path: /profiles
             Method: get
+            RestApiId: !Ref Api
         All:
           Type: Api
           Properties:
             Path: /profiles/{id}
             Method: get
+            RestApiId: !Ref Api
 
 
   ScrapingServiceFunction:
