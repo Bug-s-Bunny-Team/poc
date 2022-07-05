@@ -20,7 +20,7 @@ Parameters:
     Description: Enter desired S3 bucket name for frontend content
   ApiStageName:
     Type: String
-    Default: 'dev'
+    Default: 'dev-api' # non funziona, è sempre == 'dev' ???
     Description: Enter desired Api stage name
   SNSScrapingToScoringName:
     Type: String
@@ -136,24 +136,13 @@ Resources:
             QueryStringBehavior: none
           EnableAcceptEncodingGzip: false
 
-  ApiOriginRequestPolicy:
-    Type: AWS::CloudFront::OriginRequestPolicy
-    Properties: 
-      OriginRequestPolicyConfig: 
-        Name: ApiOriginRequestPolicy
-        HeadersConfig: 
-          HeaderBehavior: allViewer
-        CookiesConfig: 
-          CookieBehavior: all
-        QueryStringsConfig: 
-          QueryStringBehavior: all
-
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         DefaultRootObject: index.html
         Enabled: true
+        HttpVersion: http2
         Origins:
           - Id: S3Origin
             DomainName: !GetAtt FrontendBucket.RegionalDomainName
@@ -161,16 +150,14 @@ Resources:
               OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
           - Id: ApiOrigin
             DomainName: !Sub "${Api}.execute-api.${RegionName}.amazonaws.com"
-            OriginPath: !Sub "/${ApiStageName}"
             CustomOriginConfig: 
               OriginProtocolPolicy: https-only
               OriginSSLProtocols: 
                 - TLSv1.2
         CacheBehaviors:
-          - PathPattern: api/*
+          - PathPattern: !Sub '${ApiStageName}/*'
             TargetOriginId: ApiOrigin
             CachePolicyId: !Ref ApiCachePolicy
-            OriginRequestPolicyId: !Ref ApiOriginRequestPolicy 
             ViewerProtocolPolicy : redirect-to-https
             Compress: true
         DefaultCacheBehavior:
@@ -344,4 +331,7 @@ Outputs:
   CloudFrontDomain:
     Description: CloudFront domain name accessible from public
     Value: !GetAtt CloudFrontDistribution.DomainName
+  ApiPath:
+    Description: Api path accessible through CloudFront
+    Value: !Sub '${CloudFrontDistribution.DomainName}/${ApiStageName}'
 
