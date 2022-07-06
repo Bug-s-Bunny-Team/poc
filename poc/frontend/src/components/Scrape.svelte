@@ -36,8 +36,8 @@
     }
 </script>
 
+<h2>Scrape</h2>
 <article>
-    <h2>Scrape</h2>
     <form on:submit|preventDefault={handleSubmit} autocomplete="off">
         <div class="grid">
             <label for="scrape-input">
