@@ -1,6 +1,6 @@
 import MainLayout from "./components/MainLayout.svelte";
-import Scrape from "./components/Scrape.svelte";
-import Posts from "./components/Posts.svelte";
+import Scrape from "./pages/Scrape.svelte";
+import Posts from "./pages/Posts.svelte";
 
 const routes = [
     {

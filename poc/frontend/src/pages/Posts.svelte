@@ -1,20 +1,35 @@
 <script lang="ts">
+    import type { Post } from "src/models";
     import catUrl from "../assets/cat.jpg";
 
-    let posts = [
+    let posts: Array<Post> = [
         {
-            username: "testuser1",
-            location: "Rome, Italy",
+            id: 1,
             caption: "",
             caption_score: 1,
             media_score: 1,
+            profile: {
+                id: 1,
+                username: "testuser1"
+            },
+            location: {
+                id: 1,
+                name: "Rome, Italy",
+                lat: 0,
+                long: 0,
+                score: 1,
+            }
         },
         {
-            username: "testuser2",
-            location: "Rome, Italy",
+            id: 2,
             caption: "",
             caption_score: 1,
             media_score: 1,
+            profile: {
+                id: 2,
+                username: "testuser2"
+            },
+            location: null
         },
     ];
 </script>
@@ -26,10 +41,10 @@
             <article>
                 <header class="no-bottom-padding">
                     <ul>
-                        <li><strong>Username</strong>: {post.username}</li>
+                        <li><strong>Username</strong>: {post.profile.username}</li>
                         <li>
                             <strong>Location</strong>: {post.location
-                                ? post.location
+                                ? post.location.name
                                 : "N/A"}
                         </li>
                     </ul>
