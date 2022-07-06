@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { navigateTo } from "svelte-router-spa";
+
     const modes = [
         {
             name: "username",
@@ -29,11 +31,13 @@
         showProgress = true;
         await timeout(3000);
         showProgress = false;
+
+        navigateTo("/results");
     }
 </script>
 
 <article>
-    <form on:submit|preventDefault={handleSubmit}>
+    <form on:submit|preventDefault={handleSubmit} autocomplete="off">
         <div class="grid">
             <label for="scrape-input">
                 {mode.label}
@@ -43,19 +47,23 @@
                     bind:value={scrapeInput}
                     placeholder={mode.placeholder}
                     required
-                    disabled="{showProgress}"
+                    disabled={showProgress}
                 />
             </label>
             <div>
                 <label for="mode-select">Mode</label>
-                <select id="mode-select" bind:value={mode} disabled="{showProgress}">
+                <select
+                    id="mode-select"
+                    bind:value={mode}
+                    disabled={showProgress}
+                >
                     {#each modes as mode}
                         <option value={mode}>{mode.label}</option>
                     {/each}
                 </select>
             </div>
         </div>
-        <button type="submit" disabled="{showProgress}">Scrape</button>
+        <button type="submit" disabled={showProgress}>Scrape</button>
     </form>
     {#if showProgress}
         <progress />
