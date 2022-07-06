@@ -1,5 +1,5 @@
-/* Green Light scheme (Default) */
-/* Can be forced with data-theme="light" */
+@import "@picocss/pico/css/pico";
+
 [data-theme="light"],
 :root:not([data-theme="dark"]) {
   --primary: #43a047;
