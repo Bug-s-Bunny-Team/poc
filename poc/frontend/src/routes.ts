@@ -1,5 +1,5 @@
 import Scrape from "./components/Scrape.svelte";
-import Results from "./components/Results.svelte";
+import Posts from "./components/Posts.svelte";
 
 const routes = [
     {
@@ -7,8 +7,8 @@ const routes = [
         component: Scrape
     },
     {
-        name: 'results',
-        component: Results
+        name: 'posts',
+        component: Posts
     }
 ];
 

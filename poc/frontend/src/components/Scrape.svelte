@@ -32,7 +32,7 @@
         await timeout(3000);
         showProgress = false;
 
-        navigateTo("/results");
+        navigateTo("/posts");
     }
 </script>
 
