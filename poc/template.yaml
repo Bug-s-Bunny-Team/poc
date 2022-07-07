@@ -219,6 +219,9 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+      Environment:
+        Variables:
+          SNS_SCORING_TOPIC: !Ref SNSTopicR2S
       Events:
         ById:
           Type: Api

@@ -1,3 +1,7 @@
+import json
+import os
+
+import boto3
 from peewee import DoesNotExist
 from pydantic import ValidationError
 
@@ -39,5 +43,8 @@ def lambda_handler(event, context):
         return create_error_response('URL or username not provided')
 
     # publish scrape request on scrape topic and return something with code 201
+    sns = boto3.resource('sns')
+    topic = sns.Topic(os.environ['SNS_SCORING_TOPIC'])
+    topic.publish(Message=json.dumps(request.body))
 
     return create_error_response('Not implemented')
