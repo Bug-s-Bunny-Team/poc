@@ -1,19 +1,7 @@
 <script lang="ts">
     import { navigateTo } from "svelte-router-spa";
 
-    const modes = [
-        {
-            name: "username",
-            label: "Username",
-            placeholder: "testuser123",
-        },
-        {
-            name: "url",
-            label: "URL",
-            placeholder:
-                "https://www.instagram.com/p/Cek7VMLjsOa/?igshid=Ym34HBuPY=",
-        },
-    ];
+    const modes = ["Username", "URL"]
     let mode = modes[0];
     let scrapeInput = "";
     let showProgress = false;
@@ -24,7 +12,7 @@
 
     async function handleSubmit() {
         let request = {
-            [mode.name]: scrapeInput,
+            [mode.toLowerCase()]: scrapeInput,
         };
         console.log(JSON.stringify(request));
 
@@ -40,17 +28,32 @@
 <article>
     <form on:submit|preventDefault={handleSubmit} autocomplete="off">
         <div class="grid">
+            {#if mode == "Username"}
+                <label for="scrape-input">
+                    Username
+                    <input
+                        type="text"
+                        id="scrape-input"
+                        bind:value={scrapeInput}
+                        placeholder="testuser123"
+                        required
+                        disabled={showProgress}
+                        pattern="^[^\s]+$"
+                    />
+                </label>
+            {:else}
             <label for="scrape-input">
-                {mode.label}
+                URL
                 <input
-                    type="text"
+                    type="url"
                     id="scrape-input"
                     bind:value={scrapeInput}
-                    placeholder={mode.placeholder}
+                    placeholder="https://www.instagram.com/p/Cek7VMLjsOa"
                     required
                     disabled={showProgress}
                 />
             </label>
+            {/if}
             <div>
                 <label for="mode-select">Mode</label>
                 <select
@@ -59,7 +62,7 @@
                     disabled={showProgress}
                 >
                     {#each modes as mode}
-                        <option value={mode}>{mode.label}</option>
+                        <option value={mode}>{mode}</option>
                     {/each}
                 </select>
             </div>
