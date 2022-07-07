@@ -1,5 +1,6 @@
 import os
 from typing import Optional
+from .secret import get_db_secret
 
 from . import db
 from db.models import SocialProfile, PostScore, Post, Location
@@ -11,11 +12,12 @@ def init_db(
     host: Optional[str] = None,
     database: Optional[str] = None,
 ):
+    get_secret = True
     db.init(
-        user=user if user else os.environ['DB_USER'],
-        password=password if password else os.environ['DB_PASSWORD'],
-        host=host if host else os.environ['DB_HOST'],
-        database=database if database else os.environ['DB_NAME'],
+        user=get_db_secret()["username"] if get_secret else os.environ['DB_USER'],
+        password=get_db_secret()["password"] if get_secret else os.environ['DB_PASSWORD'],
+        host=get_db_secret()["host"] if get_secret else os.environ['DB_HOST'],
+        database=get_db_secret()["database"] if get_secret else os.environ['DB_NAME'],
     )
     db.connect()
 
