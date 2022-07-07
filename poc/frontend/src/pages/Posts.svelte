@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Post } from "src/models";
+    import type { Post } from "../models";
     import catUrl from "../assets/cat.jpg";
 
     let posts: Array<Post> = [
@@ -31,6 +31,50 @@
             },
             location: null
         },
+        {
+            id: 2,
+            caption: "",
+            caption_score: 1,
+            media_score: 1,
+            profile: {
+                id: 2,
+                username: "testuser2"
+            },
+            location: null
+        },
+        {
+            id: 2,
+            caption: "",
+            caption_score: 1,
+            media_score: 1,
+            profile: {
+                id: 2,
+                username: "testuser2"
+            },
+            location: null
+        },
+        {
+            id: 2,
+            caption: "",
+            caption_score: 1,
+            media_score: 1,
+            profile: {
+                id: 2,
+                username: "testuser2"
+            },
+            location: null
+        },
+        {
+            id: 2,
+            caption: "",
+            caption_score: 1,
+            media_score: 1,
+            profile: {
+                id: 2,
+                username: "testuser2"
+            },
+            location: null
+        },
     ];
 </script>
 
@@ -40,7 +84,7 @@
         <div class="grid">
             {#each posts as post}
                 <article>
-                    <header class="no-bottom-padding">
+                    <header>
                         <ul>
                             <li><strong>Username</strong>: {post.profile.username}</li>
                             <li>
@@ -53,7 +97,7 @@
                     <div class="img-container">
                         <img src={catUrl} alt="idk" />
                     </div>
-                    <footer class="no-bottom-padding">
+                    <footer>
                         <ul>
                             <li>
                                 <strong>Caption score</strong>: {post.caption_score}
@@ -72,18 +116,18 @@
 </div>
 
 <style>
+    ul {
+        margin-bottom: 0px;
+    }
     li {
         list-style-type: none;
-    }
-    img {
-        max-width: 80%;
     }
     article {
         margin-top: 1em;
         margin-bottom: 1em;
     }
-    .no-bottom-padding {
-        padding-bottom: 0px;
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
     }
     .img-container {
         text-align: center;
