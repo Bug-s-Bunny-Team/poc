@@ -1,12 +1,12 @@
 <script lang="ts">
     import routes from "../routes";
     export let currentRoute;
-    console.log(currentRoute);
 </script>
 
 <nav class="container">
     <ul>
         <li><strong>PoC</strong></li>
+        <li class="timestamp">build: {__BUILD_TIMESTAMP__}</li>
     </ul>
     <ul>
         {#each routes as route}
@@ -24,5 +24,8 @@
     .current {
         --background-color: var(--primary-focus);
         --color: var(--primary-hover);
+    }
+    .timestamp {
+        font-size: x-small;
     }
 </style>
