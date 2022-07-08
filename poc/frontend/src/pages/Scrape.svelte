@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { API_BASE } from "../config";
     import { navigateTo } from "svelte-router-spa";
 
     const modes = ["Username", "URL"];
@@ -14,13 +15,23 @@
         let request = {
             [mode.toLowerCase()]: scrapeInput,
         };
-        console.log(JSON.stringify(request));
 
         showProgress = true;
-        await timeout(2000);
-        showProgress = false;
-
-        navigateTo('/posts');
+        // await timeout(2000);
+        fetch(`${API_BASE}/posts`, {
+            method: "POST",
+            body: JSON.stringify(request),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                showProgress = false;
+                navigateTo("/posts");
+            })
+            .catch((err) => {
+                console.log(err)
+                showProgress = false;
+            });
     }
 </script>
 
