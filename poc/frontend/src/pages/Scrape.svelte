@@ -17,19 +17,19 @@
         console.log(JSON.stringify(request));
 
         showProgress = true;
-        await timeout(3000);
+        await timeout(2000);
         showProgress = false;
 
-        navigateTo("/posts");
+        navigateTo('/posts');
     }
 </script>
 
 <h2>Scrape</h2>
 <article>
     {#if mode == "Username"}
-    <p>Scrape last from some profile username.</p>
+        <p>Scrape last post from some profile username.</p>
     {:else}
-    <p>Scrape a post from its URL.</p>
+        <p>Scrape a post from its URL.</p>
     {/if}
     <form on:submit|preventDefault={handleSubmit} autocomplete="off">
         <div class="grid">
