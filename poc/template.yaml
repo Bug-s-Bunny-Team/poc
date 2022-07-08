@@ -159,13 +159,21 @@ Resources:
             CachePolicyId: !Ref ApiCachePolicy
             ViewerProtocolPolicy: redirect-to-https
             Compress: true
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - PATCH
+              - POST
+              - DELETE
         DefaultCacheBehavior:
           TargetOriginId: S3Origin
           CachePolicyId: !Ref S3CachePolicy
           ViewerProtocolPolicy: redirect-to-https
           Compress: true
 
-    # BACKEND
+  # BACKEND
 
   Api:
     Type: AWS::Serverless::Api
