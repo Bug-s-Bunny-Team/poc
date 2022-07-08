@@ -64,20 +64,12 @@ Globals:
       - !Ref DbLayer
     Environment:
       Variables:
-        ENV_REGION_NAME: !Ref RegionName #!Ref AWS::Region wtf non funziona
-        ENV_BUCKET_NAME: !Ref BackendBucketName
-        DB_USER: !Ref DatabaseUser
-        DB_PASSWORD: !Ref DatabasePassword
-        DB_HOST: !Ref DatabaseHost
-        DB_NAME: !Ref DatabaseName
-    VpcConfig:
-      SecurityGroupIds:
-        - sg-07f4a769e463ffb9c
-      SubnetIds:
-        - subnet-05c442430ab98ad16
-        - subnet-0e2905715dec21833
-        - subnet-05dfc206871eba542
-        - subnet-0e94a60afe6c90bd7
+        ENV_REGION_NAME:  !Ref RegionName #!Ref AWS::Region wtf non funziona
+        ENV_BUCKET_NAME:  !Ref BackendBucketName
+        DB_USER:          !Ref DatabaseUser
+        DB_PASSWORD:      !Ref DatabasePassword
+        DB_HOST:          !Ref DatabaseHost
+        DB_NAME:          !Ref DatabaseName
 
 Resources:
 
