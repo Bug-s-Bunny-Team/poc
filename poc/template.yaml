@@ -64,12 +64,12 @@ Globals:
       - !Ref DbLayer
     Environment:
       Variables:
-        ENV_REGION_NAME:  !Ref RegionName #!Ref AWS::Region wtf non funziona
-        ENV_BUCKET_NAME:  !Ref BackendBucketName
-        DB_USER:          !Ref DatabaseUser
-        DB_PASSWORD:      !Ref DatabasePassword
-        DB_HOST:          !Ref DatabaseHost
-        DB_NAME:          !Ref DatabaseName
+        ENV_REGION_NAME: !Ref RegionName #!Ref AWS::Region wtf non funziona
+        ENV_BUCKET_NAME: !Ref BackendBucketName
+        DB_USER: !Ref DatabaseUser
+        DB_PASSWORD: !Ref DatabasePassword
+        DB_HOST: !Ref DatabaseHost
+        DB_NAME: !Ref DatabaseName
     VpcConfig:
       SecurityGroupIds:
         - sg-07f4a769e463ffb9c
@@ -78,7 +78,6 @@ Globals:
         - subnet-0e2905715dec21833
         - subnet-05dfc206871eba542
         - subnet-0e94a60afe6c90bd7
-
 
 Resources:
 
@@ -95,12 +94,12 @@ Resources:
       Bucket: !Ref FrontendBucket
       PolicyDocument:
         Statement:
-            - Action: s3:GetObject
-              Effect: Allow
-              Resource: 
-                Fn::Join: ['', [Fn::GetAtt: [FrontendBucket, Arn], '/*']]
-              Principal:
-                AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join: [ '', [ Fn::GetAtt: [ FrontendBucket, Arn ], '/*' ] ]
+            Principal:
+              AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}
 
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -110,13 +109,13 @@ Resources:
 
   S3CachePolicy:
     Type: AWS::CloudFront::CachePolicy
-    Properties: 
-      CachePolicyConfig: 
+    Properties:
+      CachePolicyConfig:
         Comment: Cache policy used when accessing static data from Frontend S3 Bucket
         Name: S3CachePolicy
-        DefaultTTL: 86400 
-        MaxTTL: 31536000 
-        MinTTL: 0 
+        DefaultTTL: 86400
+        MaxTTL: 31536000
+        MinTTL: 0
         ParametersInCacheKeyAndForwardedToOrigin:
           CookiesConfig:
             CookieBehavior: none
@@ -128,13 +127,13 @@ Resources:
 
   ApiCachePolicy:
     Type: AWS::CloudFront::CachePolicy
-    Properties: 
-      CachePolicyConfig: 
+    Properties:
+      CachePolicyConfig:
         Comment: Cache policy used when accessing Backend Api
         Name: ApiCachePolicy
-        DefaultTTL: 0 
-        MaxTTL: 0 
-        MinTTL: 0 
+        DefaultTTL: 0
+        MaxTTL: 0
+        MinTTL: 0
         ParametersInCacheKeyAndForwardedToOrigin:
           CookiesConfig:
             CookieBehavior: none
@@ -158,23 +157,23 @@ Resources:
               OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
           - Id: ApiOrigin
             DomainName: !Sub "${Api}.execute-api.${RegionName}.amazonaws.com"
-            CustomOriginConfig: 
+            CustomOriginConfig:
               OriginProtocolPolicy: https-only
-              OriginSSLProtocols: 
+              OriginSSLProtocols:
                 - TLSv1.2
         CacheBehaviors:
           - PathPattern: !Sub '${ApiStageName}/*'
             TargetOriginId: ApiOrigin
             CachePolicyId: !Ref ApiCachePolicy
-            ViewerProtocolPolicy : redirect-to-https
+            ViewerProtocolPolicy: redirect-to-https
             Compress: true
         DefaultCacheBehavior:
           TargetOriginId: S3Origin
-          CachePolicyId: !Ref S3CachePolicy 
-          ViewerProtocolPolicy : redirect-to-https
+          CachePolicyId: !Ref S3CachePolicy
+          ViewerProtocolPolicy: redirect-to-https
           Compress: true
 
-  # BACKEND
+    # BACKEND
 
   Api:
     Type: AWS::Serverless::Api
@@ -184,7 +183,7 @@ Resources:
         Type: REGIONAL
 
   BackendBucket:
-    Type: AWS::S3::Bucket 
+    Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref BackendBucketName
 
@@ -227,6 +226,7 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Environment:
         Variables:
           SNS_SCORING_TOPIC: !Ref SNSTopicR2S
@@ -242,7 +242,7 @@ Resources:
           Properties:
             Path: /posts/{id}
             Method: get
-            RestApiId: !Ref Api 
+            RestApiId: !Ref Api
         New:
           Type: Api
           Properties:
@@ -257,6 +257,7 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         ById:
           Type: Api
@@ -278,6 +279,7 @@ Resources:
       Policies:
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicR2S
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         ById:
           Type: Api
@@ -312,26 +314,28 @@ Resources:
             Resource: !Ref SNSTopicR2S
         - SNSPublishMessagePolicy:
             TopicName: !Ref SNSTopicS2S
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         SNSEvent:
           Type: SNS
           Properties:
             Topic: !Ref SNSTopicR2S
-          
+
 
   ScoringServiceFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: services/scoring/
       Policies:
-        - ComprehendBasicAccessPolicy: {}
-        - RekognitionDetectOnlyPolicy: {}
-        - S3CrudPolicy: 
+        - ComprehendBasicAccessPolicy: { }
+        - RekognitionDetectOnlyPolicy: { }
+        - S3CrudPolicy:
             BucketName: !Ref BackendBucket
         - Statement:
             Effect: Allow
             Action: sns:Subscribe
             Resource: !Ref SNSTopicS2S
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         SNSEvent:
           Type: SNS
