@@ -1,7 +1,7 @@
 <script lang="ts">
     import { navigateTo } from "svelte-router-spa";
 
-    const modes = ["Username", "URL"]
+    const modes = ["Username", "URL"];
     let mode = modes[0];
     let scrapeInput = "";
     let showProgress = false;
@@ -26,6 +26,11 @@
 
 <h2>Scrape</h2>
 <article>
+    {#if mode == "Username"}
+    <p>Scrape last from some profile username.</p>
+    {:else}
+    <p>Scrape a post from its URL.</p>
+    {/if}
     <form on:submit|preventDefault={handleSubmit} autocomplete="off">
         <div class="grid">
             {#if mode == "Username"}
@@ -42,17 +47,17 @@
                     />
                 </label>
             {:else}
-            <label for="scrape-input">
-                URL
-                <input
-                    type="url"
-                    id="scrape-input"
-                    bind:value={scrapeInput}
-                    placeholder="https://www.instagram.com/p/Cek7VMLjsOa"
-                    required
-                    disabled={showProgress}
-                />
-            </label>
+                <label for="scrape-input">
+                    URL
+                    <input
+                        type="url"
+                        id="scrape-input"
+                        bind:value={scrapeInput}
+                        placeholder="https://www.instagram.com/p/Cek7VMLjsOa"
+                        required
+                        disabled={showProgress}
+                    />
+                </label>
             {/if}
             <div>
                 <label for="mode-select">Mode</label>
