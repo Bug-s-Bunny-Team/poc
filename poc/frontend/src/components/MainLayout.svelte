@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Route } from 'svelte-router-spa';
+    import { Route } from "svelte-router-spa";
     import Nav from "./Nav.svelte";
 
     export let currentRoute;
@@ -8,5 +8,13 @@
 
 <Nav {currentRoute} />
 <main class="container">
-    <Route {currentRoute}  {params} />
+    <p class="timestamp">build: {__BUILD_TIMESTAMP__}</p>
+    <Route {currentRoute} {params} />
 </main>
+
+<style>
+    .timestamp {
+        font-size: xx-small;
+        margin-bottom: 0px;
+    }
+</style>

@@ -1,12 +1,17 @@
 <script lang="ts">
     import routes from "../routes";
     export let currentRoute;
+
+    let dark = false;
+
+    function setTheme() {
+        document.getElementsByTagName('html')[0].dataset.theme = dark ? "dark" : "light";
+    }
 </script>
 
 <nav class="container">
     <ul>
         <li><strong>PoC</strong></li>
-        <li class="timestamp">build: {__BUILD_TIMESTAMP__}</li>
     </ul>
     <ul>
         {#each routes as route}
@@ -17,6 +22,19 @@
                 >
             </li>
         {/each}
+        <li>
+            <label for="dark-switch">
+                Dark
+                <input
+                    class="theme-selector"
+                    type="checkbox"
+                    id="dark-switch"
+                    role="switch"
+                    bind:checked={dark}
+                    on:change={setTheme}
+                />
+            </label>
+        </li>
     </ul>
 </nav>
 
@@ -24,8 +42,5 @@
     .current {
         --background-color: var(--primary-focus);
         --color: var(--primary-hover);
-    }
-    .timestamp {
-        font-size: x-small;
     }
 </style>
