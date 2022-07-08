@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { API_BASE } from "../config";
     import { navigateTo } from "svelte-router-spa";
 
     const modes = ["Username", "URL"];
@@ -18,7 +17,7 @@
 
         showProgress = true;
         // await timeout(2000);
-        fetch(`${API_BASE}/posts`, {
+        fetch('/dev-api/posts', {
             method: "POST",
             body: JSON.stringify(request),
         })

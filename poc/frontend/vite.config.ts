@@ -5,7 +5,15 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 export default defineConfig({
     plugins: [svelte()],
     define: {
-        '__BUILD_TIMESTAMP__': JSON.stringify(new Date().toISOString()),
-        '__API_BASE__': JSON.stringify(process.env.ENV === 'prod' ? 'https://api' : 'http://localhost:3000')
+        '__BUILD_TIMESTAMP__': JSON.stringify(new Date().toISOString())
+    },
+    server: {
+        proxy: {
+            '/dev-api': {
+                target: 'http://127.0.0.1:3000/',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api/, '')
+            }
+        }
     }
 })

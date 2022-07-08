@@ -1,8 +1,9 @@
 <script lang="ts">
     import type { Post } from "../models";
     import catUrl from "../assets/cat.jpg";
+    import { onMount } from "svelte";
 
-    let posts: Array<Post> = [
+    /*let posts: Array<Post> = [
         {
             id: 1,
             caption: "",
@@ -10,7 +11,7 @@
             media_score: 1,
             profile: {
                 id: 1,
-                username: "testuser1"
+                username: "testuser1",
             },
             location: {
                 id: 1,
@@ -18,7 +19,7 @@
                 lat: 0,
                 long: 0,
                 score: 1,
-            }
+            },
         },
         {
             id: 2,
@@ -27,55 +28,23 @@
             media_score: 1,
             profile: {
                 id: 2,
-                username: "testuser2"
+                username: "testuser2",
             },
-            location: null
+            location: null,
         },
-        {
-            id: 2,
-            caption: "",
-            caption_score: 1,
-            media_score: 1,
-            profile: {
-                id: 2,
-                username: "testuser2"
-            },
-            location: null
-        },
-        {
-            id: 2,
-            caption: "",
-            caption_score: 1,
-            media_score: 1,
-            profile: {
-                id: 2,
-                username: "testuser2"
-            },
-            location: null
-        },
-        {
-            id: 2,
-            caption: "",
-            caption_score: 1,
-            media_score: 1,
-            profile: {
-                id: 2,
-                username: "testuser2"
-            },
-            location: null
-        },
-        {
-            id: 2,
-            caption: "",
-            caption_score: 1,
-            media_score: 1,
-            profile: {
-                id: 2,
-                username: "testuser2"
-            },
-            location: null
-        },
-    ];
+    ];*/
+
+    let posts: Array<Post> = [];
+
+    onMount(() => {
+        fetch("/dev-api/posts")
+            .then((response) => response.json())
+            .then((data) => {
+                posts = data;
+                console.log(data);
+            })
+            .catch((err) => console.log(err));
+    });
 </script>
 
 <div>
@@ -86,7 +55,9 @@
                 <article>
                     <header>
                         <ul>
-                            <li><strong>Username</strong>: {post.profile.username}</li>
+                            <li>
+                                <strong>Username</strong>: {post.profile.username}
+                            </li>
                             <li>
                                 <strong>Location</strong>: {post.location
                                     ? post.location.name
@@ -111,7 +82,8 @@
             {/each}
         </div>
     {:else}
-        <h2>No posts</h2>
+        <p>Loading posts...</p>
+        <progress></progress>
     {/if}
 </div>
 
