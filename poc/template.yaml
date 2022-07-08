@@ -216,8 +216,10 @@ Resources:
     Properties:
       CodeUri: services/posts/
       Policies:
-        - SNSPublishMessagePolicy:
-            TopicName: !Ref SNSTopicR2S
+        - Statement:
+            Effect: Allow
+            Action: sns:Publish
+            Resource: !Ref SNSTopicR2S
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Environment:
         Variables:
@@ -247,8 +249,6 @@ Resources:
     Properties:
       CodeUri: services/locations/
       Policies:
-        - SNSPublishMessagePolicy:
-            TopicName: !Ref SNSTopicR2S
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         ById:
@@ -269,8 +269,6 @@ Resources:
     Properties:
       CodeUri: services/profiles/
       Policies:
-        - SNSPublishMessagePolicy:
-            TopicName: !Ref SNSTopicR2S
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         ById:
@@ -304,8 +302,10 @@ Resources:
             Effect: Allow
             Action: sns:Subscribe
             Resource: !Ref SNSTopicR2S
-        - SNSPublishMessagePolicy:
-            TopicName: !Ref SNSTopicS2S
+        - Statement:
+            Effect: Allow
+            Action: sns:Publish
+            Resource: !Ref SNSTopicS2S
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Events:
         SNSEvent:
