@@ -18,6 +18,7 @@ class Location implements Model {
 class Post implements Model {
     id: number;
     caption: string;
+    media_url: string;
     media_score: number;
     caption_score: number;
     profile: SocialProfile;

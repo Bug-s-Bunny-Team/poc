@@ -1,38 +1,6 @@
 <script lang="ts">
     import type { Post } from "../models";
-    import catUrl from "../assets/cat.jpg";
     import { onMount } from "svelte";
-
-    /*let posts: Array<Post> = [
-        {
-            id: 1,
-            caption: "",
-            caption_score: 1,
-            media_score: 1,
-            profile: {
-                id: 1,
-                username: "testuser1",
-            },
-            location: {
-                id: 1,
-                name: "Rome, Italy",
-                lat: 0,
-                long: 0,
-                score: 1,
-            },
-        },
-        {
-            id: 2,
-            caption: "",
-            caption_score: 1,
-            media_score: 1,
-            profile: {
-                id: 2,
-                username: "testuser2",
-            },
-            location: null,
-        },
-    ];*/
 
     let posts: Array<Post> = [];
 
@@ -66,7 +34,7 @@
                         </ul>
                     </header>
                     <div class="img-container">
-                        <img src={catUrl} alt="idk" />
+                        <img src={`/${post.media_url}`} alt="idk" />
                     </div>
                     <footer>
                         <ul>
