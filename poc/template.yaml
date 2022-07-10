@@ -292,7 +292,6 @@ Resources:
             Method: get
             RestApiId: !Ref Api
 
-
   ScrapingServiceFunction:
     Type: AWS::Serverless::Function
     Properties:
