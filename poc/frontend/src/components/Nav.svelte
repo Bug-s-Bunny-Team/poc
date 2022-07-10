@@ -1,12 +1,8 @@
 <script lang="ts">
     import routes from "../routes";
+    import ThemeSwitch from "./ThemeSwitch.svelte";
+
     export let currentRoute;
-
-    let dark = false;
-
-    function setTheme() {
-        document.getElementsByTagName('html')[0].dataset.theme = dark ? "dark" : "light";
-    }
 </script>
 
 <nav class="container">
@@ -23,17 +19,7 @@
             </li>
         {/each}
         <li>
-            <label for="dark-switch">
-                Dark
-                <input
-                    class="theme-selector"
-                    type="checkbox"
-                    id="dark-switch"
-                    role="switch"
-                    bind:checked={dark}
-                    on:change={setTheme}
-                />
-            </label>
+            <ThemeSwitch/>
         </li>
     </ul>
 </nav>
