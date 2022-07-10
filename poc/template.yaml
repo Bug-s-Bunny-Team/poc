@@ -93,6 +93,19 @@ Resources:
             Principal:
               AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}
 
+  BackendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref BackendBucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource:
+              Fn::Join: [ '', [ Fn::GetAtt: [ BackendBucket, Arn ], '/*' ] ]
+            Principal:
+              AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}
+
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
@@ -103,7 +116,7 @@ Resources:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
-        Comment: Cache policy used when accessing static data from Frontend S3 Bucket
+        Comment: Cache policy used when accessing static data from S3 Bucket
         Name: S3CachePolicy
         DefaultTTL: 86400
         MaxTTL: 31536000
@@ -153,6 +166,10 @@ Resources:
               OriginProtocolPolicy: https-only
               OriginSSLProtocols:
                 - TLSv1.2
+          - Id: S3BackendOrigin
+            DomainName: !GetAtt BackendBucket.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
         CacheBehaviors:
           - PathPattern: !Sub '${ApiStageName}/*'
             TargetOriginId: ApiOrigin
@@ -167,6 +184,11 @@ Resources:
               - PATCH
               - POST
               - DELETE
+          - PathPattern: 'media/*'
+            TargetOriginId: S3BackendOrigin
+            CachePolicyId: !Ref S3CachePolicy
+            ViewerProtocolPolicy: redirect-to-https
+            Compress: true
         DefaultCacheBehavior:
           TargetOriginId: S3Origin
           CachePolicyId: !Ref S3CachePolicy
