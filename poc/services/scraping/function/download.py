@@ -17,7 +17,7 @@ def download_media(url: str, dest: Path):
 
 
 def download_and_save_post(post: Post, overwrite: bool = True) -> Optional[str]:
-    post_key = f'instagram/{post.media_filename}'
+    post_key = f'media/instagram/{post.media_filename}'
     bucket_name = os.environ['ENV_BUCKET_NAME']
 
     if not overwrite and s3_key_exists(bucket_name, post_key):
