@@ -32,7 +32,7 @@ class PostProvider(DataProvider):
         return {
             'id': result.id,
             'caption': result.caption,
-            'media_url': result.media_url,
+            'media_url': result.media_s3_key,
             'media_score': 0.0,
             'caption_score': 0.0,
             'location': model_to_dict(result.location) if result.location else None,
