@@ -1,6 +1,6 @@
 from typing import Optional
 
-from peewee import DoesNotExist
+from peewee import DoesNotExist, JOIN
 from playhouse.shortcuts import model_to_dict
 
 from common.providers import DataProvider
@@ -16,7 +16,7 @@ class PostProvider(DataProvider):
             Post.select(Post, SocialProfile, Location)
             .join(SocialProfile, on=(Post.social_profile == SocialProfile.id))
             .switch(Post)
-            .join(Location, on=(Post.location == Location.id))
+            .join(Location, on=(Post.location == Location.id), join_type=JOIN.LEFT_OUTER)
         )
         return results
 
