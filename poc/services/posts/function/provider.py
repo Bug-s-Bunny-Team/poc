@@ -16,9 +16,12 @@ class PostProvider(DataProvider):
             Post.select(Post, SocialProfile, Location, PostScore)
             .join(SocialProfile, on=(Post.social_profile == SocialProfile.id))
             .switch(Post)
-            .join(Location, on=(Post.location == Location.id), join_type=JOIN.LEFT_OUTER)
+            .join(
+                Location, on=(Post.location == Location.id), join_type=JOIN.LEFT_OUTER
+            )
             .switch(Post)
             .join(PostScore, on=(Post.id == PostScore.post), join_type=JOIN.LEFT_OUTER)
+            .order_by(-Post.added)
         )
         return results
 
@@ -32,11 +35,22 @@ class PostProvider(DataProvider):
     def serialize(result: Post) -> dict:
         # ugly, causes n+1 problem
         score = result.score.get_or_none()
+        score_serialized = None
+
+        if score:
+            score_serialized = model_to_dict(
+                score,
+                recurse=False,
+                exclude=[PostScore.id, PostScore.post_id, PostScore.created],
+            )
+            score_serialized.update({'created': str(score.created)})
+
         return {
             'id': result.id,
             'caption': result.caption,
             'media_url': result.media_s3_key,
+            'added': str(result.added),
             'profile': model_to_dict(result.social_profile),
             'location': model_to_dict(result.location) if result.location else None,
-            'score': model_to_dict(score, recurse=False, exclude=['id', 'post_id']) if score else None
+            'score': score_serialized,
         }
