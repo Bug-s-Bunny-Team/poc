@@ -5,6 +5,7 @@ from db.models import *
 from .models import ScoringPost
 
 init_db()
+create_all_tables()
 
 class OutputStrategy(ABC):
     @abstractmethod

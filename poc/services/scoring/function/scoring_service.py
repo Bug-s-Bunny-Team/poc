@@ -76,4 +76,4 @@ class BasicScoringService(ScoringService):
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):
-        sPost.finalScore = (sPost.captionScore + sum(sPost.textsScore.values())/len(sPost.textsScore))/2.0
+        sPost.finalScore = (sPost.captionScore + sum(sPost.textsScore.values())/len(sPost.textsScore))/2.0 if len(sPost.textsScore) != 0 else 0.0

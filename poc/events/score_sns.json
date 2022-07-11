@@ -14,10 +14,7 @@
         "SignatureVersion": "1",
         "Signature": "EXAMPLE",
         "SigningCertUrl": "EXAMPLE",
-        "UnsubscribeUrl": "EXAMPLE",
-        "MessageAttributes": {
-          "id": 1
-        }
+        "UnsubscribeUrl": "EXAMPLE"
       }
     }
   ]
