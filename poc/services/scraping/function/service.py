@@ -65,7 +65,7 @@ class ScrapingService:
         else:
             print('post already in db, skipping download')
 
-        print('Publishing scoring message to topic')
+        print('publishing scoring message to topic')
         self._sns_topic.publish(Message=json.dumps({
             'post_id': post.id
         }))
