@@ -19,7 +19,7 @@
     }
 
     onMount(() => {
-        // refreshPosts();
+        refreshPosts();
     });
 </script>
 
