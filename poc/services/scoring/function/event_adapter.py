@@ -1,3 +1,4 @@
+import json
 from abc import ABC, abstractmethod
 from db.utils import *
 from db.models import *
@@ -18,7 +19,8 @@ class SQSEventAdapter(EventAdapter):
 class SNSEventAdapter(EventAdapter):
     def processEvent(self, event) -> ScoringPost:
         print("Processing SNS Event")
-        post = Post.get(id=event['Records'][0]['Sns']['MessageAttributes']['id'])
+        post_id = json.loads(event['Records'][0]['Sns']['Message'])['post_id']
+        post = Post.get(id=post_id)
         sPost = ScoringPost.fromPost(post)
         print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
         return sPost
