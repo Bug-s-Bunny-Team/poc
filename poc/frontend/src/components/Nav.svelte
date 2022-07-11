@@ -8,6 +8,7 @@
 <nav class="container">
     <ul>
         <li><strong>PoC</strong></li>
+        <li class="timestamp">build: {__BUILD_TIMESTAMP__}</li>
     </ul>
     <ul>
         {#each routes as route}
@@ -28,5 +29,9 @@
     .current {
         --background-color: var(--primary-focus);
         --color: var(--primary-hover);
+    }
+    .timestamp {
+        font-size: xx-small;
+        margin-bottom: 0px;
     }
 </style>

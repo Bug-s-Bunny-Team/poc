@@ -1,9 +1,11 @@
 import json
+import os
 
+import boto3
 from instaloader import Post as InstaPost
 
 from db.models import SocialProfile, Post, Location
-from db.utils import init_db, create_all_tables
+from db.utils import init_db
 from .download import download_and_save_post
 from .models import ScrapingEvent
 from .scrapers import InstagramScraper
@@ -12,11 +14,8 @@ from .scrapers import InstagramScraper
 class ScrapingService:
     def __init__(self, scraper: InstagramScraper):
         self._scraper = scraper
-        self._setup_db()
-
-    def _setup_db(self):
+        self._sns_topic = boto3.resource('sns').Topic(os.environ['SNS_SCORING_TOPIC'])
         init_db()
-        create_all_tables()  # TODO: don't do this in production
 
     def _get_success_response(self, post: Post):
         return {
@@ -65,5 +64,10 @@ class ScrapingService:
             self._download_post(post)
         else:
             print('post already in db, skipping download')
+
+        print('publishing scoring message to topic')
+        self._sns_topic.publish(Message=json.dumps({
+            'post_id': post.id
+        }))
 
         return self._get_success_response(post)

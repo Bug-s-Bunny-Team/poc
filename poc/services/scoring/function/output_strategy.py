@@ -1,12 +1,10 @@
 import boto3
-import os
 from abc import ABC, abstractmethod
 from db.utils import *
 from db.models import *
 from .models import ScoringPost
 
 init_db()
-create_all_tables()
 
 class OutputStrategy(ABC):
     @abstractmethod

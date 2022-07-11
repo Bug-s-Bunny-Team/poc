@@ -20,6 +20,6 @@ def create_scraper() -> InstagramScraper:
         print('session not found, logging in')
         insta_password = session_provider.get_password(insta_username)
         insta.login(insta_username, insta_password)
-        session_provider.refresh_session(insta_username, session)
+        session_provider.refresh_session(insta_username, insta.export_session_as_dict())
 
     return InstagramScraper(client=insta)
