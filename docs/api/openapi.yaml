@@ -135,6 +135,9 @@ components:
         caption:
           type: string
           example: A very nice day at place X
+        added:
+          type: string
+          example: '2022-07-11 17:53:52.8418'
         profile:
           $ref: '#/components/schemas/SocialProfile'
         location:
@@ -175,6 +178,9 @@ components:
     PostScore:
       type: object
       properties:
+        created:
+          type: string
+          example: '2022-07-11 17:53:52.8418'
         media_score:
           type: number
           example: 4.5

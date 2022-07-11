@@ -1,3 +1,4 @@
+import datetime
 from enum import Enum, unique
 from functools import cached_property
 from typing import Set, Tuple, Optional
@@ -9,6 +10,7 @@ from peewee import (
     ForeignKeyField,
     FloatField,
     IntegerField,
+    DateTimeField
 )
 
 from . import db
@@ -54,6 +56,7 @@ class Post(BaseModel):
     media_url = CharField(max_length=512)
     media_s3_key = CharField(null=True, unique=True)
     location = ForeignKeyField(Location, backref='posts', lazy_load=False, null=True)
+    added = DateTimeField(default=datetime.datetime.now())
 
     @cached_property
     def media_filename(self) -> str:
@@ -86,3 +89,4 @@ class PostScore(BaseModel):
     media_score = FloatField(default=0)
     caption_score = FloatField(default=0)
     post = ForeignKeyField(Post, backref='score', lazy_load=False, unique=True)
+    created = DateTimeField(default=datetime.datetime.now())
