@@ -15,14 +15,18 @@ class Location implements Model {
     score: number;
 }
 
+class PostScore {
+    media_score: number;
+    caption_score: number;
+}
+
 class Post implements Model {
     id: number;
     caption: string;
     media_url: string;
-    media_score: number;
-    caption_score: number;
     profile: SocialProfile;
-    location: Location;
+    location: Location | null;
+    score: PostScore | null;
 }
 
 export { Post, SocialProfile, Location };

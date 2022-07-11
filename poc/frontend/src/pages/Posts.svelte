@@ -1,15 +1,15 @@
 <script lang="ts">
     import type { Post } from "../models";
     import { onMount } from "svelte";
+    import spinnerUrl from "../assets/pulse-rings-3.svg";
 
-    let posts: Array<Post> = [];
+    let posts: Array<Post> = null;
 
     onMount(() => {
         fetch("/dev-api/posts")
             .then((response) => response.json())
             .then((data) => {
                 posts = data;
-                console.log(data);
             })
             .catch((err) => console.log(err));
     });
@@ -24,7 +24,8 @@
                     <header>
                         <ul>
                             <li>
-                                <strong>Username</strong>: {post.profile.username}
+                                <strong>Username</strong>: {post.profile
+                                    .username}
                             </li>
                             <li>
                                 <strong>Location</strong>: {post.location
@@ -37,21 +38,33 @@
                         <img src={`/${post.media_url}`} alt="idk" />
                     </div>
                     <footer>
-                        <ul>
-                            <li>
-                                <strong>Caption score</strong>: {post.caption_score}
-                            </li>
-                            <li>
-                                <strong>Media score</strong>: {post.media_score}
-                            </li>
-                        </ul>
+                        {#if post.score}
+                            <ul>
+                                <li>
+                                    <strong>Caption score</strong>: {post.score
+                                        .caption_score}
+                                </li>
+                                <li>
+                                    <strong>Media score</strong>: {post.score
+                                        .media_score}
+                                </li>
+                            </ul>
+                        {:else}
+                            <span>
+                                <img
+                                src="{spinnerUrl}"
+                                alt="Loading animation"
+                            />
+                            Scoring in progress...
+                            </span>
+                        {/if}
                     </footer>
                 </article>
             {/each}
         </div>
     {:else}
         <p>Loading posts...</p>
-        <progress></progress>
+        <progress />
     {/if}
 </div>
 
