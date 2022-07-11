@@ -3,20 +3,30 @@
     import { onMount } from "svelte";
     import spinnerUrl from "../assets/pulse-rings-3.svg";
 
-    let posts: Array<Post> = null;
+    let posts: Array<Post> = [];
 
-    onMount(() => {
+    function refreshPosts() {
+        posts = null;
         fetch("/dev-api/posts")
             .then((response) => response.json())
             .then((data) => {
                 posts = data;
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                posts = [];
+            });
+    }
+
+    onMount(() => {
+        // refreshPosts();
     });
 </script>
 
 <div>
-    <h2>Posts</h2>
+    <h2 class="title">Posts</h2>
+    <button class="refresh outline" disabled={posts === null} on:click={refreshPosts}>Refresh</button>
+    
     {#if posts && posts.length > 0}
         <div class="grid">
             {#each posts as post}
@@ -68,6 +78,8 @@
                 </article>
             {/each}
         </div>
+    {:else if posts && posts.length == 0}
+        <p>No posts</p>
     {:else}
         <p>Loading posts...</p>
         <progress />
@@ -87,6 +99,15 @@
     }
     details {
         margin-bottom: 0px;
+    }
+    .title {
+        display: inline;
+    }
+    .refresh {
+        display: inline;
+        width: fit-content;
+        margin-left: 0.5em;
+        padding: 0.5em;
     }
     .grid {
         grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
