@@ -32,6 +32,12 @@
                                     ? post.location.name
                                     : "N/A"}
                             </li>
+                            <li class="caption">
+                                <details>
+                                    <summary><strong>Caption</strong></summary>
+                                    <p>{post.caption}</p>
+                                </details>
+                            </li>
                         </ul>
                     </header>
                     <div class="img-container">
@@ -79,10 +85,16 @@
         margin-top: 1em;
         margin-bottom: 1em;
     }
+    details {
+        margin-bottom: 0px;
+    }
     .grid {
         grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
     }
     .img-container {
         text-align: center;
+    }
+    .caption {
+        margin-bottom: 0px;
     }
 </style>
