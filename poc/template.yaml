@@ -253,7 +253,7 @@ Resources:
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
       Environment:
         Variables:
-          SNS_SCORING_TOPIC: !Ref SNSTopicR2S
+          SNS_SCRAPING_TOPIC: !Ref SNSTopicR2S
       Events:
         ById:
           Type: Api
@@ -322,6 +322,7 @@ Resources:
         Variables:
           INSTA_USERNAME: NotABotBB1
           INSTA_SESSIONS_TABLE: !Ref InstaSessionTableName
+          SNS_SCORING_TOPIC: !Ref SNSTopicS2S
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref InstaSessionTableName
