@@ -118,8 +118,8 @@ Resources:
       CachePolicyConfig:
         Comment: Cache policy used when accessing static data from S3 Bucket
         Name: S3CachePolicy
-        DefaultTTL: 86400
-        MaxTTL: 31536000
+        DefaultTTL: 600
+        MaxTTL: 1200
         MinTTL: 0
         ParametersInCacheKeyAndForwardedToOrigin:
           CookiesConfig:
