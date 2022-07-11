@@ -68,6 +68,7 @@
                         {:else}
                             <span>
                                 <img
+                                class="spinner"
                                 src="{spinnerUrl}"
                                 alt="Loading animation"
                             />
@@ -87,6 +88,12 @@
 </div>
 
 <style>
+    :root[data-theme="light"] {
+        --spinner-invert: 0%
+    }
+    :root:not([data-theme="light"]) {
+        --spinner-invert: 100%
+    }
     ul {
         margin-bottom: 0px;
     }
@@ -117,5 +124,8 @@
     }
     .caption {
         margin-bottom: 0px;
+    }
+    .spinner {
+        filter: invert(var(--spinner-invert));
     }
 </style>
