@@ -4,7 +4,7 @@ from peewee import DoesNotExist, JOIN
 from playhouse.shortcuts import model_to_dict
 
 from common.providers import DataProvider
-from db.models import Post, SocialProfile, Location
+from db.models import Post, SocialProfile, Location, PostScore
 
 
 class PostProvider(DataProvider):
@@ -13,10 +13,12 @@ class PostProvider(DataProvider):
 
     def query_all(self):
         results = (
-            Post.select(Post, SocialProfile, Location)
+            Post.select(Post, SocialProfile, Location, PostScore)
             .join(SocialProfile, on=(Post.social_profile == SocialProfile.id))
             .switch(Post)
             .join(Location, on=(Post.location == Location.id), join_type=JOIN.LEFT_OUTER)
+            .switch(Post)
+            .join(PostScore, on=(Post.id == PostScore.post), join_type=JOIN.LEFT_OUTER)
         )
         return results
 
@@ -26,15 +28,15 @@ class PostProvider(DataProvider):
         except DoesNotExist:
             return None
 
-    # TODO: add scores
     @staticmethod
     def serialize(result: Post) -> dict:
+        # ugly, causes n+1 problem
+        score = result.score.get_or_none()
         return {
             'id': result.id,
             'caption': result.caption,
             'media_url': result.media_s3_key,
-            'media_score': 0.0,
-            'caption_score': 0.0,
-            'location': model_to_dict(result.location) if result.location else None,
             'profile': model_to_dict(result.social_profile),
+            'location': model_to_dict(result.location) if result.location else None,
+            'score': model_to_dict(score, recurse=False, exclude=['id', 'post_id']) if score else None
         }
