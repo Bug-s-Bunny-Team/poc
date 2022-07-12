@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { Post } from "../models";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import spinnerUrl from "../assets/pulse-rings-3.svg";
 
     let posts: Array<Post> = [];
+    const interval = setInterval(() => refreshPosts(), 6000);
 
     function refreshPosts() {
-        posts = null;
         fetch("/dev-api/posts")
             .then((response) => response.json())
             .then((data) => {
@@ -18,14 +18,23 @@
             });
     }
 
-    onMount(() => {
+    function refresh() {
+        posts = null;
         refreshPosts();
+    }
+
+    onMount(() => {
+        refresh();
     });
+
+    onDestroy(() => {
+        clearInterval(interval);
+    })
 </script>
 
 <div>
     <h2 class="title">Posts</h2>
-    <button class="refresh outline" disabled={posts === null} on:click={refreshPosts}>Refresh</button>
+    <button class="refresh outline" disabled={posts === null} on:click={refresh}>Refresh</button>
     
     {#if posts && posts.length > 0}
         <div class="grid">
