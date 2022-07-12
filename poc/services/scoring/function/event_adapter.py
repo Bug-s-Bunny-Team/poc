@@ -22,5 +22,6 @@ class SNSEventAdapter(EventAdapter):
         post_id = json.loads(event['Records'][0]['Sns']['Message'])['post_id']
         post = Post.get(id=post_id)
         sPost = ScoringPost.fromPost(post)
-        print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
+        # print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
+        print("Successfully processed SNS message")
         return sPost
