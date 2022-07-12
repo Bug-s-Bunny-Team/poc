@@ -291,7 +291,7 @@ Resources:
       CodeUri: services/scraping/
       Environment:
         Variables:
-          INSTA_USERNAME: NotABotBB1
+          INSTA_USERNAME: notabbot # Swe123456
           INSTA_SESSIONS_TABLE: !Ref InstaSessionTableName
       Policies:
         - DynamoDBCrudPolicy:
