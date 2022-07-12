@@ -55,9 +55,9 @@ class ScrapingService:
 
         profile, _ = SocialProfile.get_or_create(username=insta_post.owner_username)
         location = None
-        if insta_post.location:
+        if insta_location := insta_post.location:
             print('post has location data')
-            location, _ = Location.from_instaloader_location(insta_post.location)
+            location, _ = Location.from_instaloader_location(insta_location)
         post, created = Post.from_instaloader_post(insta_post, profile, location)
 
         if created:
