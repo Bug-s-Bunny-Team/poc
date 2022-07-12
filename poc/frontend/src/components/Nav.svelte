@@ -1,5 +1,7 @@
 <script lang="ts">
     import routes from "../routes";
+    import ThemeSwitch from "./ThemeSwitch.svelte";
+
     export let currentRoute;
 </script>
 
@@ -17,6 +19,9 @@
                 >
             </li>
         {/each}
+        <li>
+            <ThemeSwitch/>
+        </li>
     </ul>
 </nav>
 
@@ -26,6 +31,7 @@
         --color: var(--primary-hover);
     }
     .timestamp {
-        font-size: x-small;
+        font-size: xx-small;
+        margin-bottom: 0px;
     }
 </style>

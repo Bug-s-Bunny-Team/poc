@@ -20,6 +20,7 @@ def init_db(
         database=get_db_secret()["database"] if get_secret else os.environ['DB_NAME'],
     )
     db.connect()
+    create_all_tables()
 
 
 def create_all_tables():

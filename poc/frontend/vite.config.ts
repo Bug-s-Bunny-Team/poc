@@ -6,5 +6,19 @@ export default defineConfig({
     plugins: [svelte()],
     define: {
         '__BUILD_TIMESTAMP__': JSON.stringify(new Date().toISOString())
+    },
+    server: {
+        proxy: {
+            // '/dev-api': {
+            //     target: 'http://127.0.0.1:3000/',
+            //     changeOrigin: true,
+            //     rewrite: (path) => path.replace(/^\/dev-api/, '')
+            // }
+            '/dev-api/posts': {
+                target: 'http://127.0.0.1:5000/mock/posts.json',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api\/posts/, '')
+            }
+        }
     }
 })

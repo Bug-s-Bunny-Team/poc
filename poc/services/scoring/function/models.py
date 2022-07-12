@@ -47,7 +47,7 @@ class ScoringPost:
         return cls(
             id=p.id,
             caption=p.caption,
-            image=f'instagram/{p.media_url}',
+            image=p.media_s3_key,
             hashtags={idx: string for idx, string in enumerate(p.hashtags)},
         )
 

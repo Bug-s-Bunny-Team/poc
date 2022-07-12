@@ -1,7 +1,7 @@
 <script lang="ts">
     import { navigateTo } from "svelte-router-spa";
 
-    const modes = ["Username", "URL"]
+    const modes = ["Username", "URL"];
     let mode = modes[0];
     let scrapeInput = "";
     let showProgress = false;
@@ -14,18 +14,33 @@
         let request = {
             [mode.toLowerCase()]: scrapeInput,
         };
-        console.log(JSON.stringify(request));
 
         showProgress = true;
-        await timeout(3000);
-        showProgress = false;
-
-        navigateTo("/posts");
+        // await timeout(2000);
+        fetch('/dev-api/posts', {
+            method: "POST",
+            body: JSON.stringify(request),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                showProgress = false;
+                navigateTo("/posts");
+            })
+            .catch((err) => {
+                console.log(err)
+                showProgress = false;
+            });
     }
 </script>
 
 <h2>Scrape</h2>
 <article>
+    {#if mode == "Username"}
+        <p>Scrape last post from some profile username.</p>
+    {:else}
+        <p>Scrape a post from its URL.</p>
+    {/if}
     <form on:submit|preventDefault={handleSubmit} autocomplete="off">
         <div class="grid">
             {#if mode == "Username"}
@@ -42,17 +57,17 @@
                     />
                 </label>
             {:else}
-            <label for="scrape-input">
-                URL
-                <input
-                    type="url"
-                    id="scrape-input"
-                    bind:value={scrapeInput}
-                    placeholder="https://www.instagram.com/p/Cek7VMLjsOa"
-                    required
-                    disabled={showProgress}
-                />
-            </label>
+                <label for="scrape-input">
+                    URL
+                    <input
+                        type="url"
+                        id="scrape-input"
+                        bind:value={scrapeInput}
+                        placeholder="https://www.instagram.com/p/Cek7VMLjsOa"
+                        required
+                        disabled={showProgress}
+                    />
+                </label>
             {/if}
             <div>
                 <label for="mode-select">Mode</label>

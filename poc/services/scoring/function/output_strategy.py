@@ -1,5 +1,4 @@
 import boto3
-import os
 from abc import ABC, abstractmethod
 from db.utils import *
 from db.models import *
@@ -7,9 +6,6 @@ from .models import ScoringPost
 
 init_db()
 create_all_tables()
-SocialProfile.get_or_create(username="test")
-Location.get_or_create(insta_id=1, name="test_loc")
-Post.get_or_create(id=1, shortcode=1, caption="unfortunately today it is raining in Seattle #sad #city", social_profile=1, media_type=MediaType.IMAGE, media_url="test.png", location=1)
 
 class OutputStrategy(ABC):
     @abstractmethod
@@ -31,6 +27,6 @@ class DBOutputStrategy:
         print(f'Writing output to Database')
         postScore = PostScore.get_or_create(post=sPost.id)[0]
         postScore.caption_score = sPost.captionScore
-        postScore.media_score = sum(sPost.textsScore.values())/len(sPost.textsScore)
+        postScore.media_score = sum(sPost.textsScore.values())/len(sPost.textsScore) if len(sPost.textsScore) != 0 else 0.0
         postScore.save()
         print(f'Successfully written output to Database')
