@@ -320,7 +320,7 @@ Resources:
       CodeUri: services/scraping/
       Environment:
         Variables:
-          INSTA_USERNAME: notabbot # Swe123456
+          INSTA_USERNAME: notabbotswe
           INSTA_SESSIONS_TABLE: !Ref InstaSessionTableName
           SNS_SCORING_TOPIC: !Ref SNSTopicS2S
       Policies:

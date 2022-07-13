@@ -24,5 +24,6 @@ class SNSEventAdapter(EventAdapter):
         if not post:
             raise Exception(f'Post with id: {post_id}, not found in Database') 
         sPost = ScoringPost.fromPost(post)
-        print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
+        # print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
+        print("Successfully processed SNS message")
         return sPost
