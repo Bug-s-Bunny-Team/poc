@@ -45,7 +45,7 @@ class BasicScoringService(ScoringService):
     
     @classmethod
     def __unpack_post_for_comprehend(cls, sPost: ScoringPost):
-        return list([sPost.caption, *sPost.texts.values(), *sPost.hashtags.values()])
+        return list([sPost.caption, *sPost.texts.values()])
 
     @classmethod
     def __parse_comprehend_response(cls, sPost: ScoringPost, compResult):
@@ -55,13 +55,11 @@ class BasicScoringService(ScoringService):
         for item in compResult['ResultList']:
             idx = item['Index']
             score = Score(item["Sentiment"])
-            float_score = item["SentimentScore"]["Positive"]-item["SentimentScore"]["Negative"] if(score == Score.POSITIVE or score==Score.NEGATIVE) else 0.0
+            float_score = item["SentimentScore"]["Positive"]-item["SentimentScore"]["Negative"] if(score != Score.MIXED) else 0.0
             if(idx==0): 
                 sPost.captionScore = float_score
-            elif(idx-1 < n_texts):
-                sPost.textsScore[idx-1] = float_score
             else:
-                sPost.hashtagsScore[idx-1-n_texts] = float_score
+                sPost.textsScore[idx-1] = float_score
 
     def _runRekognition(self, sPost: ScoringPost):
         print('Analyzing image')
@@ -76,4 +74,4 @@ class BasicScoringService(ScoringService):
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):
-        sPost.finalScore = (sPost.captionScore + sum(sPost.textsScore.values())/len(sPost.textsScore))/2.0 if len(sPost.textsScore) != 0 else 0.0
+        sPost.finalScore = (sPost.captionScore + sum(sPost.textsScore.values())/len(sPost.textsScore))/2.0 if len(sPost.textsScore) != 0 else sPost.captionScore

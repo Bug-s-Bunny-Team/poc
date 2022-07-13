@@ -19,7 +19,6 @@ class ScoringPost:
     hashtags: Dict[int, str]
     captionScore: float
     textsScore: Dict[int, float]
-    hashtagsScore = (Dict[int, float],)
     finalScore: float
 
     def __init__(self, id: str, caption: str, image: str, hashtags: Dict[int, str]):
@@ -30,7 +29,6 @@ class ScoringPost:
         self.hashtags = hashtags
         self.captionScore = 0.0
         self.textsScore = dict()
-        self.hashtagsScore = dict()
         self.finalScore = 0.0
 
     @classmethod

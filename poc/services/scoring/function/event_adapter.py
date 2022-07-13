@@ -20,7 +20,9 @@ class SNSEventAdapter(EventAdapter):
     def processEvent(self, event) -> ScoringPost:
         print("Processing SNS Event")
         post_id = json.loads(event['Records'][0]['Sns']['Message'])['post_id']
-        post = Post.get(id=post_id)
+        post = Post.get_or_none(id=post_id)
+        if not post:
+            raise Exception(f'Post with id: {post_id}, not found in Database') 
         sPost = ScoringPost.fromPost(post)
         print("Successfully processed data from SNS subject: " + event['Records'][0]['Sns']['Subject'])
         return sPost
