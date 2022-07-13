@@ -61,6 +61,10 @@ class BasicScoringService(ScoringService):
             else:
                 sPost.textsScore[idx-1] = float_score
 
+    @classmethod
+    def __parse_dominant_language_response(cls, domResponse):
+        return domResponse['Languages'][0]['LanguageCode'] if domResponse['Languages'][0] else 'en'
+
     def _runRekognition(self, sPost: ScoringPost):
         print('Analyzing image')
         response = self._rekognition.detect_text(Image={'S3Object': {'Bucket': os.environ['ENV_BUCKET_NAME'], 'Name': sPost.image}})
@@ -69,7 +73,9 @@ class BasicScoringService(ScoringService):
 
     def _runComprehend(self, sPost: ScoringPost):
         print('Analizying textual information')
-        response = self._comprehend.batch_detect_sentiment(TextList=BasicScoringService.__unpack_post_for_comprehend(sPost), LanguageCode='en')
+        dominantLanguageResponse = self._comprehend.detect_dominant_language(Text=sPost.caption)
+        response = self._comprehend.batch_detect_sentiment( TextList=BasicScoringService.__unpack_post_for_comprehend(sPost), 
+                                                            LanguageCode=BasicScoringService.__parse_dominant_language_response(dominantLanguageResponse))
         BasicScoringService.__parse_comprehend_response(sPost, response)
         print('Successfully analized textual information')
 
