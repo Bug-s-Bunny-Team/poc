@@ -1,5 +1,9 @@
 # poc
 
+# Frontend
+Documentazione e sorgenti relativi al frontend si trovano nella cartella [frontend](./frontend/).
+
+# Backend
 ## Prerequisiti
 
 - Python
