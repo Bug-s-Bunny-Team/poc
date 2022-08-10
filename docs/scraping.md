@@ -4,6 +4,3 @@ Questo documento ha lo scopo di descrivere con ragionevole dettaglio, le strateg
 # Social network
 ## Instagram
 *TODO*
-
-## Tiktok
-*TODO*
