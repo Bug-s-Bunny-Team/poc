@@ -13,6 +13,8 @@ export class AccountModel {
 
     login(email: string, password: string): Account {
         this.account = new Account();
+        //Todo:
+        //Controllo credenziali da dare al backend
         console.log(email, password);
         return this.account;
     }
