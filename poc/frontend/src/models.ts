@@ -15,6 +15,13 @@ class Location implements Model {
     score: number;
 }
 
+class Account {
+    accountname: string;
+    email: string;
+    password: string;
+    preference: boolean;
+}
+
 class PostScore {
     media_score: number;
     caption_score: number;
@@ -29,4 +36,4 @@ class Post implements Model {
     score: PostScore | null;
 }
 
-export { Post, SocialProfile, Location };
+export { Account, Post, SocialProfile, Location };
