@@ -1,11 +1,9 @@
 <script>
-    //import { LoginPresenter } from '../presenters/ChangePswPresenter'    
-    //let presenter = new ChangePresenter();
-    //import { Navigate } from 'svelte-router-spa'
-
+    import { ChangePswPresenter } from '../presenters/ChangePswPresenter';
     let new_password;
     let repeat_password;
     let loading;
+    let presenter = new ChangePswPresenter();
 
     const handleSubmit=()=>{
         const changepswFields={
@@ -21,15 +19,15 @@
     <form>
         <div class="inputBox">
             <label for="userPassword">Actual Password</label>
-            <input type="password" name="userPassword" id="userPassword" placeholder="type your actual password" required/> 
+            <input type="password" name="userPassword" id="userPassword" placeholder="type your actual password" required on:click={presenter.handleChangePsw}/> 
         </div>
         <div class="inputBox">
             <label for="newuserPassword">New Password</label>
-            <input type="password" name="userPassword" id="newuserPassword" placeholder="type your new password" required/> 
+            <input type="password" name="userPassword" id="newuserPassword" placeholder="type your new password" required on:click={presenter.handleChangePsw}/> 
         </div>
         <div class="inputBox">
             <label for="reapuserPassword">Confirm Password</label>
-            <input type="password" name="userPassword" id="reapuserPassword" placeholder="type your new password again" required/> 
+            <input type="password" name="userPassword" id="reapuserPassword" placeholder="type your new password again" required on:click={presenter.handleChangePsw}/> 
         </div>
             <button type="submit" name="" style="float: left;">Submit</button>
     </form>
