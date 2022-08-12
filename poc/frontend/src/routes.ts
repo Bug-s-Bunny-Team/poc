@@ -3,6 +3,8 @@ import Scrape from "./pages/Scrape.svelte";
 import Posts from "./pages/Posts.svelte";
 import Login from "./pages/Login.svelte";
 import Register from "./pages/Register.svelte";
+import ChangePsw from "./pages/ChangePsw.svelte"
+import Account from "./pages/Account.svelte";
 
 const routes = [
     {
@@ -15,6 +17,18 @@ const routes = [
         name: '/register',
         title: 'Register',
         component: Register,
+        layout: MainLayout
+    },
+    {
+        name: '/changepsw',
+        title: 'ChangePassword',
+        component: ChangePsw,
+        layout: MainLayout
+    },
+    {
+        name: '/account',
+        title: 'Account',
+        component: Account,
         layout: MainLayout
     },
     {
