@@ -1,18 +1,30 @@
 import { AccountModel } from "../models/accountModel";
 
 export class AccountPresenter {
-    firstname: string;
-    lastname: string;
-    username: string;
+    name: string;
     email: string;
+    preference: boolean;
 
     constructor() {
-        this.handleAccount = this.handleAccount.bind(this);
+        this.changePreference = this.changePreference.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+
+        const account = AccountModel.getInstance().account;
+        if(account) {
+            this.name = account.accountname;
+            this.email = account.email;
+            this.preference = account.preference;
+        }
     }
 
-    handleAccount() : void {
+    changePreference() : void {
+        const account = AccountModel.getInstance().account;
+        if(account) account.preference = this.preference;
+    }
+
+    handleLogout() : void {
         const accModel = AccountModel.getInstance();
-     
+        accModel.logout();
     }
 
 }
