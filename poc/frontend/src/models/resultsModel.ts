@@ -9,13 +9,21 @@ export class Filter {
 }
 
 export class ResultsModel {
+    private static resultsModelInstance : ResultsModel = ResultsModel.construct_session();
 
-    private static resultModelInstance = new ResultsModel();
+    private static construct_session() : ResultsModel {
+        let result : ResultsModel = JSON.parse(window.sessionStorage.getItem('ResultsModel'));
+        if(!result) {
+            result = new ResultsModel();
+            window.sessionStorage.setItem('ResultsModel', JSON.stringify(result));
+        }
+        return result;
+    }
 
-    private constructor() {}
+    private constructor() { }
 
     static getInstance() : ResultsModel {
-        return this.resultModelInstance;
+        return this.resultsModelInstance;
     }
 
     rankedList: Location[];
@@ -26,4 +34,7 @@ export class ResultsModel {
         return this.rankedList;
     }
 
+    private save_to_session() {
+        window.sessionStorage.setItem('ResultsModel', JSON.stringify(this));
+    }
 }

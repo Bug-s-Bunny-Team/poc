@@ -4,6 +4,7 @@
     let presenter = new AccountPresenter();
 </script>
 
+{#if presenter.isLogged}
 <h2>My Account</h2>
 <h3> Your personal information </h3>
 <article>
@@ -16,6 +17,13 @@
     <strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong>
     <button type="submit" name="" id="logout">Logout</button>
 </article>
+{:else}
+<article>
+    <p>Non sei loggato, effettua il Login:</p>
+    <strong class="link"><Navigate to="/login">Login </Navigate></strong>
+</article>
+{/if}
+
 <footer>
 </footer>
 
