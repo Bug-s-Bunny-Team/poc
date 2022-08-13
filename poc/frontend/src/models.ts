@@ -21,6 +21,7 @@ class Account {
     password: string;
     preference: boolean;
     followers: number;
+    remember: boolean;
 }
 
 class PostScore {
