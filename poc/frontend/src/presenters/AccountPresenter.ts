@@ -3,7 +3,7 @@ import { AccountModel } from "../models/accountModel";
 export class AccountPresenter {
     name: string;
     email: string;
-    follower: Number;
+    followers: Number;
     preference: boolean;
     isLogged: boolean;
 
@@ -16,7 +16,7 @@ export class AccountPresenter {
         if(this.isLogged) {
             this.name = account.accountname;
             this.email = account.email;
-            this.follower = account.follower;
+            this.followers = account.followers;
             this.preference = account.preference;
         }
     }
