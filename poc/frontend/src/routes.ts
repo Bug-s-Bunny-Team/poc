@@ -5,6 +5,7 @@ import Login from "./pages/Login.svelte";
 import Register from "./pages/Register.svelte";
 import ChangePsw from "./pages/ChangePsw.svelte"
 import Account from "./pages/Account.svelte";
+import Explore from "./pages/Explore.svelte";
 
 const routes = [
     {
@@ -37,7 +38,12 @@ const routes = [
         component: Scrape,
         layout: MainLayout
     },
-    
+    {
+        name: '/explore',
+        title: 'Explore',
+        component: Explore,
+        layout: MainLayout
+    },
     {
         name: '/posts',
         title: 'Posts',
