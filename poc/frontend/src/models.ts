@@ -19,6 +19,7 @@ class Account {
     accountname: string;
     email: string;
     password: string;
+    follower: Number;
     preference: boolean;
 }
 

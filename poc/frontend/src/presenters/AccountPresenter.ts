@@ -3,6 +3,7 @@ import { AccountModel } from "../models/accountModel";
 export class AccountPresenter {
     name: string;
     email: string;
+    follower: Number;
     preference: boolean;
 
     constructor() {
@@ -13,6 +14,7 @@ export class AccountPresenter {
         if(account) {
             this.name = account.accountname;
             this.email = account.email;
+            this.follower = account.follower;
             this.preference = account.preference;
         }
     }

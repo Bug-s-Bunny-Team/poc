@@ -8,6 +8,7 @@
 <h3> Your personal information </h3>
     <p> Name: { presenter.name }</p>
     <p> Email: { presenter.email }</p>
+    <p> Follower: {presenter.follower} </p>
 
     <label for="choosePreference" class="link">Choose your predefined guide: </label>
     <input type="checkbox" name="preference" id="choosePreference" on:change={presenter.changePreference} bind:checked={presenter.preference} >
