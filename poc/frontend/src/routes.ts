@@ -6,8 +6,15 @@ import Register from "./pages/Register.svelte";
 import ChangePsw from "./pages/ChangePsw.svelte"
 import Account from "./pages/Account.svelte";
 import Explore from "./pages/Explore.svelte";
+import FirstPage from "./pages/FirstPage.svelte";
 
 const routes = [
+    {
+        name: '/FirstPage',
+        title: 'FirstPage',
+        component: FirstPage,
+        layout: MainLayout
+    },
     {
         name: '/login',
         title: 'Login',
