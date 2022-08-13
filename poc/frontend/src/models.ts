@@ -20,6 +20,7 @@ class Account {
     email: string;
     password: string;
     preference: boolean;
+    followers: number;
 }
 
 class PostScore {

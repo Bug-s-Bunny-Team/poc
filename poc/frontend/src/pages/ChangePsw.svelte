@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { ChangePswPresenter } from '../presenters/ChangePswPresenter';
     let new_password;
     let repeat_password;
