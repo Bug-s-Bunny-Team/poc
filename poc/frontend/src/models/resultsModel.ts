@@ -16,6 +16,8 @@ export class ResultsModel {
         if(!result) {
             result = new ResultsModel();
             window.sessionStorage.setItem('ResultsModel', JSON.stringify(result));
+        } else {
+            result.__proto__ = ResultsModel.prototype; // errore del compilatore don't worry
         }
         return result;
     }

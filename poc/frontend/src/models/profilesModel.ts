@@ -8,6 +8,8 @@ export class ProfilesModel {
         if(!result) {
             result = new ProfilesModel();
             window.sessionStorage.setItem('ProfilesModel', JSON.stringify(result));
+        } else {
+            result.__proto__ = ProfilesModel.prototype; // errore del compilatore don't worry
         }
         return result;
     }

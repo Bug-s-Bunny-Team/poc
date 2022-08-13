@@ -8,6 +8,8 @@ export class AccountModel {
         if(!result) {
             result = new AccountModel();
             window.sessionStorage.setItem('AccountModel', JSON.stringify(result));
+        } else {
+            result.__proto__ = AccountModel.prototype; // errore del compilatore don't worry
         }
         return result;
     }
@@ -35,7 +37,7 @@ export class AccountModel {
     }
     
     logout() : void {
-        this.account = null;
+        this.account = undefined;
         this.save_to_session();
     }
     

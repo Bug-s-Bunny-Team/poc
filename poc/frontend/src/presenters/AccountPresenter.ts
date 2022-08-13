@@ -4,7 +4,7 @@ export class AccountPresenter {
     name: string;
     email: string;
     preference: boolean;
-    isLogged: boolean = false;
+    isLogged: boolean;
 
     constructor() {
         this.changePreference = this.changePreference.bind(this);
@@ -37,7 +37,6 @@ export class AccountPresenter {
     }
 
     private checkLogin() {
-        console.log(AccountModel.getInstance().account);
         this.isLogged = AccountModel.getInstance().account ? true : false;
     }
 
