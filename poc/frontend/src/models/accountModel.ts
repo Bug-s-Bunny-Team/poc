@@ -10,12 +10,12 @@ export class AccountModel {
     }
 
     account: Account;
-
-    login(email: string, password: string): Account {
+    
+    login(email: string, password: string, remember: boolean): Account {
         this.account = new Account();
         //Todo:
         //Controllo credenziali da dare al backend
-        console.log(email, password);
+        console.log(email, password, remember);
         return this.account;
     }
     

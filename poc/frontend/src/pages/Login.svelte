@@ -15,8 +15,13 @@
             <input type="password" name="userPassword" id="userPassword" placeholder="type your password" required bind:value={presenter.password}/>
         </div>
         <div>
+            <input type="checkbox" name="preference" id="remember" value="preference" on:change={presenter.RememberFields} bind:checked={presenter.remember} >
+            <label for="preference" > remember </label> 
+        </div>
+        <div>
             <button type="submit" name="" style="float: left;" on:click={presenter.handleLogin}>Submit</button>
             <strong class="link"><Navigate to="/register">Register</Navigate></strong>
+
         </div>
     </form>
 <footer>
