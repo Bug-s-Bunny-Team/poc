@@ -5,13 +5,15 @@ export class AccountPresenter {
     email: string;
     follower: Number;
     preference: boolean;
+    isLogged: boolean;
 
     constructor() {
         this.changePreference = this.changePreference.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
 
         const account = AccountModel.getInstance().account;
-        if(account) {
+        this.checkLogin();
+        if(this.isLogged) {
             this.name = account.accountname;
             this.email = account.email;
             this.follower = account.follower;
@@ -20,13 +22,24 @@ export class AccountPresenter {
     }
 
     changePreference() : void {
-        const account = AccountModel.getInstance().account;
-        if(account) account.preference = this.preference;
+        this.checkLogin();
+        if(this.isLogged) {
+            const account = AccountModel.getInstance().account;
+            account.preference = this.preference;
+        }
     }
 
     handleLogout() : void {
-        const accModel = AccountModel.getInstance();
-        accModel.logout();
+        this.checkLogin();
+        if(this.isLogged) {
+            const accModel = AccountModel.getInstance();
+            accModel.logout();
+            this.checkLogin();
+        }
+    }
+
+    private checkLogin() {
+        this.isLogged = AccountModel.getInstance().account ? true : false;
     }
 
 }

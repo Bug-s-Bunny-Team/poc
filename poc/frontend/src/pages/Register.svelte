@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 
     import { RegistrationPresenter } from '../presenters/RegistrationPresenter';
     import { Navigate } from 'svelte-router-spa'
