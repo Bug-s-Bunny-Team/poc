@@ -1,5 +1,5 @@
 import { ProfilesModel } from "../models/profilesModel";
-import { AccountModel } from "src/models/accountModel";
+import { AccountModel } from "../models/accountModel";
 import type { Account, SocialProfile } from "src/models";
 
 export class FolloweesPresenter {
