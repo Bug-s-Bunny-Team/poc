@@ -15,12 +15,13 @@
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
     "svelte-preprocess": "^4.9.8",
+    "svelte-router-spa": "^6.0.3",
     "tslib": "^2.3.1",
     "typescript": "^4.5.4",
-    "vite": "^2.9.9",
-    "svelte-router-spa": "^6.0.3"
+    "vite": "^2.9.9"
   },
   "dependencies": {
-    "@picocss/pico": "^1.5.3"
+    "@picocss/pico": "^1.5.3",
+    "leaflet": "^1.8.0"
   }
 }

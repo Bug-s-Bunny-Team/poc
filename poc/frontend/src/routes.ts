@@ -7,6 +7,7 @@ import ChangePsw from "./pages/ChangePsw.svelte"
 import Account from "./pages/Account.svelte";
 import Explore from "./pages/Explore.svelte";
 import FirstPage from "./pages/FirstPage.svelte";
+import Map from "./pages/Map.svelte";
 
 const routes = [
     {
@@ -37,6 +38,12 @@ const routes = [
         name: '/account',
         title: 'Account',
         component: Account,
+        layout: MainLayout
+    },
+    {
+        name: '/map',
+        title: 'Map',
+        component: Map,
         layout: MainLayout
     },
     {
