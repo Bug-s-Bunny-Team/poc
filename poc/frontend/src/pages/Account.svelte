@@ -13,7 +13,10 @@ import Login from './Login.svelte';
             <p> Name: { presenter.name }</p>
             <p> Email: { presenter.email }</p>
             <p> Follower: {presenter.followers} </p>
-    
+            
+            <strong class="link"><Navigate to="/followees">Followees</Navigate></strong>
+            <button type="submit" name="" id="followees">Show Followees</button>
+
             <label for="choosePreference" class="link">Display my guide as map: </label>
             <input type="checkbox" name="preference" id="choosePreference" role="switch" on:change={presenter.changePreference} bind:checked={presenter.preference} >
     

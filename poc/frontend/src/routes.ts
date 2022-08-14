@@ -7,6 +7,7 @@ import ChangePsw from "./pages/ChangePsw.svelte"
 import Account from "./pages/Account.svelte";
 import Explore from "./pages/Explore.svelte";
 import FirstPage from "./pages/FirstPage.svelte";
+import Followees from "./pages/Followees.svelte";
 
 const routes = [
     {
@@ -49,6 +50,12 @@ const routes = [
         name: '/explore',
         title: 'Explore',
         component: Explore,
+        layout: MainLayout
+    },
+    {
+        name: '/followees',
+        title: 'Followees',
+        component: Followees,
         layout: MainLayout
     },
     {

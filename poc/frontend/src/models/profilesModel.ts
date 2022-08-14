@@ -20,6 +20,9 @@ export class ProfilesModel {
         return this.profilesModelInstance;
     }
 
+    getFollowers(account: Account) : number {
+        return this.getFollowees.length;
+    }
 
     getFollowees(account: Account) : SocialProfile[] {
         return [new SocialProfile()];
