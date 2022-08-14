@@ -5,6 +5,7 @@ interface Model {
 class SocialProfile implements Model {
     id: number;
     username: string;
+    followers: number;
 }
 
 class Location implements Model {
