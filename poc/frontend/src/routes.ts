@@ -8,6 +8,7 @@ import Account from "./pages/Account.svelte";
 import Explore from "./pages/Explore.svelte";
 import FirstPage from "./pages/FirstPage.svelte";
 import Followees from "./pages/Followees.svelte";
+import Map from "./pages/Map.svelte";
 
 const routes = [
     {
@@ -44,6 +45,12 @@ const routes = [
         name: '/',
         title: 'Scrape',
         component: Scrape,
+        layout: MainLayout
+    },
+    {
+        name: '/map',
+        title: 'Map',
+        component: Map,
         layout: MainLayout
     },
     {
