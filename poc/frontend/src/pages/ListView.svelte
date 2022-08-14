@@ -2,29 +2,22 @@
     import type { Post } from "../models";
     import { onDestroy, onMount } from "svelte";
     import spinnerUrl from "../assets/pulse-rings-3.svg";
+import { ListPresenter } from "../presenters/ListPresenter";
 
-    let posts: Array<Post> = [];
-    const interval = setInterval(() => refreshPosts(), 6000);
+   
+    let presenter = new ListPresenter();
+    const interval = setInterval(() => presenter.refreshPosts, 6000);
 
-    function refreshPosts() {
-        fetch("/dev-api/posts")
-            .then((response) => response.json())
-            .then((data) => {
-                posts = data;
-            })
-            .catch((err) => {
-                console.log(err);
-                posts = [];
-            });
-    }
-
+    
     function refresh() {
-        posts = null;
-        refreshPosts();
+        presenter.posts = null;
+        presenter.refreshPosts;
+        presenter.posts = presenter.posts;
     }
 
     onMount(() => {
         refresh();
+     
     });
 
     onDestroy(() => {
@@ -34,11 +27,11 @@
 
 <div>
     <h2 class="title">Posts</h2>
-    <button class="refresh outline" disabled={posts === null} on:click={refresh}>Refresh</button>
+    <button class="refresh outline" disabled={presenter.posts === null} on:click={refresh}>Refresh</button>
     
-    {#if posts && posts.length > 0}
+    {#if presenter.posts && presenter.posts.length > 0}
         <div class="grid">
-            {#each posts as post}
+            {#each presenter.posts as post}
                 <article>
                     <header>
                         <ul>
@@ -88,7 +81,7 @@
                 </article>
             {/each}
         </div>
-    {:else if posts && posts.length == 0}
+    {:else if presenter.posts && presenter.posts.length == 0}
         <p>No posts</p>
     {:else}
         <p>Loading posts...</p>

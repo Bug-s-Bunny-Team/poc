@@ -1,6 +1,6 @@
 import MainLayout from "./components/MainLayout.svelte";
 import Scrape from "./pages/Scrape.svelte";
-import Posts from "./pages/Posts.svelte";
+import Posts from "./pages/ListView.svelte";
 import Login from "./pages/Login.svelte";
 import Register from "./pages/Register.svelte";
 import ChangePsw from "./pages/ChangePsw.svelte"

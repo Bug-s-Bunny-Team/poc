@@ -20,7 +20,7 @@ export class FolloweesPresenter {
     }
 
     refreshFollowees() : void {
-        fetch("/dev-api/post") //Da cambiare per poter fetchare i "social profiles".
+        fetch("/dev-api/posts") //Da cambiare per poter fetchare i "social profiles".
             .then((response) => response.json())
             .then((data) => {
                 this.followees = data;
