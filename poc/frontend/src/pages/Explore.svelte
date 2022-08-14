@@ -1,32 +1,13 @@
 <script lang="ts">
 
     import { ExplorePresenter } from '../presenters/ExplorePresenter';
-    import type { Account } from "../models";
     import { onDestroy, onMount } from "svelte";
-    import spinnerUrl from "../assets/pulse-rings-3.svg";
-
-    let accounts: Array<Account> = [];
-    const interval = setInterval(() => refreshAccounts(), 6000);
-
-    function refreshAccounts() {
-        fetch("/dev-api/post")
-            .then((response) => response.json())
-            .then((data) => {
-                accounts = data;
-            })
-            .catch((err) => {
-                console.log(err);
-                accounts = [];
-            });
-    }
-
-    function refresh() {
-        accounts = null;
-        refreshAccounts();
-    }
+  
+    const interval = setInterval(() => presenter.refreshAccounts(), 6000);
+    let presenter = new ExplorePresenter();
 
     onMount(() => {
-        refresh();
+        presenter.refresh();
     });
 
     onDestroy(() => {
@@ -36,11 +17,11 @@
 
 <div>
     <h2 class="title">Explore</h2>
-    <button class="refresh outline" disabled={accounts === null} on:click={refresh}>Refresh</button>
+    <button class="refresh outline" disabled={presenter.accounts === null} on:click={presenter.refresh}>Refresh</button>
     
-    {#if accounts && accounts.length > 0}
+    {#if presenter.accounts && presenter.accounts.length > 0}
         <div class="grid">
-            {#each accounts as account}
+            {#each presenter.accounts as account}
                 <article>
                     <header>
                         <ul>
@@ -60,7 +41,7 @@
                 </article>
             {/each}
         </div>
-    {:else if accounts && accounts.length == 0}
+    {:else if presenter.accounts && presenter.accounts.length == 0}
         <p>No accounts</p>
     {:else}
         <p>Loading accounts...</p>
