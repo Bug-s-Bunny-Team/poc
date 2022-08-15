@@ -2,22 +2,23 @@
     import type { Post } from "../models";
     import { onDestroy, onMount } from "svelte";
     import spinnerUrl from "../assets/pulse-rings-3.svg";
-import { ListPresenter } from "../presenters/ListPresenter";
+    import { ListPresenter } from "../presenters/ListPresenter";
 
-   
     let presenter = new ListPresenter();
-    const interval = setInterval(() => presenter.refreshPosts, 6000);
+    let posts;
+    const interval = setInterval(() => presenter.refresh(), 6000);
 
-    
+    // https://svelte.dev/tutorial/writable-stores
+    presenter.posts.subscribe(data => {
+        posts = data;
+    })
+
     function refresh() {
-        presenter.posts = null;
-        presenter.refreshPosts;
-        presenter.posts = presenter.posts;
+        presenter.refresh();
     }
 
     onMount(() => {
         refresh();
-     
     });
 
     onDestroy(() => {
@@ -27,11 +28,11 @@ import { ListPresenter } from "../presenters/ListPresenter";
 
 <div>
     <h2 class="title">Posts</h2>
-    <button class="refresh outline" disabled={presenter.posts === null} on:click={refresh}>Refresh</button>
+    <button class="refresh outline" disabled={posts === null} on:click={refresh}>Refresh</button>
     
-    {#if presenter.posts && presenter.posts.length > 0}
+    {#if posts && posts.length > 0}
         <div class="grid">
-            {#each presenter.posts as post}
+            {#each posts as post}
                 <article>
                     <header>
                         <ul>
@@ -81,7 +82,7 @@ import { ListPresenter } from "../presenters/ListPresenter";
                 </article>
             {/each}
         </div>
-    {:else if presenter.posts && presenter.posts.length == 0}
+    {:else if posts && posts.length == 0}
         <p>No posts</p>
     {:else}
         <p>Loading posts...</p>

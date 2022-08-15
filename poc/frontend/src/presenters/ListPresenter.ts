@@ -1,20 +1,26 @@
 import type { Post } from "../models";
+import { writable, Writable } from "svelte/store";
 
 export class ListPresenter {
-   
-    posts: Array<Post> = [];
+    
+    // https://svelte.dev/tutorial/writable-stores
+    posts: Writable<Post[]> = writable([]);
 
     refreshPosts() {
-        console.log("Sono dentro refreshPost");
         fetch("/dev-api/posts")
             .then((response) => response.json())
             .then((data) => {
-                this.posts = data;
+                this.posts.set(data);
             })
             .catch((err) => {
                 console.log(err);
-                this.posts = [];
+                this.posts.set([]);
             });
+    }
+
+    refresh() {
+        this.posts.set(null);
+        this.refreshPosts();
     }
 
 }
