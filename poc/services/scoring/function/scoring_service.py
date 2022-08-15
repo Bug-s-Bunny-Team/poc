@@ -68,8 +68,14 @@ class BasicScoringService(ScoringService):
     def _runRekognition(self, sPost: ScoringPost):
         print('Analyzing image')
         response = self._rekognition.detect_text(Image={'S3Object': {'Bucket': os.environ['ENV_BUCKET_NAME'], 'Name': sPost.image}})
+        #idea di come dovrebbe essere una response della facial analysis 
+        #response = self._rekognition.facial_analysis(Image={'S3Object': {'Bucket': os.environ['ENV_BUCKET_NAME'], 'Name': sPost.image}})
+        #legare a response un'altra resp
         BasicScoringService.__parse_rekognition_response(sPost, response)
         print('Successfully analized image')
+    
+    #alternativa in caso si volesse fare due funzioni per semplicita
+    #def _runRekognitionFace(self, sPost: ScoringPost):
 
     def _runComprehend(self, sPost: ScoringPost):
         print('Analizying textual information')
@@ -80,4 +86,6 @@ class BasicScoringService(ScoringService):
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):
+        #aggiungere sPost.faceScore 
+        #aggiornare sPost aggiungendoci faceScore
         sPost.finalScore = (sPost.captionScore + sum(sPost.textsScore.values())/len(sPost.textsScore))/2.0 if len(sPost.textsScore) != 0 else sPost.captionScore
