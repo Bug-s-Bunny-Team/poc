@@ -6,6 +6,10 @@ export class ListPresenter {
     // https://svelte.dev/tutorial/writable-stores
     posts: Writable<Post[]> = writable([]);
 
+    constructor() {
+        this.refresh = this.refresh.bind(this);
+    }
+
     refreshPosts() {
         fetch("/dev-api/posts")
             .then((response) => response.json())

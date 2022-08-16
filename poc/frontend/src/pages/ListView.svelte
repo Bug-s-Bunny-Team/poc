@@ -13,12 +13,8 @@
         posts = data;
     })
 
-    function refresh() {
-        presenter.refresh();
-    }
-
     onMount(() => {
-        refresh();
+        presenter.refresh();
     });
 
     onDestroy(() => {
@@ -28,7 +24,7 @@
 
 <div>
     <h2 class="title">Posts</h2>
-    <button class="refresh outline" disabled={posts === null} on:click={refresh}>Refresh</button>
+    <button class="refresh outline" disabled={posts === null} on:click={presenter.refresh}>Refresh</button>
     
     {#if posts && posts.length > 0}
         <div class="grid">
