@@ -8,9 +8,10 @@ export class FolloweesPresenter {
     //Ho bisogno dei dati degli utenti che seguo:
     followees: Writable<SocialProfile[]> = writable([]);
 
-    /*constructor() {
-        this.handleFollowees = this.handleFollowees.bind(this);
-    }*/
+    constructor() {
+        this.refresh = this.refresh.bind(this);
+        // this.handleFollowees = this.handleFollowees.bind(this);
+    }
 
    /* handleFollowees() : void {
        

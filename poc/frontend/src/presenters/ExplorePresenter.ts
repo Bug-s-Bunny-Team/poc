@@ -8,6 +8,10 @@ export class ExplorePresenter{
 
     //https://svelte.dev/tutorial/writable-stores
 
+    constructor() {
+        this.refresh = this.refresh.bind(this);
+    }
+
     refreshAccounts() {
          fetch("/dev-api/posts")
              .then((response) => response.json())

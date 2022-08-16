@@ -12,12 +12,8 @@
         followees = data;
     })
 
-    function refresh() {
-        presenter.refresh();
-    }
-
     onMount(() => {
-        refresh();
+        presenter.refresh();
     });
 
     onDestroy(() => {
