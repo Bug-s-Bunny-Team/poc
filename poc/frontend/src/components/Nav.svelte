@@ -1,11 +1,16 @@
 <script lang="ts">
 
-    import { PublicRoutes } from "../routes/PublicRoutes";
+    import { AccountModel } from "../models/accountModel";
     import routes from "../routes";
     import ThemeSwitch from "./ThemeSwitch.svelte";
     
-    
+    let isLog=true;
+    const account = AccountModel.getInstance().account;
+        if(account) {
+            isLog=true;
+        }
     export let currentRoute;
+
 </script>
 
 <nav class="container">
@@ -14,13 +19,22 @@
         <li class="timestamp">build: {__BUILD_TIMESTAMP__}</li>
     </ul>
     <ul>
-        {#each PublicRoutes as route}
+        {#each routes as route}
+           {#if isLog && route.typeOfRoute == "public"}
             <li>
                 <a
                     class={currentRoute.name == route.name ? "current" : ""}
                     href={route.name}>{route.title}</a
                 >
             </li>
+            {:else if !isLog && route.typeOfRoute == "private"}
+            <li>
+                <a
+                    class={currentRoute.name == route.name ? "current" : ""}
+                    href={route.name}>{route.title}</a
+                >
+            </li>
+           {/if} 
         {/each}
         <li>
             <ThemeSwitch/>
