@@ -1,7 +1,10 @@
 <script lang="ts">
+
+    import { PublicRoutes } from "../routes/PublicRoutes";
     import routes from "../routes";
     import ThemeSwitch from "./ThemeSwitch.svelte";
-
+    
+    
     export let currentRoute;
 </script>
 
@@ -11,7 +14,7 @@
         <li class="timestamp">build: {__BUILD_TIMESTAMP__}</li>
     </ul>
     <ul>
-        {#each routes as route}
+        {#each PublicRoutes as route}
             <li>
                 <a
                     class={currentRoute.name == route.name ? "current" : ""}
