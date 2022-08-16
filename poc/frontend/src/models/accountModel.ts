@@ -24,6 +24,9 @@ export class AccountModel {
     
     login(email: string, password: string, remember: boolean): Account {
         this.account = new Account();
+        this.account.accountname = "nome default";
+        this.account.email = "mail default";
+        this.account.preference = true;
         //Todo:
         //Controllo credenziali da dare al backend
         this.save_to_session();
@@ -43,6 +46,11 @@ export class AccountModel {
     
     cambiaPsw(psw_new: string) : void {
         this.account.password = psw_new;
+        this.save_to_session();
+    }
+
+    cambiaPreferenza(newPref: boolean) {
+        this.account.preference = newPref;
         this.save_to_session();
     }
 
