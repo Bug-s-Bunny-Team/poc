@@ -2,6 +2,7 @@
 
     import { ExplorePresenter } from '../presenters/ExplorePresenter';
     import { onDestroy, onMount } from "svelte";
+    import { Navigate } from 'svelte-router-spa'
   
     
     let presenter = new ExplorePresenter();
@@ -45,6 +46,9 @@
                                 <details>
                                     <p>{account.followers}</p>
                                 </details>
+                            </li>
+                            <li>
+                                <strong class="link"><Navigate to="/">Segui</Navigate></strong> <br>
                             </li>
                         </ul>
                     </header>
