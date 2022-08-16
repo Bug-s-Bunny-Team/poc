@@ -6,6 +6,7 @@ import Account from "../pages/Account.svelte";
 import Explore from "../pages/Explore.svelte";
 import Followees from "../pages/Followees.svelte";
 import Map from "../pages/Map.svelte";
+import AddProfile from "../pages/AddProfile.svelte";
 
 const ProtectedRoutes = [
     {
@@ -30,6 +31,12 @@ const ProtectedRoutes = [
         name: '/map',
         title: 'Map',
         component: Map,
+        layout: MainLayout
+    },
+    {
+        name: '/add',
+        title: 'Add',
+        component: AddProfile,
         layout: MainLayout
     },
     {
