@@ -1,7 +1,6 @@
 <script>
     import { AccountPresenter } from '../presenters/AccountPresenter';
     import { Navigate } from 'svelte-router-spa'
-    import { onMount } from 'svelte';
     let presenter = new AccountPresenter();
 </script>
 
