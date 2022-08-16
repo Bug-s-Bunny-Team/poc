@@ -4,7 +4,7 @@ export class AccountPresenter {
     name: string;
     email: string;
     followers: Number;
-    preference: boolean;
+    preference: Number;
     isLogged: boolean;
 
     constructor() {
@@ -17,15 +17,15 @@ export class AccountPresenter {
             this.name = account.accountname;
             this.email = account.email;
             this.followers = account.followers;
-            this.preference = account.preference;
+            this.preference = Number(account.preference);
         }
     }
 
     changePreference() : void {
         this.checkLogin();
         if(this.isLogged) {
-            const account = AccountModel.getInstance().account;
-            account.preference = this.preference;
+            const accModel = AccountModel.getInstance();
+            accModel.cambiaPreferenza(Boolean(!this.preference));
         }
     }
 

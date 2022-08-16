@@ -1,6 +1,7 @@
 <script>
     import { AccountPresenter } from '../presenters/AccountPresenter';
     import { Navigate } from 'svelte-router-spa'
+    import { onMount } from 'svelte';
     let presenter = new AccountPresenter();
 </script>
 
@@ -12,14 +13,23 @@
             <p> Name: { presenter.name }</p>
             <p> Email: { presenter.email }</p>
             <p> Follower: {presenter.followers} </p>
-            
+
+            <p>
+                Choose your predefined guide:
+                <label>
+                    <input type=radio id="choosePreferenceM" on:change={presenter.changePreference} bind:group={presenter.preference} value={1}>
+                    List
+                </label>
+                <label>
+                    <input type=radio id="choosePreferenceL" on:change={presenter.changePreference} bind:group={presenter.preference} value={0}>
+                    Map
+                </label>
+            </p>
+
+            <strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong>
+
             <strong class="link"><Navigate to="/followees">Followees</Navigate></strong>
             <button type="submit" name="" id="followees">Show Followees</button>
-
-            <label for="choosePreference" class="link">Display my guide as map: </label>
-            <input type="checkbox" name="preference" id="choosePreference" role="switch" on:change={presenter.changePreference} bind:checked={presenter.preference} >
-    
-            <strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong>
             <button type="submit" name="" id="logout" on:click={presenter.handleLogout}>Logout</button>
         </form>
     </article>
@@ -29,21 +39,7 @@
         <strong class="link"><Navigate to="/login">Login </Navigate></strong>
     </article>
 {/if}
-  
-    <label for="choosePreference" class="link">Choose your predefined guide: </label>
-    <ul>
-        <li> 
-            <input type="checkbox" name="preferenceM" id="choosePreferenceM" on:change={presenter.changePreference} bind:checked={presenter.preference} value="map" >
-            <label for="map"> Map </label>
-        </li>
-        <li> 
-            <input type="checkbox" name="preferenceL" id="choosePreferenceL" on:change={presenter.changePreference} bind:checked={presenter.preference} value="list">
-            <label for="list"> List </label>
-        </li>
-    </ul>
 
-    <strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong> <br>
-    <a href="login"> <button class="link" type="submit" > Logout</button></a>
 <footer>
 </footer>
 
