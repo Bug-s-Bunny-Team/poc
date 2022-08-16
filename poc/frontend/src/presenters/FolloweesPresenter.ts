@@ -1,38 +1,40 @@
 import { ProfilesModel } from "../models/profilesModel";
 import { AccountModel } from "../models/accountModel";
-import type { Account, SocialProfile } from "src/models";
+import type { Account, SocialProfile } from "../models";
+import { writable, Writable } from "svelte/store";
+
 
 export class FolloweesPresenter {
     //Ho bisogno dei dati degli utenti che seguo:
-    followees: Array<SocialProfile> = [];
+    followees: Writable<SocialProfile[]> = writable([]);
 
-    constructor() {
+    /*constructor() {
         this.handleFollowees = this.handleFollowees.bind(this);
-    }
+    }*/
 
-    handleFollowees() : void {
+   /* handleFollowees() : void {
        
         const accModel = AccountModel.getInstance().account;
         if(accModel.followers)
         //Todo:
         //Controllo 
-            this.followees = ProfilesModel.getInstance().getFollowees(accModel);
-    }
+            ;
+    }*/
 
-    refreshFollowees() : void {
-        fetch("/dev-api/posts") //Da cambiare per poter fetchare i "social profiles".
+    refreshFollowees() {
+        fetch("/dev-api/posts")
             .then((response) => response.json())
             .then((data) => {
-                this.followees = data;
+                this.followees.set(data);
             })
+            .catch((err) => {
+                console.log(err);
+                this.followees.set([]);
+            });
     }
 
-    refresh() : void {
-        this.followees = null;
+    refresh() {
+        this.followees.set(null);
         this.refreshFollowees();
-    }
-
-    getFollowees() : Array<SocialProfile> {
-        return this.followees;
     }
 }

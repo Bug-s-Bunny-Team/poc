@@ -3,11 +3,21 @@
     import { ExplorePresenter } from '../presenters/ExplorePresenter';
     import { onDestroy, onMount } from "svelte";
   
-    const interval = setInterval(() => presenter.refreshAccounts(), 6000);
+    
     let presenter = new ExplorePresenter();
+    let accounts;
+    const interval = setInterval(() => presenter.refreshAccounts(), 6000);
+
+    presenter.accounts.subscribe(data => {
+        accounts = data;
+    })
+
+    function refresh() {
+        presenter.refresh();
+    }
 
     onMount(() => {
-        presenter.refresh();
+        refresh();
     });
 
     onDestroy(() => {
@@ -17,11 +27,11 @@
 
 <div>
     <h2 class="title">Explore</h2>
-    <button class="refresh outline" disabled={presenter.accounts === null} on:click={presenter.refresh}>Refresh</button>
+    <button class="refresh outline" disabled={accounts === null} on:click={refresh}>Refresh</button>
     
-    {#if presenter.accounts && presenter.accounts.length > 0}
+    {#if accounts && accounts.length > 0}
         <div class="grid">
-            {#each presenter.accounts as account}
+            {#each accounts as account}
                 <article>
                     <header>
                         <ul>
@@ -41,7 +51,7 @@
                 </article>
             {/each}
         </div>
-    {:else if presenter.accounts && presenter.accounts.length == 0}
+    {:else if accounts && accounts.length == 0}
         <p>No accounts</p>
     {:else}
         <p>Loading accounts...</p>

@@ -5,11 +5,19 @@
     import { onDestroy, onMount } from "svelte";
 
     let presenter = new FolloweesPresenter();
-
+    let followees;
     const interval = setInterval(() => presenter.refreshFollowees(), 6000);
     
-    onMount(() => {
+    presenter.followees.subscribe(data => {
+        followees = data;
+    })
+
+    function refresh() {
         presenter.refresh();
+    }
+
+    onMount(() => {
+        refresh();
     });
 
     onDestroy(() => {
@@ -21,14 +29,14 @@
     <h2 class="title">Explore</h2>
     <button class="refresh outline" disabled={presenter.followees === null} on:click={presenter.refresh}>Refresh</button>
     
-    {#if presenter.getFollowees() && presenter.getFollowees().length > 0}
+    {#if followees && followees.length > 0}
         <div class="grid">
-            {#each presenter.getFollowees() as followees}
+            {#each followees as followees}
                 <article>
                     <header>
                         <ul>
                             <li>
-                                <strong>Username</strong>: {followees.username}
+                                <strong>Username</strong>: {followees.profile.username}
                             </li>
                             <li>
                                 <strong>Followers:</strong>
@@ -46,7 +54,7 @@
                 </article>
             {/each}
         </div>
-    {:else if presenter.getFollowees() && presenter.getFollowees().length == 0}
+    {:else if followees && followees.length == 0}
         <p>No following accounts</p>
     {:else}
         <p>Loading accounts...</p>

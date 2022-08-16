@@ -1,30 +1,30 @@
 import { ProfilesModel } from "../models/profilesModel";
 import type { Account } from "src/models";
+import { writable, Writable } from "svelte/store";
 
 export class ExplorePresenter{
 
-    accounts: Array<Account> = [];
+    accounts: Writable<Account[]> = writable([]);
 
-    constructor() {
-        this.handleExplore = this.handleExplore.bind(this);
-    }
-    
+    //https://svelte.dev/tutorial/writable-stores
+
     refreshAccounts() {
-        fetch("/dev-api/post") //Fetch per ACCOUNT della piattaforma!!
-            .then((response) => response.json())
-            .then((data) => {
-                this.accounts = data;
-            })
-            .catch((err) => {
-                console.log(err);
-                this.accounts = [];
-            });
+         fetch("/dev-api/posts")
+             .then((response) => response.json())
+             .then((data) => {
+                 this.accounts.set(data);
+             })
+             .catch((err) => {
+                 console.log(err);
+                 this.accounts.set([]);
+             });
     }
-
+ 
     refresh() {
-        this.accounts = null;
-        this.refreshAccounts();
+         this.accounts.set(null);
+         this.refreshAccounts();
     }
+ 
 
     handleExplore() : void {
         const profilesModel = ProfilesModel.getInstance();
