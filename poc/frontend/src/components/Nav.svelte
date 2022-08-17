@@ -15,7 +15,7 @@
 
 <nav class="container">
     <ul>
-        <li><strong>PoC</strong></li>
+        <li><strong>BunnyFood</strong></li>
         <li class="timestamp">build: {__BUILD_TIMESTAMP__}</li>
     </ul>
     <ul>

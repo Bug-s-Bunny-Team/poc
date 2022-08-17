@@ -38,6 +38,13 @@ const PublicRoutes = [
 
 const ProtectedRoutes = [
     {
+        name: '/home',
+        title: 'Home',
+        component: Home,
+        layout: MainLayout,
+        typeOfRoute: 'private'
+    },
+    {
         name: '/changepsw',
         title: 'ChangePassword',
         component: ChangePsw,
@@ -55,13 +62,6 @@ const ProtectedRoutes = [
         name: '/scrape',
         title: 'Scrape',
         component: Scrape,
-        layout: MainLayout,
-        typeOfRoute: 'private'
-    },
-    {
-        name: '/home',
-        title: 'Home',
-        component: Home,
         layout: MainLayout,
         typeOfRoute: 'private'
     },
