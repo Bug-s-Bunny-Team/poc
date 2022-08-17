@@ -9,7 +9,8 @@ import Map from "./pages/Map.svelte";
 import AddProfile from "./pages/AddProfile.svelte";
 import Login from "./pages/Login.svelte";
 import Register from "./pages/Register.svelte";
-import FirstPage from "./pages/FirstPage.svelte"
+import FirstPage from "./pages/FirstPage.svelte";
+import Home from "./pages/Home.svelte";
 
 const PublicRoutes = [
     {
@@ -54,6 +55,13 @@ const ProtectedRoutes = [
         name: '/scrape',
         title: 'Scrape',
         component: Scrape,
+        layout: MainLayout,
+        typeOfRoute: 'private'
+    },
+    {
+        name: '/home',
+        title: 'Home',
+        component: Home,
         layout: MainLayout,
         typeOfRoute: 'private'
     },
