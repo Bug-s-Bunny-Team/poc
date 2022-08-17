@@ -45,7 +45,6 @@ export class ResultsModel {
         const response = await fetch('dev-api/results');
         this.rankedList.set(await response.json());
         return get(this.rankedList);
-        new Location(0, );
     }
 
     async getRankedList(filter: Filter) : Promise<Location[]> {
