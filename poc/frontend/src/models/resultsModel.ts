@@ -1,8 +1,8 @@
-import { Location } from '../models'
+import { Location, Position } from '../models'
 
 export class Filter {
     globale: boolean;
-    luogo: Location;
+    posizione: Position;
     n_risultati: Number;
     raggio: Number;
     min_rating: Number;

@@ -4,7 +4,7 @@
     let presenter = new AccountPresenter();
 </script>
 
-{#if presenter.isLogged}
+{#if presenter.isLogged()} <!-- Warning: non reactive update, not a problem because every time you login or logout you are not on this page (login) or it gets refreshed (logout) --> 
     <h2>My Account</h2>
     <h3> Your personal information </h3>
     <article>
@@ -34,8 +34,7 @@
     </article>
 {:else}
     <article>
-        <p>Non sei loggato, effettua il Login:</p>
-        <strong class="link"><Navigate to="/login">Login </Navigate></strong>
+        <p>Non sei loggato, effettua il <strong class="link"><Navigate to="/login">Login </Navigate></strong></p>
     </article>
 {/if}
 
@@ -43,17 +42,5 @@
 </footer>
 
 <style>
-
-    #choosePreference {
-        display: block;
-        margin-top: 0.5em;
-        margin-bottom: 1.5em;
-        
-    }
-
-    strong.link {
-        display: block;
-        margin-bottom: 1.5em;
-    }
 
 </style>

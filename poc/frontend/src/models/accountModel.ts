@@ -25,16 +25,19 @@ export class AccountModel {
     login(email: string, password: string, remember: boolean): Account {
         this.account = new Account();
         this.account.accountname = "nome default";
-        this.account.email = "mail default";
+        this.account.email = email;
+        this.account.password = password;
         this.account.preference = true;
-        //Todo:
-        //Controllo credenziali da dare al backend
         this.save_to_session();
         return this.account;
     }
     
     registrati(email: string, password: string): Account {
         this.account = new Account();
+        this.account.accountname = "nome default";
+        this.account.email = email;
+        this.account.password = password;
+        this.account.preference = true;        
         this.save_to_session();
         return this.account;
     }

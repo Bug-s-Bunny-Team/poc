@@ -21,7 +21,7 @@ export class ProfilesModel {
     }
 
     getFollowers(account: Account) : number {
-        return this.getFollowees.length;
+        return this.getFollowees(account).length;
     }
 
     getFollowees(account: Account) : SocialProfile[] {
