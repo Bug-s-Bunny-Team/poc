@@ -18,6 +18,16 @@ export default defineConfig({
                 target: 'http://127.0.0.1:5000/mock/posts.json',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/posts/, '')
+            },
+            '/dev-api/profiles': {
+                target: 'http://127.0.0.1:5000/mock/social_profiles.json',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api\/profiles/, '')
+            },
+            '/dev-api/results': {
+                target: 'http://127.0.0.1:5000/mock/results.json',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api\/results/, '')
             }
         }
     }

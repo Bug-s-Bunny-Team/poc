@@ -6,12 +6,12 @@ export class AccountModel {
 
     private static construct_session() : AccountModel {
         let account: Account = null;
-
         let str = window.sessionStorage.getItem('AccountModel.account');
         if(str) {
             account = JSON.parse(str);
             if(account) account.__proto__ = Account.prototype; // errore del compilatore don't worry
         }
+
         let result = new AccountModel();
         result.account.set(account);
         return result;

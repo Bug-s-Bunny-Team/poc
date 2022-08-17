@@ -1,30 +1,19 @@
-import type { Post } from "../models";
-import { writable, Writable } from "svelte/store";
+import type { Location } from "../models";
+import type { Writable } from "svelte/store";
+import { Filter, ResultsModel } from "../models/resultsModel";
 
 export class ListPresenter {
-    
-    // https://svelte.dev/tutorial/writable-stores
-    posts: Writable<Post[]> = writable([]);
-
     constructor() {
         this.refresh = this.refresh.bind(this);
+        ResultsModel.getInstance().requestRankedList(new Filter());
     }
 
-    refreshPosts() {
-        fetch("/dev-api/posts")
-            .then((response) => response.json())
-            .then((data) => {
-                this.posts.set(data);
-            })
-            .catch((err) => {
-                console.log(err);
-                this.posts.set([]);
-            });
+    public get locations() : Writable<Location[]> {
+        return ResultsModel.getInstance().rankedList;
     }
 
     refresh() {
-        this.posts.set(null);
-        this.refreshPosts();
+        ResultsModel.getInstance().requestRankedList(new Filter());
     }
 
 }

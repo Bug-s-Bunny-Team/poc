@@ -1,3 +1,4 @@
+import { get, writable, Writable } from 'svelte/store';
 import { Location, Position } from '../models'
 
 export class Filter {
@@ -12,31 +13,47 @@ export class ResultsModel {
     private static resultsModelInstance : ResultsModel = ResultsModel.construct_session();
 
     private static construct_session() : ResultsModel {
-        let result : ResultsModel = JSON.parse(window.sessionStorage.getItem('ResultsModel'));
-        if(!result) {
-            result = new ResultsModel();
-            window.sessionStorage.setItem('ResultsModel', JSON.stringify(result));
-        } else {
-            result.__proto__ = ResultsModel.prototype; // errore del compilatore don't worry
+        let rankedList: Location[] = [];
+        let str = window.sessionStorage.getItem('ResultsModel.rankedList');
+        if(str) {
+            rankedList = JSON.parse(str);
+            if(rankedList) rankedList.forEach( location => { location.__proto__ = Location.prototype; location.position.__proto__ = Position.prototype; }) // errore del compilatore don't worry
         }
+
+        let result = new ResultsModel();
+        result.rankedList.set(rankedList);
         return result;
     }
 
-    private constructor() { }
+    private constructor() { 
+        this.rankedList.subscribe(rankedList => {
+            if(rankedList) window.sessionStorage.setItem('ResultsModel.rankedList', JSON.stringify(rankedList));
+            else window.sessionStorage.removeItem('ResultsModel.rankedList');
+        })
+    }
 
     static getInstance() : ResultsModel {
         return this.resultsModelInstance;
     }
 
-    rankedList: Location[];
+    rankedList: Writable<Location[]> = writable([]);
+    private lastFilter: Filter = null;
     
-    getRankedList(filter: Filter) : Location[] {
-        let result: Location[] = [new Location()];
-        this.rankedList = result;
-        return this.rankedList;
+    // TODO add writable fields and update singleton pattern as per accountModel
+
+    async requestRankedList(filter: Filter) : Promise<Location[]> {
+        const response = await fetch('dev-api/results');
+        this.rankedList.set(await response.json());
+        return get(this.rankedList);
+        new Location(0, );
     }
 
-    private save_to_session() {
-        window.sessionStorage.setItem('ResultsModel', JSON.stringify(this));
+    async getRankedList(filter: Filter) : Promise<Location[]> {
+        if(filter != this.lastFilter) {
+            this.lastFilter = filter;
+            return await this.requestRankedList(this.lastFilter);
+        } else {
+            return get(this.rankedList);
+        }
     }
 }
