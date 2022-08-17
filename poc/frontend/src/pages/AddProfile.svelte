@@ -93,7 +93,7 @@
     {/if}
 </article>
 
-{#if showPeople}
+{#if showPeople && scrapeInput !=""}
     {#if posts && posts.length > 0}
     <div class="grid">
         {#each posts as post}

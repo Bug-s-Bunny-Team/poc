@@ -5,7 +5,7 @@ import type { Account, SocialProfile } from "../models";
 
 export class AddProfilePresenter {
     //avrò bisogno di ricordare i dati se inizio a seguire una persona
-
+    
     constructor() {
 
     }

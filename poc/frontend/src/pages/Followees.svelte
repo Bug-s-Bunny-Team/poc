@@ -22,7 +22,7 @@
 </script>
 
 <div>
-    <h2 class="title">Explore</h2>
+    <h2 class="title">Followees</h2>
     <button class="refresh outline" disabled={presenter.followees === null} on:click={presenter.refresh}>Refresh</button>
     
     {#if followees && followees.length > 0}

@@ -55,6 +55,14 @@
             errors.lastName = '';
         }
 
+        if (presenter.email.trim().length <= 0) {
+            valid = false;
+            errors.email = 'Campo obbligatorio';
+        }else {
+            valid = true
+            errors.email = '';
+        }
+
         if (presenter.username.trim().length <= 0) {
             valid = false;
             errors.userName = 'Username deve essere inserito';
