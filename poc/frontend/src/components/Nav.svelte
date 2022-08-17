@@ -3,6 +3,10 @@
     import { NavPresenter } from "../presenters/NavPresenter";
     import ThemeSwitch from "./ThemeSwitch.svelte";
     const presenter = new NavPresenter();
+    let routes;
+    presenter.routes.subscribe(new_routes => {
+        routes = new_routes;
+    });
 
     export let currentRoute;
 
@@ -11,7 +15,7 @@
 <nav class="container">
     <li class='left'><strong>BunnyFood</strong></li>
     <ul>
-        {#each presenter.routes as route}
+        {#each routes as route}
             <li>
                 <a
                     class={currentRoute.name == route.name ? "current" : ""}

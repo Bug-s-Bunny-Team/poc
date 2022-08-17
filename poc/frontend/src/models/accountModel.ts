@@ -1,64 +1,61 @@
+import { Writable, writable, get } from 'svelte/store';
 import { Account } from '../models'
 
 export class AccountModel {
     private static accountModelInstance : AccountModel = AccountModel.construct_session();
 
     private static construct_session() : AccountModel {
-        let result : AccountModel = JSON.parse(window.sessionStorage.getItem('AccountModel'));
-        if(!result) {
-            result = new AccountModel();
-            window.sessionStorage.setItem('AccountModel', JSON.stringify(result));
-        } else {
-            result.__proto__ = AccountModel.prototype; // errore del compilatore don't worry
+        let account: Account = null;
+
+        let str = window.sessionStorage.getItem('AccountModel.account');
+        if(str) {
+            account = JSON.parse(str);
+            if(account) account.__proto__ = Account.prototype; // errore del compilatore don't worry
         }
+        let result = new AccountModel();
+        result.account.set(account);
         return result;
     }
 
-    private constructor() { }
+    private constructor() { 
+        this.account.subscribe(account => {
+            if(account) window.sessionStorage.setItem('AccountModel.account', JSON.stringify(account));
+            else window.sessionStorage.removeItem('AccountModel.account');
+        })
+    }
 
     static getInstance() : AccountModel {
         return this.accountModelInstance;
     }
 
-    account: Account;
+    account: Writable<Account> = writable();
     
-    login(email: string, password: string, remember: boolean): Account {
-        this.account = new Account();
-        this.account.accountname = "nome default";
-        this.account.email = email;
-        this.account.password = password;
-        this.account.preference = true;
-        this.save_to_session();
-        return this.account;
+    login(email: string, password: string, remember: boolean): void {
+        this.account.set(new Account("nome default", email, password, true));
     }
     
-    registrati(email: string, password: string): Account {
-        this.account = new Account();
-        this.account.accountname = "nome default";
-        this.account.email = email;
-        this.account.password = password;
-        this.account.preference = true;        
-        this.save_to_session();
-        return this.account;
+    registrati(email: string, password: string): void {
+        this.account.set(new Account("nome default", email, password, true));
     }
     
     logout() : void {
-        this.account = undefined;
-        this.save_to_session();
+        this.account.set(null);
     }
     
     cambiaPsw(psw_new: string) : void {
-        this.account.password = psw_new;
-        this.save_to_session();
+        this.account.update(() => { let account = this.getAccount(); account.password = psw_new; return account; });
     }
 
     cambiaPreferenza(newPref: boolean) {
-        this.account.preference = newPref;
-        this.save_to_session();
+        this.account.update(() => { let account = this.getAccount(); account.preference = newPref; return account; });
     }
 
-    private save_to_session() {
-        window.sessionStorage.setItem('AccountModel', JSON.stringify(this));
+    cambiaRemember(newRem: boolean) {
+        this.account.update(() => { let account = this.getAccount(); account.remember = newRem; return account; });
+    }
+
+    getAccount() {
+        return get(this.account);
     }
 
 }

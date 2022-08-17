@@ -1,15 +1,14 @@
+import { Writable, writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 import { PublicRoutes, ProtectedRoutes } from "../routes";
 
 export class NavPresenter {
-    routes;
+    routes: Writable<any[]> = writable();
 
     constructor() {
-        if(this.isLogged()) { this.routes = ProtectedRoutes; }
-        else { this.routes = PublicRoutes; }
-    }
-
-    isLogged() {
-        return AccountModel.getInstance().account ? true : false;
+        AccountModel.getInstance().account.subscribe(account => {
+            if(account) { this.routes.set(ProtectedRoutes); }
+            else { this.routes.set(PublicRoutes); }
+        })
     }
 }

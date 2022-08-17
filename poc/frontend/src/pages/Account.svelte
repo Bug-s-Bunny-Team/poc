@@ -2,9 +2,11 @@
     import { AccountPresenter } from '../presenters/AccountPresenter';
     import { Navigate } from 'svelte-router-spa'
     let presenter = new AccountPresenter();
+    let isLogged;
+    presenter.isLogged.subscribe( logged => { isLogged = logged; });
 </script>
 
-{#if presenter.isLogged()} <!-- Warning: non reactive update, not a problem because every time you login or logout you are not on this page (login) or it gets refreshed (logout) --> 
+{#if isLogged} 
     <h2>My Account</h2>
     <h3> Your personal information </h3>
     <article>
@@ -29,7 +31,7 @@
 
             <strong class="link"><Navigate to="/followees">Followees</Navigate></strong>
             <button type="submit" name="" id="followees">Show Followees</button>
-            <button type="submit" name="" id="logout" on:click={presenter.handleLogout}>Logout</button>
+            <button name="" id="logout" on:click={presenter.handleLogout}>Logout</button>
         </form>
     </article>
 {:else}

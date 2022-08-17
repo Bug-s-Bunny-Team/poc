@@ -12,8 +12,7 @@ export class LoginPresenter {
     }
 
     rememberFields() : void {
-        const login = AccountModel.getInstance().account;
-        if(login) login.remember = this.remember;
+        if(AccountModel.getInstance().getAccount()) AccountModel.getInstance().cambiaRemember(this.remember);
     } 
 
     handleLogin() : void {

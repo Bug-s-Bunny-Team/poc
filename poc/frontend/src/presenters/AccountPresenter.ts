@@ -1,3 +1,5 @@
+import type { Account } from "src/models";
+import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 
 export class AccountPresenter {
@@ -5,13 +7,19 @@ export class AccountPresenter {
     email: string;
     followers: Number;
     preference: Number;
+    isLogged: Writable<boolean> = writable(null);
 
     constructor() {
         this.changePreference = this.changePreference.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
+        this.updateAccount = this.updateAccount.bind(this);
+        AccountModel.getInstance().account.subscribe(this.updateAccount);
+    }
 
-        const account = AccountModel.getInstance().account;
-        if(this.isLogged()) {
+    private updateAccount(account: Account) {
+        console.log('update account');
+        this.isLogged.set(account ? true : false);
+        if(account) {
             this.name = account.accountname;
             this.email = account.email;
             this.followers = account.followers;
@@ -20,21 +28,13 @@ export class AccountPresenter {
     }
 
     changePreference() : void {
-        if(this.isLogged()) {
-            const accModel = AccountModel.getInstance();
-            accModel.cambiaPreferenza(Boolean(!this.preference));
-        }
+        if(this.isLogged)
+            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference));
     }
 
     handleLogout() : void {
-        if(this.isLogged()) {
-            const accModel = AccountModel.getInstance();
-            accModel.logout();
-        }
-    }
-
-    isLogged() {
-        return AccountModel.getInstance().account ? true : false;
+        if(this.isLogged)
+            AccountModel.getInstance().logout();
     }
 
 }
