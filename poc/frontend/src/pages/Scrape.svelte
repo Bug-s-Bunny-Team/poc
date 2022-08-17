@@ -25,7 +25,7 @@
             .then((data) => {
                 console.log(data);
                 showProgress = false;
-                navigateTo("/posts");
+                navigateTo("/listview");
             })
             .catch((err) => {
                 console.log(err)
