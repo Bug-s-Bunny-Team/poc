@@ -104,4 +104,4 @@ const ProtectedRoutes = [
 
 const routes = [...PublicRoutes, ...ProtectedRoutes]
 
-export default routes;
+export { routes, PublicRoutes, ProtectedRoutes }
