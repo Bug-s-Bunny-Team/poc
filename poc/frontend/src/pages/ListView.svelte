@@ -1,36 +1,36 @@
 <script lang="ts">
+    import type { Location } from "../models";
     import { ListPresenter } from "../presenters/ListPresenter";
     let presenter = new ListPresenter();
-    let locations;
-
-    presenter.locations.subscribe(_locations => {
-        locations = _locations;
-    });
+    let locations: Promise<Location[]>;
+    locations = presenter.refresh();
 </script>
 
 <div>
     <h2 class="title">Locations</h2>
-    <button class="refresh outline" disabled={locations === null} on:click={presenter.refresh}>Refresh</button>
+    <button class="refresh outline" disabled={locations === null} on:click={() => {locations = presenter.refresh()}}>Refresh</button>
     
-    {#if locations && locations.length > 0}
-        <div class="grid">
-            {#each locations as location}
-                <article>
-                    <header>
-                        <strong>Location</strong>: 
-                        {location.name}
-                    </header>
-                    <strong>Score</strong>:
-                    {location.score}
-                </article>
-            {/each}
-        </div>
-    {:else if locations && locations.length == 0}
-        <p>No locations</p>
-    {:else}
+    {#await locations}
         <p>Loading locations...</p>
         <progress />
-    {/if}
+    {:then locations} 
+        {#if locations && locations.length > 0}
+            <div class="grid">
+                {#each locations as location}
+                    <article>
+                        <header>
+                            <strong>Location</strong>: 
+                            {location.name}
+                        </header>
+                        <strong>Score</strong>:
+                        {location.score}
+                    </article>
+                {/each}
+            </div>
+        {:else if locations && locations.length == 0}
+            <p>No locations</p>
+        {/if}
+    {/await}
 </div>
 
 <style>

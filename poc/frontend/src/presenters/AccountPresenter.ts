@@ -1,12 +1,12 @@
-import type { Account } from "src/models";
+import type { Account } from "../models";
 import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 
 export class AccountPresenter {
     name: string;
     email: string;
-    followers: Number;
-    preference: Number;
+    followers: number;
+    preference: number;
     isLogged: Writable<boolean> = writable(null);
 
     constructor() {
@@ -17,7 +17,6 @@ export class AccountPresenter {
     }
 
     private updateAccount(account: Account) {
-        console.log('update account');
         this.isLogged.set(account ? true : false);
         if(account) {
             this.name = account.accountname;

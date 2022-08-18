@@ -1,5 +1,5 @@
 import { ProfilesModel } from "../models/profilesModel";
-import type { Account } from "src/models";
+import type { Account } from "../models";
 import { writable, Writable } from "svelte/store";
 
 export class ExplorePresenter{
