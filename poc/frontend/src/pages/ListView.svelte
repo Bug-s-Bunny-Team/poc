@@ -3,7 +3,8 @@
     import { ListPresenter } from "../presenters/ListPresenter";
     let presenter = new ListPresenter();
     let locations: Promise<Location[]> = presenter.refresh();
-    let disableButtons = false;
+    let disableButtons;
+    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; })
 </script>
 
 <div>

@@ -2,14 +2,16 @@
     import { Navigate } from "svelte-router-spa";
     import type { SocialProfile } from "../models";
     import { ExplorePresenter } from "../presenters/ExplorePresenter";
+
     let presenter = new ExplorePresenter();
     let profiles: Promise<SocialProfile[]> = presenter.refresh();
-    let disableButtons = false;
+    let disableButtons: boolean;
+    presenter.disableButtons.subscribe(_disableButtons => {disableButtons = _disableButtons});
 </script>
 
 <div>
     <h2 class="title">Explore</h2>
-    <button class="refresh outline" disabled={disableButtons} on:click={() => {profiles = presenter.refresh(); disableButtons = true; profiles.then(() => {disableButtons = false})}}>Refresh</button>
+    <button class="refresh outline" disabled={disableButtons} on:click={() => {profiles = presenter.refresh()}}>Refresh</button>
     
     {#await profiles}
         <p>Loading most popular profiles...</p>
