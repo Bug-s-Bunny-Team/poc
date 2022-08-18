@@ -18,8 +18,8 @@
     <h2>Change your password</h2>
     <form>
         <div class="inputBox">
-            <label for="userPassword">Actual Password</label>
-            <input type="password" name="userPassword" id="userPassword" placeholder="type your actual password" required on:click={presenter.handleChangePsw}/> 
+            <label for="userPassword">Current Password</label>
+            <input type="password" name="userPassword" id="userPassword" placeholder="type your current password" required on:click={presenter.handleChangePsw}/> 
         </div>
         <div class="inputBox">
             <label for="newuserPassword">New Password</label>

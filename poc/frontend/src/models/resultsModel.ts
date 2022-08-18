@@ -24,6 +24,7 @@ export class ResultsModel {
     }
     
     async getRankedList(filter: Filter) : Promise<Location[]> {
+        await new Promise(r => setTimeout(r, 500))
         const response = await fetch('dev-api/results');
         return await response.json();
     }

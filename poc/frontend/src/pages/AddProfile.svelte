@@ -1,17 +1,16 @@
 <script lang="ts">
     import type { SocialProfile } from "src/models";
-    import { Navigate } from "svelte-router-spa";
-
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
 
     let presenter = new AddProfilesPresenter();
-    let profiles: Promise<SocialProfile[]> = null;
+    let profiles: Promise<SocialProfile[]>;
     let disableButtons: boolean;
-    presenter.disableButtons.subscribe(_disableButtons => {disableButtons = _disableButtons});
+    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
+    presenter.profiles.subscribe(_profiles => { profiles = _profiles; });
 </script>
 
 <article> 
-    <form on:submit|preventDefault={() => {profiles = presenter.search()}} autocomplete="off">
+    <form on:submit|preventDefault={presenter.search} autocomplete="off">
     <div class="grid">
     <label for="scrape-input">
         Search a new profile
@@ -44,7 +43,7 @@
                         </header>
                         <strong>Followers</strong>: {profile.followers}
                         <footer>
-                            <strong class="link"><Navigate to="/"> Segui </Navigate></strong> <br>
+                            <button on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
                         </footer>            
                     </article>
                 {/each}

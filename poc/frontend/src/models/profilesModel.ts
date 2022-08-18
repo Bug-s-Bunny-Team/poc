@@ -16,24 +16,29 @@ export class ProfilesModel {
     }
 
     async getFollowees() {
+        await new Promise(r => setTimeout(r, 500))
         const response = await fetch('dev-api/profiles');
         return await response.json();
     }
 
-    removeFollowee(profile: SocialProfile) : void {
+    async removeFollowee(profile: SocialProfile) : Promise<void> {
+        await new Promise(r => setTimeout(r, 500))
     }
 
     async getMostPopularProfiles(quantity: number) : Promise<SocialProfile[]> {
+        await new Promise(r => setTimeout(r, 500))
         const response = await fetch('dev-api/profiles');
         return await response.json();
     }
 
     async getProfiles(ricerca: String) : Promise<SocialProfile[]> {
+        await new Promise(r => setTimeout(r, 500))
         const response = await fetch('dev-api/profiles');
         return await response.json();
     }
 
-    followProfile(profile: SocialProfile, self_account: Account) : void {
+    async followProfile(profile: SocialProfile) : Promise<void> {
+        await new Promise(r => setTimeout(r, 500))
     }
 }  
  
