@@ -1,5 +1,4 @@
 import MainLayout from "./components/MainLayout.svelte";
-import Scrape from "./pages/Scrape.svelte";
 import ListView from "./pages/ListView.svelte";
 import ChangePsw from "./pages/ChangePsw.svelte"
 import Account from "./pages/Account.svelte";
