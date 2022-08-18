@@ -23,8 +23,9 @@ export class ProfilesModel {
     removeFollowee(profile: SocialProfile) : void {
     }
 
-    getMostPopularProfiles(quantity: number) : SocialProfile[] {
-        return [];
+    async getMostPopularProfiles(quantity: number) : Promise<SocialProfile[]> {
+        const response = await fetch('dev-api/profiles');
+        return await response.json();
     }
 
     async getProfiles(ricerca: String) : Promise<SocialProfile[]> {

@@ -6,9 +6,6 @@ export class AddProfilesPresenter {
 
     searchText: string;
 
-    constructor() {
-    }
-
     async search() {
         return await ProfilesModel.getInstance().getProfiles(this.searchText);
     }

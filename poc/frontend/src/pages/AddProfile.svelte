@@ -10,7 +10,7 @@
 </script>
 
 <article> 
-    <form on:submit|preventDefault={() => { profiles = presenter.search(); disableButtons = true; profiles.then(() => { disableButtons = false; }); }} autocomplete="off">
+    <form on:submit|preventDefault={() => {profiles = presenter.search(); disableButtons = true; profiles.then(() => {disableButtons = false})}} autocomplete="off">
     <div class="grid">
     <label for="scrape-input">
         Search a new profile
