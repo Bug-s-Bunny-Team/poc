@@ -30,7 +30,7 @@
 
 	function makeIcon() {
 		return new L.Icon({
-			iconUrl: './src/assets/icon.jpg',
+			iconUrl: './src/assets/icon.png',
 			iconSize: [100, 100],
 			iconAnchor: [22, 94],
 			popupAnchor: [-3, -76],

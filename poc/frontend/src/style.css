@@ -39,4 +39,7 @@
 .leaflet-marker-icon {
   padding: 0 !important;
   border: none !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  --box-shadow: none !important;
 }
