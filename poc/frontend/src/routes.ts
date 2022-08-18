@@ -59,13 +59,6 @@ const ProtectedRoutes = [
         typeOfRoute: 'private'
     },
     {
-        name: '/scrape',
-        title: 'Scrape',
-        component: Scrape,
-        layout: MainLayout,
-        typeOfRoute: 'private'
-    },
-    {
         name: '/map',
         title: 'Map',
         component: Map,
