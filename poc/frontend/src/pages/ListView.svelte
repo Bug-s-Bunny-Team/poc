@@ -9,7 +9,6 @@
 </script>
 
 <div>
-    <h2 class="title">Locations</h2>
     <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>
     
     {#await locations}
@@ -43,9 +42,6 @@
     article {
         margin-top: 1em;
         margin-bottom: 1em;
-    }
-    .title {
-        display: inline;
     }
     .refresh {
         display: inline;

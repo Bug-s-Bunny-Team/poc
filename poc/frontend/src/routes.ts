@@ -58,13 +58,6 @@ const ProtectedRoutes = [
         typeOfRoute: 'private'
     },
     {
-        name: '/map',
-        title: 'Map',
-        component: Map,
-        layout: MainLayout,
-        typeOfRoute: 'private'
-    },
-    {
         name: '/add',
         title: 'Add',
         component: AddProfile,
@@ -75,13 +68,6 @@ const ProtectedRoutes = [
         name: '/explore',
         title: 'Explore',
         component: Explore,
-        layout: MainLayout,
-        typeOfRoute: 'private'
-    },
-    {
-        name: '/listview',
-        title: 'ListView',
-        component: ListView,
         layout: MainLayout,
         typeOfRoute: 'private'
     }
