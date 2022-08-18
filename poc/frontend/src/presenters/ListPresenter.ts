@@ -9,6 +9,7 @@ export class ListPresenter {
 
     constructor() {
         this.refresh = this.refresh.bind(this);
+        this.refresh();
     }
 
     refresh() : void {

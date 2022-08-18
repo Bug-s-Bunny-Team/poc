@@ -6,7 +6,6 @@
     let presenter = new FolloweesPresenter();
     let followees: Promise<SocialProfile[]>;
     presenter.profiles.subscribe(_profiles => {followees = _profiles});
-    presenter.refresh();
 </script>
 
 <div>    

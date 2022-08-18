@@ -10,6 +10,7 @@ export class FolloweesPresenter {
     constructor() {
         this.refresh = this.refresh.bind(this);
         this.removeFollowee = this.removeFollowee.bind(this);
+        this.refresh();
     }
 
     refresh() : void {
@@ -17,7 +18,7 @@ export class FolloweesPresenter {
         this.profiles.set(promise);    
     }
 
-    async removeFollowee(followee: SocialProfile) : Promise<void> {
+    removeFollowee(followee: SocialProfile) : void {
         ProfilesModel.getInstance().removeFollowee(followee).then(this.refresh);
     }
 }

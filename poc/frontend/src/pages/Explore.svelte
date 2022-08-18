@@ -6,10 +6,7 @@
     let profiles: Promise<SocialProfile[]>;
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => {disableButtons = _disableButtons});
-    presenter.profiles.subscribe(_profiles => {
-        profiles = _profiles;
-    });
-    presenter.refresh();
+    presenter.profiles.subscribe(_profiles => {profiles = _profiles});
 </script>
 
 <div>

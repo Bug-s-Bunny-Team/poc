@@ -10,6 +10,7 @@ export class ExplorePresenter {
     constructor() {
         this.refresh = this.refresh.bind(this);
         this.addProfile = this.addProfile.bind(this);
+        this.refresh();
     }
 
     refresh() : void {

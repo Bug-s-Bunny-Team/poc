@@ -5,10 +5,7 @@
     let locations: Promise<Location[]>;
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; });
-    presenter.rankedList.subscribe(_rankedList => {
-        locations = _rankedList;
-    });
-    presenter.refresh();
+    presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
 </script>
 
 <div>
