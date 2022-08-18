@@ -1,19 +1,15 @@
-<script>
+<script lang="ts">
     import * as L from 'leaflet';
-    // If you're playing with this in the Svelte REPL, import the CSS using the
-    // syntax in svelte:head instead. For normal development, this is better.
-    //import 'leaflet/dist/leaflet.css';
-    import * as markerIcons from './MapComponents/markers.js';
-    import MapToolBar from './MapComponents/MapToolBar.svelte';
+
+	export const library = `<svg style="width:30px;height:30px" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>`;
+    import { MapPresenter } from '../presenters/MapPresenter.js';
+	import type { Location } from "../models"
 
     let map;
-
-    const markerLocations = [
-		[45.420, 11.895],
-		[45.412, 11.890],
-		[45.402, 11.880],
-		[45.410, 11.885],
-	];
+    let presenter=new MapPresenter();
+	let rankedList: Promise<Location[]>;
+	let markerLocations = [];
+	presenter.rankedList.subscribe(_rankedList => {rankedList = _rankedList});
   
     function createMap(container) {
       let m = L.map(container).setView([45.420, 11.895], 13);
@@ -29,75 +25,50 @@
   
       return m;
     }
-
-	let eye = true;
-	
-	let toolbar = L.control({ position: 'topright' });
-	let toolbarComponent;
-	toolbar.onAdd = (map) => {
-		let div = L.DomUtil.create('div');
-		toolbarComponent = new MapToolBar({
-			target: div,
-			props: {}
-		});
-		  toolbarComponent.$on('click-reset', () => {
-			map.setView([45.420, 11.895],13, { animate: true })
-		})
-
-		return div;
-	}
-	
-	
 	
 	let markers = new Map();
-	
-	function markerIcon(count) {
-		let html = `<div class="map-marker"><div>${markerIcons.library}</div><div class="marker-text">${count}</div></div>`;
-		return L.divIcon({
-			html,
-			className: 'map-marker'
+
+	function makeIcon() {
+		return new L.Icon({
+			iconUrl: './src/assets/icon.jpg',
+			iconSize: [100, 100],
+			iconAnchor: [22, 94],
+			popupAnchor: [-3, -76],
+			shadowUrl: null
 		});
 	}
-	
 
 	function createMarker(loc) {
-		let count = Math.ceil(Math.random() * 25);
-		let marker = L.marker(loc);
+		let marker = L.marker(loc, {icon: makeIcon()});
 		return marker;
 	}
 	
 
 	let markerLayers;
-  function mapAction(container) {
-    map = createMap(container); 
-		toolbar.addTo(map);
-		
-		markerLayers = L.layerGroup()
- 		for(let location of markerLocations) {
- 			let m = createMarker(location);
-			markerLayers.addLayer(m);
- 		}
-		
-		
-		markerLayers.addTo(map);
-		
-    return {
-       destroy: () => {
-				 toolbar.remove();
-				 map.remove();
-				 map = null;
-			 }
-    };
-	}
-	
-	// We could do these in the toolbar's click handler but this is an example
-	// of modifying the map with reactive syntax.
-	$: if(markerLayers && map) {
-		if(eye) {
+  	function mapAction(container) {
+		rankedList.then(locations => {
+			locations.forEach(location => {
+				markerLocations.push([location.position.lat, location.position.long]);
+			});
+
+			map = createMap(container); 
+			
+			markerLayers = L.layerGroup();
+			for(let location of markerLocations) {
+				let m = createMarker(location);
+				markerLayers.addLayer(m);
+			}
+
 			markerLayers.addTo(map);
-		} else {
-			markerLayers.remove();
-		}
+			
+			return {
+			destroy: () => {
+						map.remove();
+						map = null;
+					}
+			};
+		})
+
 	}
 
 	function resizeMap() {
@@ -117,4 +88,7 @@ throw new Error('Function not implemented.');
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
  
- <div style="height:400px;width:100%" use:mapAction />
+ <div style="height:400px;width:100%" use:mapAction/>
+
+ <style>
+ </style>
