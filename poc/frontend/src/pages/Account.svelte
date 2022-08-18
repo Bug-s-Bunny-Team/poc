@@ -1,4 +1,5 @@
 <script>
+    import Followees from './Followees.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';
     import { Navigate } from 'svelte-router-spa'
     let presenter = new AccountPresenter();
@@ -27,16 +28,19 @@
                 </label>
             </p>
 
-            <strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong>
-
-            <strong class="link"><Navigate to="/followees">Followees</Navigate></strong>
-            <button type="submit" name="" id="followees">Show Followees</button>
+            <p><strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong></p>
+            <p>
+                <details>
+                    <summary>Show Followees</summary>
+                    <span><Followees/></span>
+                </details>
+            </p>
             <button name="" id="logout" on:click={presenter.handleLogout}>Logout</button>
         </form>
     </article>
 {:else}
     <article>
-        <p>Non sei loggato, effettua il <strong class="link"><Navigate to="/login">Login </Navigate></strong></p>
+        <p>Non sei loggato, effettua il <strong class="link"><Navigate to="/login">Login</Navigate></strong>.</p>
     </article>
 {/if}
 
@@ -44,5 +48,8 @@
 </footer>
 
 <style>
-
+    details > span {
+        display: block;
+        padding: 1em 2em;
+    }
 </style>

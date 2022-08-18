@@ -2,14 +2,15 @@
     import type { Location } from "../models";
     import { ListPresenter } from "../presenters/ListPresenter";
     let presenter = new ListPresenter();
-    let locations: Promise<Location[]> = presenter.refresh();
-    let disableButtons;
-    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; })
+    let locations: Promise<Location[]>;
+    let disableButtons: boolean;
+    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; });
+    presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
 </script>
 
 <div>
     <h2 class="title">Locations</h2>
-    <button class="refresh outline" disabled={disableButtons} on:click={() => {locations = presenter.refresh(); disableButtons = true; locations.then(() => {disableButtons = false})}}>Refresh</button>
+    <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>
     
     {#await locations}
         <p>Loading locations...</p>

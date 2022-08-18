@@ -1,32 +1,32 @@
 <script lang="ts">
-    import { Navigate } from "svelte-router-spa";
     import type { SocialProfile } from "../models";
     import { ExplorePresenter } from "../presenters/ExplorePresenter";
 
     let presenter = new ExplorePresenter();
-    let profiles: Promise<SocialProfile[]> = presenter.refresh();
+    let profiles: Promise<SocialProfile[]>;
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => {disableButtons = _disableButtons});
+    presenter.profiles.subscribe(_profiles => {profiles = _profiles});
 </script>
 
 <div>
     <h2 class="title">Explore</h2>
-    <button class="refresh outline" disabled={disableButtons} on:click={() => {profiles = presenter.refresh()}}>Refresh</button>
+    <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>
     
     {#await profiles}
         <p>Loading most popular profiles...</p>
         <progress />
-    {:then profiles} 
-        {#if profiles.length > 0}
+    {:then _profiles} 
+        {#if _profiles.length > 0}
             <div class="grid">
-                {#each profiles as profile}
+                {#each _profiles as profile}
                     <article>
                         <header>
                             <strong>Username</strong>: {profile.username}
                         </header>
                         <strong>Followers</strong>: {profile.followers}
                         <footer>
-                            <strong class="link"><Navigate to="/"> Segui </Navigate></strong> <br>
+                            <button on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
                         </footer>  
                     </article>
                 {/each}

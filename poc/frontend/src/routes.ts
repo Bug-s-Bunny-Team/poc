@@ -79,13 +79,6 @@ const ProtectedRoutes = [
         typeOfRoute: 'private'
     },
     {
-        name: '/followees',
-        title: 'Followees',
-        component: Followees,
-        layout: MainLayout,
-        typeOfRoute: 'private'
-    },
-    {
         name: '/listview',
         title: 'ListView',
         component: ListView,
