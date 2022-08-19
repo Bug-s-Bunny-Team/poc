@@ -26,13 +26,11 @@
       return m;
     }
 	
-	let markers = new Map();
-
 	function makeIcon() {
 		return new L.Icon({
 			iconUrl: './src/assets/icon.png',
 			iconSize: [40, 40],
-			iconAnchor: [20, 30],
+			iconAnchor: [20, 30], // [half of iconSize.x, 3/4 of iconSize.y] dependent on image used
 			popupAnchor: [-3, -76],
 			shadowUrl: null
 		});
