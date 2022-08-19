@@ -52,7 +52,7 @@
             <label for="preference" > remember </label> 
         </div>
         <div>
-            <button type="submit" name="" style="float: left;" disabled={!valid} on:click={presenter.handleLogin}>Submit</button>
+            <button name="" style="float: left;" disabled={!valid} on:click|preventDefault={presenter.handleLogin}>Submit</button>
             <strong class="link"><Navigate to="/register">Register</Navigate></strong>
 
         </div>

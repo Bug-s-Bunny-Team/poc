@@ -5,7 +5,6 @@
     let presenter=new MapPresenter();
     let locations: Promise<Location[]>;
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
-
 </script>
 
 <svelte:window on:resize={presenter.resizeMap} />
