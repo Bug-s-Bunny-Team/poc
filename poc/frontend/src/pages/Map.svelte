@@ -31,14 +31,14 @@
 	function makeIcon() {
 		return new L.Icon({
 			iconUrl: './src/assets/icon.png',
-			iconSize: [100, 100],
-			iconAnchor: [22, 94],
+			iconSize: [40, 40],
+			iconAnchor: [20, 30],
 			popupAnchor: [-3, -76],
 			shadowUrl: null
 		});
 	}
 
-	function createMarker(loc) {
+	function createMarker(loc: [number, number]) {
 		let marker = L.marker(loc, {icon: makeIcon()});
 		return marker;
 	}
@@ -72,14 +72,8 @@
 	}
 
 	function resizeMap() {
-	  if(map) { map.invalidateSize(); }
-  }
-
-
-
-function initialView(initialView,arg1,arg2) {
-throw new Error('Function not implemented.');
-}
+	  if(map) map.invalidateSize();
+    }
 </script>
 <svelte:window on:resize={resizeMap} />
 
@@ -88,7 +82,7 @@ throw new Error('Function not implemented.');
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
  
- <div style="height:400px;width:100%" use:mapAction/>
+ <div style="height:80vh;width:100%" use:mapAction/>
 
  <style>
  </style>

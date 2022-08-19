@@ -43,3 +43,8 @@
   border-radius: 0 !important;
   --box-shadow: none !important;
 }
+
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+   --border-color: none !important;
+   padding: 0 !important;
+}
