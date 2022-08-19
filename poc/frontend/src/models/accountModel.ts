@@ -17,15 +17,15 @@ export class AccountModel {
         return result;
     }
 
+    static getInstance() : AccountModel {
+        return this.accountModelInstance;
+    }
+
     private constructor() { 
         this.account.subscribe(account => {
             if(account) window.sessionStorage.setItem('AccountModel.account', JSON.stringify(account));
             else window.sessionStorage.removeItem('AccountModel.account');
         })
-    }
-
-    static getInstance() : AccountModel {
-        return this.accountModelInstance;
     }
 
     account: Writable<Account> = writable();

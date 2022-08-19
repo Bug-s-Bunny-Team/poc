@@ -16,15 +16,17 @@ export class ResultsModel {
         return result;
     }
 
-    private constructor() { 
-    }
-
     static getInstance() : ResultsModel {
         return this.resultsModelInstance;
     }
+
+    private constructor() { 
+    }
+
+    private static static_delay_ms = 200;
     
     async getRankedList(filter: Filter) : Promise<Location[]> {
-        await new Promise(r => setTimeout(r, 500))
+        await new Promise(r => setTimeout(r, ResultsModel.static_delay_ms))
         const response = await fetch('dev-api/results');
         return await response.json();
     }

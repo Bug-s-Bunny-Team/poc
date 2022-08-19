@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Location } from "../models";
     import { ListPresenter } from "../presenters/ListPresenter";
+    
     let presenter = new ListPresenter();
     let locations: Promise<Location[]>;
     let disableButtons: boolean;
